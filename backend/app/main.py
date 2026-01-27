@@ -25,41 +25,7 @@ app = FastAPI(
     docs_url=f"{settings.API_V1_PREFIX}/docs",
 )
 
-
-@app.on_event("startup")
-async def startup_event():
-    """Create admin user on startup if it doesn't exist"""
-    try:
-        from app.db.session import SessionLocal
-        from app.models.user import User, UserRole
-        from app.core.security import get_password_hash
-
-        db = SessionLocal()
-        try:
-            # Check if admin user exists
-            existing = db.query(User).filter(User.email == "admin@ecomodel.com").first()
-            if not existing:
-                # Create admin user - use string directly for enum value
-                admin_user = User(
-                    email="admin@ecomodel.com",
-                    full_name="Administrator",
-                    role="global_admin",  # Direct string value matching PostgreSQL enum
-                    password_hash=get_password_hash("admin123"),
-                    is_active=True,
-                    organization_id=None
-                )
-                db.add(admin_user)
-                db.commit()
-                db.refresh(admin_user)
-                print(f"✅ Admin user created: {admin_user.email}")
-            else:
-                print(f"✅ Admin user already exists: {existing.email}")
-        finally:
-            db.close()
-    except Exception as e:
-        print(f"⚠️  Could not create admin user: {e}")
-        import traceback
-        traceback.print_exc()
+# Admin user creation is handled by create-admin-sql.py script in start.sh
 
 # CORS
 app.add_middleware(
