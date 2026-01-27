@@ -1,0 +1,31 @@
+🚀 EJECUTA ESTE COMANDO PARA COMPLETAR EL DEPLOYMENT:
+============================================================
+
+cd "/Users/miguelcaselles/Desktop/PROYECTOS PROGRAMACIÓN /Innovación HSCS/Farmacoeconomia" && ./deploy-now.sh
+
+============================================================
+
+Este script hará TODO automáticamente:
+
+✅ Verificar login en Railway
+✅ Conectar al proyecto (railway link)
+✅ Configurar todas las variables de entorno
+✅ Configurar CORS automáticamente
+✅ Ejecutar migraciones de base de datos
+✅ Cargar datos demo (te preguntará)
+✅ Abrir tu app en el navegador
+
+⏱️  Tiempo: ~2-3 minutos
+
+💡 IMPORTANTE: Antes de ejecutar, verifica que PostgreSQL esté añadido en Railway:
+   https://railway.app/dashboard
+
+   Si no está:
+   1. Abre tu proyecto
+   2. Click "+ New"
+   3. Database → PostgreSQL
+
+============================================================
+
+📚 Si prefieres hacerlo paso a paso:
+   Ver archivo: NEXT_STEPS.md
