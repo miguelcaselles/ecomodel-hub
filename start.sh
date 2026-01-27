@@ -62,7 +62,14 @@ else
     exit 1
 fi
 
+# Create admin user if needed
+echo ""
+echo "👤 Creating admin user if needed..."
+cd /app || { echo "Failed to cd to /app"; exit 1; }
+python create-admin-user.py || echo "⚠️  Could not create admin user (may already exist)"
+
 # Start server
 echo ""
 echo "🚀 Starting server..."
+cd /app/backend || { echo "Failed to cd to /app/backend"; exit 1; }
 exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}
