@@ -31,7 +31,7 @@ async def startup_event():
     """Create admin user on startup if it doesn't exist"""
     try:
         from app.db.session import SessionLocal
-        from app.models.user import User
+        from app.models.user import User, UserRole
         from app.core.security import get_password_hash
 
         db = SessionLocal()
@@ -43,7 +43,7 @@ async def startup_event():
                 admin_user = User(
                     email="admin@ecomodel.com",
                     full_name="Administrator",
-                    role="global_admin",
+                    role=UserRole.GLOBAL_ADMIN,
                     password_hash=get_password_hash("admin123"),
                     is_active=True,
                     organization_id=None
