@@ -39,11 +39,11 @@ async def startup_event():
             # Check if admin user exists
             existing = db.query(User).filter(User.email == "admin@ecomodel.com").first()
             if not existing:
-                # Create admin user with role value as string
+                # Create admin user - use string directly for enum value
                 admin_user = User(
                     email="admin@ecomodel.com",
                     full_name="Administrator",
-                    role=UserRole.GLOBAL_ADMIN.value,  # Use .value to get "global_admin" string
+                    role="global_admin",  # Direct string value matching PostgreSQL enum
                     password_hash=get_password_hash("admin123"),
                     is_active=True,
                     organization_id=None
