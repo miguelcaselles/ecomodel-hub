@@ -62,7 +62,14 @@ else
     exit 1
 fi
 
-# Start server (admin user will be created by startup event)
+# Create admin user using raw SQL
+echo ""
+echo "👤 Creating admin user..."
+cd /app || { echo "Failed to cd to /app"; exit 1; }
+python create-admin-sql.py || echo "⚠️  Admin user creation skipped (may already exist)"
+
+# Start server
 echo ""
 echo "🚀 Starting server..."
+cd /app/backend || { echo "Failed to cd to /app/backend"; exit 1; }
 exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}
