@@ -3,7 +3,14 @@
 # Script de inicio que ejecuta migraciones y luego inicia el servidor
 
 echo "🔄 Ejecutando migraciones de base de datos..."
-cd /app/backend && alembic upgrade head
+echo "DATABASE_URL: ${DATABASE_URL:0:30}..." # Show first 30 chars for debugging
+
+cd /app/backend
+
+# Export DATABASE_URL to ensure alembic can read it
+export DATABASE_URL="${DATABASE_URL}"
+
+alembic upgrade head
 
 if [ $? -eq 0 ]; then
     echo "✅ Migraciones completadas"
