@@ -3,6 +3,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from alembic import context
 import sys
+import os
 from pathlib import Path
 
 # Add parent directory to path to import app modules
@@ -13,6 +14,10 @@ from app import models  # Import all models
 
 # this is the Alembic Config object
 config = context.config
+
+# Override sqlalchemy.url with DATABASE_URL from environment if available
+if os.getenv("DATABASE_URL"):
+    config.set_main_option("sqlalchemy.url", os.getenv("DATABASE_URL"))
 
 # Interpret the config file for Python logging
 if config.config_file_name is not None:
