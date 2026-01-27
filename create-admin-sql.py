@@ -5,6 +5,10 @@ import os
 import sys
 import psycopg2
 
+# Import backend password hashing
+sys.path.insert(0, '/app/backend')
+from app.core.security import get_password_hash
+
 def main():
     try:
         # Get DATABASE_URL from environment
@@ -26,9 +30,24 @@ def main():
             print(f"   ID: {existing[0]}")
             print(f"   Email: {existing[1]}")
             print(f"   Role: {existing[2]}")
+
+            # Update password with correct hash
+            print("🔄 Updating password with correct hash...")
+            password_hash = get_password_hash("admin123")
+            cur.execute("""
+                UPDATE users
+                SET password_hash = %s,
+                    updated_at = NOW()
+                WHERE email = 'admin@ecomodel.com'
+            """, (password_hash,))
+            conn.commit()
+            print("✅ Password updated")
         else:
             print("👤 Creating admin user...")
-            # Insert admin user with bcrypt hash for 'admin123'
+            # Generate password hash using backend security module
+            password_hash = get_password_hash("admin123")
+
+            # Insert admin user
             cur.execute("""
                 INSERT INTO users (
                     id,
@@ -43,7 +62,7 @@ def main():
                 ) VALUES (
                     gen_random_uuid(),
                     'admin@ecomodel.com',
-                    '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYqj98kN/x2',
+                    %s,
                     'Administrator',
                     'global_admin',
                     true,
@@ -51,7 +70,7 @@ def main():
                     NOW(),
                     NOW()
                 )
-            """)
+            """, (password_hash,))
             conn.commit()
 
             # Verify creation
@@ -62,9 +81,10 @@ def main():
             print(f"   ID: {new_user[0]}")
             print(f"   Email: {new_user[1]}")
             print(f"   Role: {new_user[2]}")
-            print(f"\n🔑 Login credentials:")
-            print(f"   Email: admin@ecomodel.com")
-            print(f"   Password: admin123")
+
+        print(f"\n🔑 Login credentials:")
+        print(f"   Email: admin@ecomodel.com")
+        print(f"   Password: admin123")
 
         cur.close()
         conn.close()
