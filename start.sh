@@ -5,19 +5,41 @@ echo "="
 echo "= Railway Deployment Start"
 echo "="
 
-# Verify database state first
-echo ""
-echo "🔍 Verificando estado de la base de datos..."
-cd /app || { echo "Failed to cd to /app"; exit 1; }
-python verify-and-migrate.py
-
-if [ $? -ne 0 ]; then
-    echo "❌ Error verificando base de datos"
-    exit 1
-fi
-
 # Change to backend directory
 cd /app/backend || { echo "Failed to cd to /app/backend"; exit 1; }
+
+# Verify database state - if alembic_version exists but users doesn't, reset alembic
+echo ""
+echo "🔍 Verificando estado de la base de datos..."
+TABLES_SQL="SELECT COUNT(*) FROM information_schema.tables WHERE table_name='users' AND table_schema='public';"
+ALEMBIC_SQL="SELECT COUNT(*) FROM information_schema.tables WHERE table_name='alembic_version' AND table_schema='public';"
+
+# This will be executed inside the container where psql is available
+python -c "
+import os
+from sqlalchemy import create_engine, text
+
+engine = create_engine(os.getenv('DATABASE_URL'))
+with engine.connect() as conn:
+    # Check if tables exist
+    users_exists = conn.execute(text(\"SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name='users' AND table_schema='public')\")).scalar()
+    alembic_exists = conn.execute(text(\"SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name='alembic_version' AND table_schema='public')\")).scalar()
+
+    print(f'Users table exists: {users_exists}')
+    print(f'Alembic version table exists: {alembic_exists}')
+
+    # If alembic_version exists but users doesn't, drop alembic_version
+    if alembic_exists and not users_exists:
+        print('⚠️  PROBLEMA: alembic_version existe pero users no')
+        print('🔧 Eliminando alembic_version para forzar re-ejecución...')
+        conn.execute(text('DROP TABLE alembic_version'))
+        conn.commit()
+        print('✅ alembic_version eliminada - migraciones se ejecutarán desde cero')
+    elif users_exists:
+        print('✅ Base de datos ya configurada correctamente')
+    else:
+        print('📝 Base de datos vacía - lista para migraciones iniciales')
+"
 
 # Run migrations
 echo ""
