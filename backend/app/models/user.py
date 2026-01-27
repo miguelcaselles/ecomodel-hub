@@ -19,7 +19,8 @@ class User(Base):
     email = Column(String, unique=True, nullable=False, index=True)
     password_hash = Column(String, nullable=False)
     full_name = Column(String, nullable=False)
-    role = Column(SQLEnum(UserRole), nullable=False, default=UserRole.LOCAL_USER)
+    # Use String type to avoid enum mapping issues, validation will use UserRole enum
+    role = Column(String, nullable=False, default="local_user")
     is_active = Column(Boolean, default=True)
     organization_id = Column(GUID, ForeignKey("organizations.id"), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
