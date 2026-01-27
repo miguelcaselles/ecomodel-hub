@@ -3,7 +3,7 @@
 # Script de inicio que ejecuta migraciones y luego inicia el servidor
 
 echo "🔄 Ejecutando migraciones de base de datos..."
-cd backend && alembic upgrade head
+cd /app/backend && alembic upgrade head
 
 if [ $? -eq 0 ]; then
     echo "✅ Migraciones completadas"
@@ -12,4 +12,4 @@ else
 fi
 
 echo "🚀 Iniciando servidor..."
-cd /app/backend && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}
+uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}
