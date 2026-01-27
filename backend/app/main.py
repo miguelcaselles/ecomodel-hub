@@ -31,29 +31,35 @@ async def startup_event():
     """Create admin user on startup if it doesn't exist"""
     try:
         from app.db.session import SessionLocal
-        from app.crud import crud_user
-        from app.schemas.user import UserCreate
+        from app.models.user import User
+        from app.core.security import get_password_hash
 
         db = SessionLocal()
         try:
             # Check if admin user exists
-            existing = crud_user.get_by_email(db, email="admin@ecomodel.com")
+            existing = db.query(User).filter(User.email == "admin@ecomodel.com").first()
             if not existing:
                 # Create admin user
-                user_in = UserCreate(
+                admin_user = User(
                     email="admin@ecomodel.com",
-                    password="admin123",
                     full_name="Administrator",
-                    role="global_admin"
+                    role="global_admin",
+                    password_hash=get_password_hash("admin123"),
+                    is_active=True,
+                    organization_id=None
                 )
-                user = crud_user.create(db, obj_in=user_in)
-                print(f"✅ Admin user created: {user.email}")
+                db.add(admin_user)
+                db.commit()
+                db.refresh(admin_user)
+                print(f"✅ Admin user created: {admin_user.email}")
             else:
                 print(f"✅ Admin user already exists: {existing.email}")
         finally:
             db.close()
     except Exception as e:
         print(f"⚠️  Could not create admin user: {e}")
+        import traceback
+        traceback.print_exc()
 
 # CORS
 app.add_middleware(
