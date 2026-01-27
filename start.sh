@@ -5,6 +5,17 @@ echo "="
 echo "= Railway Deployment Start"
 echo "="
 
+# Verify database state first
+echo ""
+echo "🔍 Verificando estado de la base de datos..."
+cd /app || { echo "Failed to cd to /app"; exit 1; }
+python verify-and-migrate.py
+
+if [ $? -ne 0 ]; then
+    echo "❌ Error verificando base de datos"
+    exit 1
+fi
+
 # Change to backend directory
 cd /app/backend || { echo "Failed to cd to /app/backend"; exit 1; }
 
