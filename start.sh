@@ -1,29 +1,26 @@
 #!/bin/bash
+set -e  # Exit on error
 
-# Script de inicio que ejecuta migraciones y luego inicia el servidor
+echo "="
+echo "= Railway Deployment Start"
+echo "="
 
-echo "🔄 Ejecutando migraciones de base de datos..."
-echo "DATABASE_URL: ${DATABASE_URL:0:30}..." # Show first 30 chars for debugging
+# Change to backend directory
+cd /app/backend || { echo "Failed to cd to /app/backend"; exit 1; }
 
-cd /app/backend
-
-# Export DATABASE_URL to ensure alembic can read it
-export DATABASE_URL="${DATABASE_URL}"
-
+# Run migrations
+echo ""
+echo "🔄 Running database migrations..."
 alembic upgrade head
 
 if [ $? -eq 0 ]; then
-    echo "✅ Migraciones completadas"
-
-    # Run seed script if it exists
-    if [ -f "/app/seed-remote.sh" ]; then
-        bash /app/seed-remote.sh
-        # Remove seed script after execution so it doesn't run again
-        rm -f /app/seed-remote.sh
-    fi
+    echo "✅ Migrations completed successfully"
 else
-    echo "⚠️  Error en migraciones, continuando de todos modos..."
+    echo "❌ Migrations failed"
+    exit 1
 fi
 
-echo "🚀 Iniciando servidor..."
-uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}
+# Start server
+echo ""
+echo "🚀 Starting server..."
+exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}
