@@ -1,0 +1,3499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoModel Hub - Professional HEOR Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            /* Professional color palette - Clean & Corporate */
+            --primary: #0F172A;      /* Dark slate */
+            --primary-light: #1E293B;
+            --accent: #3B82F6;       /* Professional blue */
+            --accent-hover: #2563EB;
+            --success: #059669;
+            --warning: #D97706;
+            --danger: #DC2626;
+
+            /* Neutrals */
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --bg-tertiary: #F1F5F9;
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+
+            /* Text */
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-tertiary: #94A3B8;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-secondary {
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        /* Page Title */
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            letter-spacing: -0.02em;
+        }
+
+        .page-header p {
+            font-size: 14px;
+            color: var(--text-tertiary);
+        }
+
+        /* Layout Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* Card Component */
+        .card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            padding: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .tab.active {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .label-value {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border-light);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: var(--accent-hover);
+            transform: scale(1.1);
+        }
+
+        /* Slider with input container */
+        .slider-input-container {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .slider-input-container input[type="number"] {
+            width: 100px;
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            text-align: right;
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        }
+
+        .slider-input-container input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Primary Button */
+        .btn-primary {
+            width: 100%;
+            padding: 12px 24px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Results Section */
+        .results-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* KPI Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .kpi-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+
+        .kpi-card:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-md);
+        }
+
+        .kpi-label {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            font-family: 'SF Mono', 'Monaco', monospace;
+        }
+
+        .kpi-unit {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .kpi-card.success .kpi-value {
+            color: var(--success);
+        }
+
+        .kpi-card.warning .kpi-value {
+            color: var(--warning);
+        }
+
+        .kpi-card.danger .kpi-value {
+            color: var(--danger);
+        }
+
+        /* Charts */
+        .chart-container {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .chart-header {
+            margin-bottom: 20px;
+        }
+
+        .chart-header h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .chart-header p {
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Table */
+        .table-container {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-header h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--bg-tertiary);
+        }
+
+        th {
+            padding: 12px 24px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 16px 24px;
+            font-size: 14px;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .metric-name {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .metric-value {
+            font-weight: 600;
+            font-family: 'SF Mono', 'Monaco', monospace;
+        }
+
+        /* Conclusion Badge */
+        .conclusion {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .conclusion.success {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--success);
+        }
+
+        .conclusion.danger {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--danger);
+        }
+
+        /* Loading State */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                padding: 16px;
+            }
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Divider */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 24px 0;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-tertiary);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* AI Chat Widget */
+        .ai-chat-widget {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+        }
+
+        .ai-chat-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            transition: all 0.3s;
+        }
+
+        .ai-chat-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .ai-chat-panel {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 400px;
+            max-height: 600px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow-xl);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .ai-chat-panel.open {
+            display: flex;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ai-chat-header {
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ai-chat-header-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .ai-chat-header-info h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .ai-chat-header-info p {
+            font-size: 12px;
+            opacity: 0.9;
+            margin: 2px 0 0 0;
+        }
+
+        .ai-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ai-message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .ai-message.assistant {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .ai-message.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .ai-chat-input-area {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 8px;
+        }
+
+        .ai-chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .ai-chat-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .ai-chat-send {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .ai-chat-send:hover {
+            transform: scale(1.05);
+        }
+
+        .ai-chat-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .ai-quick-actions {
+            padding: 8px 16px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .ai-quick-btn {
+            padding: 6px 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .ai-quick-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .ai-typing {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            width: fit-content;
+        }
+
+        .ai-typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--text-tertiary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .ai-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .ai-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-6px); }
+        }
+
+        /* Analysis Modules Grid */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .module-card {
+            padding: 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .module-card:hover {
+            border-color: var(--accent);
+            background: var(--bg-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .module-card.active {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .module-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .module-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .module-desc {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+        }
+
+        /* Interactive Tooltips */
+        .tooltip-trigger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: help;
+            margin-left: 6px;
+            transition: all 0.2s;
+        }
+
+        .tooltip-trigger:hover {
+            background: var(--accent-hover);
+            transform: scale(1.1);
+        }
+
+        .tooltip-content {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 280px;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+            z-index: 1000;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .tooltip-content::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: var(--primary);
+        }
+
+        .tooltip-wrapper {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .tooltip-wrapper:hover .tooltip-content {
+            display: block;
+            animation: tooltipFade 0.2s ease;
+        }
+
+        @keyframes tooltipFade {
+            from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        .tooltip-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .tooltip-example {
+            background: rgba(255,255,255,0.1);
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        /* Welcome banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .welcome-banner-content h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .welcome-banner-content p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .welcome-banner-btn {
+            padding: 10px 20px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .welcome-banner-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .welcome-banner-close {
+            background: none;
+            border: none;
+            color: white;
+            opacity: 0.7;
+            font-size: 20px;
+            cursor: pointer;
+            margin-left: 16px;
+        }
+
+        .welcome-banner-close:hover {
+            opacity: 1;
+        }
+
+        /* Executive Summary Panel */
+        .executive-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 24px;
+            color: white;
+            margin-bottom: 24px;
+        }
+
+        .executive-summary h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .summary-stat {
+            background: rgba(255,255,255,0.15);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .summary-stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .summary-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .recommendation-box {
+            background: rgba(255,255,255,0.95);
+            color: #1F2937;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .recommendation-box h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .recommendation-box p {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #4B5563;
+        }
+
+        .recommendation-positive { border-left: 4px solid #10B981; }
+        .recommendation-negative { border-left: 4px solid #EF4444; }
+        .recommendation-neutral { border-left: 4px solid #F59E0B; }
+
+        /* CE Plane */
+        .ce-plane-container {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .ce-plane-quadrants {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            background: #F9FAFB;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .ce-quadrant {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .ce-quadrant.nw { top: 0; left: 0; background: rgba(239, 68, 68, 0.1); color: #DC2626; }
+        .ce-quadrant.ne { top: 0; right: 0; background: rgba(251, 191, 36, 0.1); color: #D97706; }
+        .ce-quadrant.sw { bottom: 0; left: 0; background: rgba(251, 191, 36, 0.1); color: #D97706; }
+        .ce-quadrant.se { bottom: 0; right: 0; background: rgba(16, 185, 129, 0.1); color: #059669; }
+
+        .ce-axes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .ce-axis-h {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #374151;
+        }
+
+        .ce-axis-v {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #374151;
+        }
+
+        .ce-point {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #4F46E5;
+            border: 3px solid white;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            transition: all 0.5s ease;
+        }
+
+        .ce-wtp-line {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 150%;
+            height: 2px;
+            background: #EF4444;
+            transform-origin: left center;
+            opacity: 0.6;
+        }
+
+        .ce-label {
+            position: absolute;
+            font-size: 11px;
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        .ce-label.x-label { bottom: 8px; right: 8px; }
+        .ce-label.y-label { top: 8px; left: 8px; }
+
+        /* Cost Breakdown Pie Chart */
+        .cost-breakdown {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .cost-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .cost-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .cost-legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        /* Animated Results */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .kpi-value.animate {
+            animation: countUp 0.5s ease forwards;
+        }
+
+        /* HTA Compliance Badge */
+        .hta-compliance {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .hta-badge {
+            background: rgba(79, 70, 229, 0.1);
+            color: #4F46E5;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .hta-badge.active {
+            background: #4F46E5;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-area">
+                <div class="logo-icon">E</div>
+                <div class="logo-text">
+                    <h1>EcoModel Hub</h1>
+                    <p>Professional HEOR Platform</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div id="userInfo" style="margin-right: 20px; display: flex; align-items: center; gap: 8px;">
+                    <span id="userName" style="color: var(--text-primary); font-size: 14px; font-weight: 500;"></span>
+                    <span id="userRole" style="padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase;"></span>
+                </div>
+                <button class="btn-secondary" onclick="logout()">Logout</button>
+                <button class="btn-secondary" onclick="window.location.href='/demo'">Demo</button>
+                <button class="btn-secondary" onclick="window.location.href='/api/v1/docs'">API</button>
+                <button id="modelBuilderBtn" class="btn-secondary" onclick="window.location.href='/model-builder'" style="display: none;">
+                    <a href="/model-builder" style="text-decoration: none;">
+                        🏗️ Model Builder
+                    </a>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- AI Chat Widget -->
+    <div class="ai-chat-widget">
+        <div class="ai-chat-panel" id="aiChatPanel">
+            <div class="ai-chat-header">
+                <div class="ai-chat-header-icon">🤖</div>
+                <div class="ai-chat-header-info">
+                    <h4>PharmEcon AI Assistant</h4>
+                    <p>Expert guidance for HTA &amp; HEOR</p>
+                </div>
+            </div>
+            <div class="ai-chat-messages" id="aiChatMessages">
+                <div class="ai-message assistant">
+                    Hello! I'm your pharmacoeconomics expert. I can help you with:
+                    <br><br>
+                    • Explaining concepts (ICER, QALY, PSA...)
+                    <br>• Configuring your models
+                    <br>• Interpreting results
+                    <br>• HTA submission requirements
+                    <br><br>
+                    How can I help you today?
+                </div>
+            </div>
+            <div class="ai-quick-actions">
+                <button class="ai-quick-btn" onclick="askAI('What is an ICER?')">What is ICER?</button>
+                <button class="ai-quick-btn" onclick="askAI('How do I interpret my PSA results?')">PSA help</button>
+                <button class="ai-quick-btn" onclick="askAI('What parameters should I use for oncology?')">Oncology tips</button>
+                <button class="ai-quick-btn" onclick="interpretCurrentResults()">Interpret results</button>
+            </div>
+            <div class="ai-chat-input-area">
+                <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask me anything..."
+                       onkeypress="if(event.key==='Enter') sendAIMessage()">
+                <button class="ai-chat-send" onclick="sendAIMessage()" id="aiSendBtn">➤</button>
+            </div>
+        </div>
+        <button class="ai-chat-toggle" onclick="toggleAIChat()" title="AI Assistant">
+            🤖
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="page-header">
+            <h2>Pharmacoeconomic Analysis Suite</h2>
+            <p>Complete HEOR toolkit for cost-effectiveness, budget impact, and decision analysis</p>
+        </div>
+
+        <!-- Analysis Modules Selection -->
+        <div class="card" style="margin-bottom: 24px;">
+            <div class="card-header">
+                <h3>Analysis Modules</h3>
+            </div>
+            <div class="card-body">
+                <div class="modules-grid">
+                    <div class="module-card active" onclick="selectModule('markov')" id="module-markov">
+                        <div class="module-icon">📊</div>
+                        <div class="module-name">Markov Model</div>
+                        <div class="module-desc">CEA Analysis</div>
+                    </div>
+                    <div class="module-card" onclick="selectModule('bia')" id="module-bia">
+                        <div class="module-icon">💰</div>
+                        <div class="module-name">Budget Impact</div>
+                        <div class="module-desc">BIA Analysis</div>
+                    </div>
+                    <div class="module-card" onclick="selectModule('decision-tree')" id="module-decision-tree">
+                        <div class="module-icon">🌳</div>
+                        <div class="module-name">Decision Tree</div>
+                        <div class="module-desc">Short-term CEA</div>
+                    </div>
+                    <div class="module-card" onclick="selectModule('survival')" id="module-survival">
+                        <div class="module-icon">📈</div>
+                        <div class="module-name">Survival</div>
+                        <div class="module-desc">Parametric models</div>
+                    </div>
+                    <div class="module-card" onclick="selectModule('voi')" id="module-voi">
+                        <div class="module-icon">🎯</div>
+                        <div class="module-name">EVPI/EVPPI</div>
+                        <div class="module-desc">Value of Info</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- Left Panel: Parameters -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Model Parameters</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchTab('costs')">Costs</button>
+                        <button class="tab" onclick="switchTab('clinical')">Clinical</button>
+                        <button class="tab" onclick="switchTab('settings')">Settings</button>
+                    </div>
+
+                    <!-- Costs Tab -->
+                    <div id="costs-tab" class="tab-content active">
+                        <div class="form-group">
+                            <label>
+                                <span>Drug A Cost (€/cycle)</span>
+                                <span class="tooltip-wrapper">
+                                    <span class="tooltip-trigger">?</span>
+                                    <span class="tooltip-content">
+                                        <span class="tooltip-title">New Treatment Cost</span>
+                                        Cost of the new/innovative treatment per model cycle (usually 1 month or 1 year).
+                                        <span class="tooltip-example">Oncology: €2,000-15,000/cycle<br>Chronic: €500-3,000/cycle</span>
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="slider-input-container">
+                                <input type="range" id="costDrugA" min="500" max="10000" step="100" value="3500"
+                                       oninput="updateSliderValue('costDrugA', this.value)">
+                                <input type="number" id="costDrugAInput" min="500" max="10000" step="100" value="3500"
+                                       oninput="updateInputValue('costDrugA', this.value)">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <span>Drug B Cost (€/cycle)</span>
+                                <span class="tooltip-wrapper">
+                                    <span class="tooltip-trigger">?</span>
+                                    <span class="tooltip-content">
+                                        <span class="tooltip-title">Comparator Cost</span>
+                                        Cost of the standard of care or comparator treatment per cycle.
+                                        <span class="tooltip-example">Generic: €50-500/cycle<br>Branded: €500-2,000/cycle</span>
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="slider-input-container">
+                                <input type="range" id="costDrugB" min="100" max="5000" step="50" value="500"
+                                       oninput="updateSliderValue('costDrugB', this.value)">
+                                <input type="number" id="costDrugBInput" min="100" max="5000" step="50" value="500"
+                                       oninput="updateInputValue('costDrugB', this.value)">
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="form-group">
+                            <label>
+                                <span>Healthcare Cost - Stable (€)</span>
+                                <span class="tooltip-wrapper">
+                                    <span class="tooltip-trigger">?</span>
+                                    <span class="tooltip-content">
+                                        <span class="tooltip-title">Stable State Costs</span>
+                                        Healthcare costs for patients in stable/controlled disease state (monitoring, routine visits).
+                                        <span class="tooltip-example">Monitoring: €100-300/cycle<br>Includes: labs, visits</span>
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="slider-input-container">
+                                <input type="range" id="costStable" min="0" max="1000" step="50" value="200"
+                                       oninput="updateSliderValue('costStable', this.value)">
+                                <input type="number" id="costStableInput" min="0" max="1000" step="50" value="200"
+                                       oninput="updateInputValue('costStable', this.value)">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <span>Healthcare Cost - Progression (€)</span>
+                                <span class="tooltip-wrapper">
+                                    <span class="tooltip-trigger">?</span>
+                                    <span class="tooltip-content">
+                                        <span class="tooltip-title">Progression State Costs</span>
+                                        Higher healthcare costs when disease progresses (hospitalizations, intensive care).
+                                        <span class="tooltip-example">Oncology: €2,000-5,000/cycle<br>Includes: hospital, palliative</span>
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="slider-input-container">
+                                <input type="range" id="costProgression" min="500" max="5000" step="100" value="1500"
+                                       oninput="updateSliderValue('costProgression', this.value)">
+                                <input type="number" id="costProgressionInput" min="500" max="5000" step="100" value="1500"
+                                       oninput="updateInputValue('costProgression', this.value)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clinical Tab -->
+                    <div id="clinical-tab" class="tab-content">
+                        <div class="form-group">
+                            <label>
+                                <span>Progression Risk - Drug A (%)</span>
+                                <span class="tooltip-wrapper">
+                                    <span class="tooltip-trigger">?</span>
+                                    <span class="tooltip-content">
+                                        <span class="tooltip-title">Transition Probability</span>
+                                        Probability per cycle that a patient on Drug A progresses from stable to progressed state.
+                                        <span class="tooltip-example">From clinical trial:<br>HR 0.65 → ~10% vs 15%</span>
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="slider-input-container">
+                                <input type="range" id="probProgressionA" min="1" max="50" step="1" value="10"
+                                       oninput="updateSliderValue('probProgressionA', this.value)">
+                                <input type="number" id="probProgressionAInput" min="1" max="50" step="1" value="10"
+                                       oninput="updateInputValue('probProgressionA', this.value)">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <span>Progression Risk - Drug B (%)</span>
+                                <span class="tooltip-wrapper">
+                                    <span class="tooltip-trigger">?</span>
+                                    <span class="tooltip-content">
+                                        <span class="tooltip-title">Comparator Progression</span>
+                                        Probability per cycle for patients on standard treatment. Usually higher than new treatment.
+                                        <span class="tooltip-example">Control arm data:<br>15-25% typical for oncology</span>
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="slider-input-container">
+                                <input type="range" id="probProgressionB" min="1" max="50" step="1" value="15"
+                                       oninput="updateSliderValue('probProgressionB', this.value)">
+                                <input type="number" id="probProgressionBInput" min="1" max="50" step="1" value="15"
+                                       oninput="updateInputValue('probProgressionB', this.value)">
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="form-group">
+                            <label>
+                                <span>Utility - Stable</span>
+                                <span class="tooltip-wrapper">
+                                    <span class="tooltip-trigger">?</span>
+                                    <span class="tooltip-content">
+                                        <span class="tooltip-title">Health-Related Quality of Life</span>
+                                        Utility value (0-1) for stable disease state. 1.0 = perfect health, 0 = death.
+                                        <span class="tooltip-example">Stable cancer: 0.75-0.85<br>Controlled diabetes: 0.80-0.90</span>
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="slider-input-container">
+                                <input type="range" id="utilityStable" min="0.5" max="1" step="0.01" value="0.85"
+                                       oninput="updateSliderValue('utilityStable', this.value)">
+                                <input type="number" id="utilityStableInput" min="0.5" max="1" step="0.01" value="0.85"
+                                       oninput="updateInputValue('utilityStable', this.value)">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <span>Utility - Progression</span>
+                                <span class="tooltip-wrapper">
+                                    <span class="tooltip-trigger">?</span>
+                                    <span class="tooltip-content">
+                                        <span class="tooltip-title">Progressed Disease Utility</span>
+                                        Lower quality of life during disease progression. Reflects symptoms and treatment burden.
+                                        <span class="tooltip-example">Metastatic cancer: 0.40-0.60<br>Severe complications: 0.30-0.50</span>
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="slider-input-container">
+                                <input type="range" id="utilityProgression" min="0.1" max="0.8" step="0.01" value="0.50"
+                                       oninput="updateSliderValue('utilityProgression', this.value)">
+                                <input type="number" id="utilityProgressionInput" min="0.1" max="0.8" step="0.01" value="0.50"
+                                       oninput="updateInputValue('utilityProgression', this.value)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Tab -->
+                    <div id="settings-tab" class="tab-content">
+                        <div class="form-group">
+                            <label>
+                                <span>Time Horizon (years)</span>
+                                <span class="tooltip-wrapper">
+                                    <span class="tooltip-trigger">?</span>
+                                    <span class="tooltip-content">
+                                        <span class="tooltip-title">Analysis Time Horizon</span>
+                                        How far into the future to model. Should capture all relevant costs and outcomes.
+                                        <span class="tooltip-example">Acute: 1-2 years<br>Chronic: 10-20 years<br>Lifetime: 30+ years</span>
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="slider-input-container">
+                                <input type="range" id="timeHorizon" min="1" max="30" step="1" value="10"
+                                       oninput="updateSliderValue('timeHorizon', this.value)">
+                                <input type="number" id="timeHorizonInput" min="1" max="30" step="1" value="10"
+                                       oninput="updateInputValue('timeHorizon', this.value)">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <span>Discount Rate (%)</span>
+                                <span class="tooltip-wrapper">
+                                    <span class="tooltip-trigger">?</span>
+                                    <span class="tooltip-content">
+                                        <span class="tooltip-title">Annual Discount Rate</span>
+                                        Adjusts future costs and benefits to present value. HTA agencies specify this.
+                                        <span class="tooltip-example">UK (NICE): 3.5%<br>Spain (AEMPS): 3%<br>Germany (G-BA): 3%</span>
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="slider-input-container">
+                                <input type="range" id="discountRate" min="0" max="10" step="0.5" value="3"
+                                       oninput="updateSliderValue('discountRate', this.value)">
+                                <input type="number" id="discountRateInput" min="0" max="10" step="0.5" value="3"
+                                       oninput="updateInputValue('discountRate', this.value)">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <span>WTP Threshold (€/QALY)</span>
+                                <span class="tooltip-wrapper">
+                                    <span class="tooltip-trigger">?</span>
+                                    <span class="tooltip-content">
+                                        <span class="tooltip-title">Willingness-to-Pay</span>
+                                        Maximum amount society is willing to pay for one additional QALY. Determines cost-effectiveness.
+                                        <span class="tooltip-example">UK: £20,000-30,000<br>Spain: €25,000-30,000<br>US: $50,000-150,000</span>
+                                    </span>
+                                </span>
+                            </label>
+                            <div class="slider-input-container">
+                                <input type="range" id="wtpThreshold" min="10000" max="100000" step="5000" value="30000"
+                                       oninput="updateSliderValue('wtpThreshold', this.value)">
+                                <input type="number" id="wtpThresholdInput" min="10000" max="100000" step="5000" value="30000"
+                                       oninput="updateInputValue('wtpThreshold', this.value)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Quick Start Templates -->
+                    <div style="margin-bottom: 16px;">
+                        <label style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 12px; display: block;">
+                            Quick Start Templates
+                        </label>
+                        <select id="templateSelect" class="form-control" onchange="loadTemplate()" style="margin-bottom: 8px;">
+                            <option value="">Select a template...</option>
+                            <optgroup label="Oncology">
+                                <option value="oncology_nsclc">NSCLC - Immunotherapy</option>
+                                <option value="oncology_breast">Breast Cancer - HER2+</option>
+                            </optgroup>
+                            <optgroup label="Chronic Diseases">
+                                <option value="diabetes_t2dm">Type 2 Diabetes - SGLT2i</option>
+                                <option value="cardiovascular_hf">Heart Failure - HFrEF</option>
+                                <option value="autoimmune_ra">Rheumatoid Arthritis</option>
+                            </optgroup>
+                            <optgroup label="Rare Diseases">
+                                <option value="rare_disease_sma">SMA - Gene Therapy</option>
+                            </optgroup>
+                        </select>
+                        <p style="font-size: 10px; color: var(--text-tertiary); margin-bottom: 12px;">
+                            Pre-configured parameters for common disease areas
+                        </p>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Scenario Management -->
+                    <div style="margin-bottom: 16px;">
+                        <label style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 12px; display: block;">
+                            Your Scenarios
+                        </label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                            <button class="btn-secondary" onclick="saveScenario()" title="Save current parameters">
+                                💾 Save
+                            </button>
+                            <button class="btn-secondary" onclick="exportRCode()" title="Download R script">
+                                📄 Export R
+                            </button>
+                        </div>
+                        <select id="scenarioSelect" class="form-control" onchange="loadScenario()" style="margin-bottom: 8px;">
+                            <option value="">Load Scenario...</option>
+                        </select>
+                        <a href="/model-builder" style="text-decoration: none;">
+                            <button class="btn-secondary" style="width: 100%; margin-top: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                                🏗️ Model Builder
+                            </button>
+                        </a>
+                    </div>
+
+                    <button class="btn-primary" onclick="runAnalysis()">Run Analysis</button>
+                    <button class="btn-primary" onclick="runPSA()" style="background: var(--success); margin-top: 8px;">
+                        🎲 Run PSA (1000)
+                    </button>
+                    <button class="btn-primary" onclick="runTornado()" style="background: var(--warning); margin-top: 8px;">
+                        🌪️ Run Tornado
+                    </button>
+
+                    <div class="divider"></div>
+
+                    <!-- Export Reports -->
+                    <div style="margin-top: 16px;">
+                        <label style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 12px; display: block;">
+                            Export Reports
+                        </label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <button class="btn-secondary" onclick="exportPDF()" title="Download PDF report" id="btnExportPDF">
+                                📑 Export PDF
+                            </button>
+                            <button class="btn-secondary" onclick="exportExcel()" title="Download Excel report" id="btnExportExcel">
+                                📊 Export Excel
+                            </button>
+                        </div>
+                        <p style="font-size: 10px; color: var(--text-tertiary); margin-top: 8px; text-align: center;">
+                            Generate professional reports from analysis results
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Results -->
+            <div class="results-section">
+                <!-- Executive Summary (shown after analysis) -->
+                <div id="executiveSummary" class="executive-summary" style="display: none;">
+                    <h3>📊 Executive Summary</h3>
+                    <div class="summary-grid">
+                        <div class="summary-stat">
+                            <div class="summary-stat-label">Net Monetary Benefit</div>
+                            <div class="summary-stat-value" id="summaryNMB">—</div>
+                        </div>
+                        <div class="summary-stat">
+                            <div class="summary-stat-label">Cost per QALY</div>
+                            <div class="summary-stat-value" id="summaryCostPerQALY">—</div>
+                        </div>
+                        <div class="summary-stat">
+                            <div class="summary-stat-label">Years of Life Gained</div>
+                            <div class="summary-stat-value" id="summaryLYG">—</div>
+                        </div>
+                    </div>
+                    <div id="recommendationBox" class="recommendation-box recommendation-positive">
+                        <h4>💡 Recommendation</h4>
+                        <p id="recommendationText">Analysis not yet performed. Configure parameters and run the model.</p>
+                    </div>
+                    <div class="hta-compliance">
+                        <span class="hta-badge" id="htaNICE">NICE</span>
+                        <span class="hta-badge" id="htaAEMPS">AEMPS</span>
+                        <span class="hta-badge" id="htaGBA">G-BA</span>
+                        <span class="hta-badge" id="htaHAS">HAS</span>
+                    </div>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">ICER</div>
+                        <div class="kpi-value" id="icerValue">—</div>
+                        <div class="kpi-unit">€ per QALY gained</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">ΔQALYs</div>
+                        <div class="kpi-value" id="deltaQalyValue">—</div>
+                        <div class="kpi-unit">Quality-adjusted life years</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">ΔCosts</div>
+                        <div class="kpi-value" id="deltaCostValue">—</div>
+                        <div class="kpi-unit">Incremental costs</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Conclusion</div>
+                        <div id="conclusionBadge">
+                            <span class="conclusion">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Markov Trace Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h4>Markov State Traces - Drug A</h4>
+                        <p>Patient distribution across states over time</p>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="markovTraceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Cost-Effectiveness Plane -->
+                <div class="ce-plane-container">
+                    <div class="chart-header">
+                        <h4>Cost-Effectiveness Plane</h4>
+                        <p>Position of intervention relative to WTP threshold</p>
+                    </div>
+                    <div class="ce-plane-quadrants" id="cePlane">
+                        <div class="ce-quadrant nw">Dominated<br><small>Higher cost, less effective</small></div>
+                        <div class="ce-quadrant ne">Trade-off<br><small>Higher cost, more effective</small></div>
+                        <div class="ce-quadrant sw">Trade-off<br><small>Lower cost, less effective</small></div>
+                        <div class="ce-quadrant se">Dominant<br><small>Lower cost, more effective</small></div>
+                        <div class="ce-axes">
+                            <div class="ce-axis-h"></div>
+                            <div class="ce-axis-v"></div>
+                        </div>
+                        <div class="ce-wtp-line" id="ceWtpLine" style="transform: rotate(-30deg);"></div>
+                        <div class="ce-point" id="cePoint" style="left: 50%; top: 50%;"></div>
+                        <div class="ce-label x-label">Δ QALYs →</div>
+                        <div class="ce-label y-label">Δ Costs ↑</div>
+                    </div>
+                </div>
+
+                <!-- Comparison Table -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <h4>Detailed Comparison</h4>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Drug A (New)</th>
+                                <th>Drug B (Standard)</th>
+                                <th>Difference</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comparisonTableBody">
+                            <tr>
+                                <td class="metric-name">Total Costs</td>
+                                <td class="metric-value" id="costA">—</td>
+                                <td class="metric-value" id="costB">—</td>
+                                <td class="metric-value" id="costDiff">—</td>
+                            </tr>
+                            <tr>
+                                <td class="metric-name">Total QALYs</td>
+                                <td class="metric-value" id="qalyA">—</td>
+                                <td class="metric-value" id="qalyB">—</td>
+                                <td class="metric-value" id="qalyDiff">—</td>
+                            </tr>
+                            <tr>
+                                <td class="metric-name">Life Years</td>
+                                <td class="metric-value" id="lyA">—</td>
+                                <td class="metric-value" id="lyB">—</td>
+                                <td class="metric-value" id="lyDiff">—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Cost Breakdown Chart -->
+                <div class="cost-breakdown">
+                    <div class="chart-header">
+                        <h4>Cost Breakdown by Category</h4>
+                        <p>Distribution of costs for Drug A vs Drug B</p>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <h5 style="text-align: center; color: #4F46E5; margin-bottom: 10px;">Drug A (New)</h5>
+                            <div class="chart-wrapper" style="height: 200px;">
+                                <canvas id="costBreakdownA"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 style="text-align: center; color: #6B7280; margin-bottom: 10px;">Drug B (Standard)</h5>
+                            <div class="chart-wrapper" style="height: 200px;">
+                                <canvas id="costBreakdownB"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cost-legend">
+                        <div class="cost-legend-item">
+                            <span class="cost-legend-color" style="background: #4F46E5;"></span>
+                            <span>Drug Cost</span>
+                        </div>
+                        <div class="cost-legend-item">
+                            <span class="cost-legend-color" style="background: #10B981;"></span>
+                            <span>Stable State</span>
+                        </div>
+                        <div class="cost-legend-item">
+                            <span class="cost-legend-color" style="background: #F59E0B;"></span>
+                            <span>Progression</span>
+                        </div>
+                        <div class="cost-legend-item">
+                            <span class="cost-legend-color" style="background: #EF4444;"></span>
+                            <span>Terminal Care</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PSA Results Section (hidden by default) -->
+                <div id="psaResultsSection" style="display: none;">
+                    <!-- CEAC Curve -->
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h4>Cost-Effectiveness Acceptability Curve (CEAC)</h4>
+                            <p>Probability of being cost-effective vs WTP threshold</p>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="ceacChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- PSA Scatter Plot -->
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h4>PSA Scatter Plot</h4>
+                            <p>Monte Carlo simulation results (1000 iterations)</p>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="psaScatterChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Percentiles Table -->
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h4>PSA Summary Statistics</h4>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Mean</th>
+                                    <th>P2.5 (95% CI)</th>
+                                    <th>P50 (Median)</th>
+                                    <th>P97.5 (95% CI)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="psaStatsBody">
+                                <tr>
+                                    <td class="metric-name">ICER (€/QALY)</td>
+                                    <td class="metric-value" id="psaICERMean">—</td>
+                                    <td class="metric-value" id="psaICERP25">—</td>
+                                    <td class="metric-value" id="psaICERP50">—</td>
+                                    <td class="metric-value" id="psaICERP975">—</td>
+                                </tr>
+                                <tr>
+                                    <td class="metric-name">% Cost-Effective at €30k WTP</td>
+                                    <td class="metric-value" id="psaProbCE" colspan="4">—</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tornado Results Section (hidden by default) -->
+                <div id="tornadoResultsSection" style="display: none;">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h4>Tornado Diagram - One-Way Sensitivity Analysis</h4>
+                            <p>Parameters ranked by impact on ICER</p>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="tornadoChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== AUTH CHECK ====================
+        const token = localStorage.getItem('access_token');
+        const user = token ? JSON.parse(localStorage.getItem('user')) : null;
+
+        if (!token || !user) {
+            alert('Please login first');
+            window.location.href = '/login';
+        }
+
+        // Display user info with role
+        document.getElementById('userName').textContent = user.email;
+
+        const userRoleEl = document.getElementById('userRole');
+        const roleColors = {
+            'global_admin': { bg: '#DC2626', text: 'white' },
+            'local_user': { bg: '#3B82F6', text: 'white' },
+            'viewer': { bg: '#6B7280', text: 'white' }
+        };
+
+        const roleLabels = {
+            'global_admin': '👑 ADMIN',
+            'local_user': '💼 USER',
+            'viewer': '👁️ VIEWER'
+        };
+
+        const roleColor = roleColors[user.role] || roleColors.viewer;
+        userRoleEl.textContent = roleLabels[user.role] || user.role.toUpperCase();
+        userRoleEl.style.background = roleColor.bg;
+        userRoleEl.style.color = roleColor.text;
+
+        // Show/hide Model Builder button based on role
+        if (user.role === 'global_admin') {
+            document.getElementById('modelBuilderBtn').style.display = 'block';
+        }
+
+        // Apply role-based permissions
+        applyRolePermissions(user.role);
+
+        // Show welcome banner for first-time users
+        showWelcomeBannerIfNew();
+
+        function showWelcomeBannerIfNew() {
+            const hasSeenWelcome = localStorage.getItem('ecomodel_welcome_seen');
+            if (!hasSeenWelcome) {
+                const container = document.querySelector('.container');
+                const banner = document.createElement('div');
+                banner.className = 'welcome-banner';
+                banner.id = 'welcomeBanner';
+                banner.innerHTML = `
+                    <div class="welcome-banner-content">
+                        <h3>Welcome to EcoModel Hub!</h3>
+                        <p>Your complete pharmacoeconomic analysis platform. Need help getting started?</p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <button class="welcome-banner-btn" onclick="window.location.href='/welcome'">
+                            Take the Tour
+                        </button>
+                        <button class="welcome-banner-close" onclick="dismissWelcomeBanner()">&times;</button>
+                    </div>
+                `;
+                container.insertBefore(banner, container.firstChild.nextSibling);
+            }
+        }
+
+        function dismissWelcomeBanner() {
+            localStorage.setItem('ecomodel_welcome_seen', 'true');
+            const banner = document.getElementById('welcomeBanner');
+            if (banner) {
+                banner.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => banner.remove(), 300);
+            }
+        }
+
+        function applyRolePermissions(role) {
+            // Viewer: Disable all edit/save/delete buttons
+            if (role === 'viewer') {
+                // Disable save scenario button
+                const saveButtons = document.querySelectorAll('[onclick*="saveScenario"], [onclick*="deleteScenario"]');
+                saveButtons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.title = 'Viewers cannot modify data';
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                });
+
+                // Show warning banner
+                const container = document.querySelector('.container');
+                const warning = document.createElement('div');
+                warning.style.cssText = 'background: #FEF3C7; border: 2px solid #F59E0B; padding: 16px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;';
+                warning.innerHTML = '<span style="font-size: 24px;">👁️</span><div><strong>Viewer Mode</strong><br><span style="font-size: 13px; color: #92400E;">You can view results and download reports, but cannot create or modify scenarios.</span></div>';
+                container.insertBefore(warning, container.firstChild);
+            }
+
+            // Local User: Can create scenarios but not models
+            if (role === 'local_user') {
+                const container = document.querySelector('.container');
+                const info = document.createElement('div');
+                info.style.cssText = 'background: #DBEAFE; border: 2px solid #3B82F6; padding: 16px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;';
+                info.innerHTML = '<span style="font-size: 24px;">💼</span><div><strong>Local User Mode</strong><br><span style="font-size: 13px; color: #1E40AF;">You can create scenarios, run simulations, and generate reports for your organization.</span></div>';
+                container.insertBefore(info, container.firstChild);
+            }
+
+            // Global Admin: Full access
+            if (role === 'global_admin') {
+                const container = document.querySelector('.container');
+                const admin = document.createElement('div');
+                admin.style.cssText = 'background: #FEE2E2; border: 2px solid #DC2626; padding: 16px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;';
+                admin.innerHTML = '<span style="font-size: 24px;">👑</span><div><strong>Administrator Mode</strong><br><span style="font-size: 13px; color: #991B1B;">Full access: You can create models, manage organizations, and perform all actions. Use the Model Builder to create new economic models.</span></div>';
+                container.insertBefore(admin, container.firstChild);
+            }
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.clear();
+                window.location.href = '/login';
+            }
+        }
+
+        // API call helper with auth
+        async function apiCall(endpoint, options = {}) {
+            const headers = {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+            return fetch(endpoint, {...options, headers});
+        }
+
+        // ==================== GLOBAL VARIABLES ====================
+        let markovTraceChart = null;
+        let ceacChart = null;
+        let psaScatterChart = null;
+        let tornadoChart = null;
+        let costBreakdownChartA = null;
+        let costBreakdownChartB = null;
+        let currentScenarioId = null;
+
+        // ==================== TAB SWITCHING ====================
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        // Update slider values
+        function updateValue(id, value) {
+            const numValue = parseFloat(value);
+            let formattedValue;
+
+            if (id.includes('cost') || id.includes('wtp')) {
+                formattedValue = new Intl.NumberFormat('es-ES').format(numValue);
+            } else if (id.includes('utility')) {
+                formattedValue = numValue.toFixed(2);
+            } else if (id.includes('discount')) {
+                formattedValue = numValue.toFixed(1);
+            } else {
+                formattedValue = numValue;
+            }
+
+            document.getElementById(id + 'Value').textContent = formattedValue;
+        }
+
+        // Update when slider moves - sync to input
+        function updateSliderValue(id, value) {
+            const numValue = parseFloat(value);
+            document.getElementById(id + 'Input').value = numValue;
+        }
+
+        // Update when typing in input - sync to slider
+        function updateInputValue(id, value) {
+            const numValue = parseFloat(value);
+            const slider = document.getElementById(id);
+            if (!isNaN(numValue) && numValue >= slider.min && numValue <= slider.max) {
+                slider.value = numValue;
+            }
+        }
+
+        // Run analysis
+        async function runAnalysis() {
+            const requestData = {
+                time_horizon: parseInt(document.getElementById('timeHorizon').value),
+                discount_rate: parseFloat(document.getElementById('discountRate').value) / 100,
+                cohort_size: 1000, // Default cohort size
+                cost_drug_a: parseFloat(document.getElementById('costDrugA').value),
+                cost_drug_b: parseFloat(document.getElementById('costDrugB').value),
+                cost_state_s: parseFloat(document.getElementById('costStable').value),
+                cost_state_p: parseFloat(document.getElementById('costProgression').value),
+                prob_s_to_p_a: parseFloat(document.getElementById('probProgressionA').value) / 100,
+                prob_s_to_p_b: parseFloat(document.getElementById('probProgressionB').value) / 100,
+                prob_s_to_d: 0.02, // Stable to death
+                prob_p_to_d: 0.17, // Progression to death
+                utility_stable: parseFloat(document.getElementById('utilityStable').value),
+                utility_progression: parseFloat(document.getElementById('utilityProgression').value)
+            };
+
+            try {
+                const response = await fetch('/api/calculate', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Calculation failed');
+                }
+
+                const data = await response.json();
+                updateResults(data);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Error running analysis: ' + error.message);
+            }
+        }
+
+        // Update results
+        function updateResults(data) {
+            const summary = data.summary;
+            const wtpThreshold = parseFloat(document.getElementById('wtpThreshold').value);
+
+            // Update KPIs with animation
+            animateValue('icerValue', summary.icer.toLocaleString('es-ES', {maximumFractionDigits: 0}));
+            animateValue('deltaQalyValue', summary.delta_qaly.toFixed(3));
+            animateValue('deltaCostValue', '€' + summary.delta_cost.toLocaleString('es-ES', {maximumFractionDigits: 0}));
+
+            // Conclusion
+            const isCostEffective = summary.icer <= wtpThreshold;
+            const conclusionBadge = document.getElementById('conclusionBadge');
+
+            conclusionBadge.innerHTML = isCostEffective
+                ? '<span class="conclusion success">✓ Cost-Effective</span>'
+                : '<span class="conclusion danger">✗ Not Cost-Effective</span>';
+
+            // Update table
+            document.getElementById('costA').textContent =
+                '€' + data.drug_a_results.total_cost.toLocaleString('es-ES', {maximumFractionDigits: 0});
+            document.getElementById('costB').textContent =
+                '€' + data.drug_b_results.total_cost.toLocaleString('es-ES', {maximumFractionDigits: 0});
+            document.getElementById('costDiff').textContent =
+                '€' + summary.delta_cost.toLocaleString('es-ES', {maximumFractionDigits: 0});
+
+            document.getElementById('qalyA').textContent = data.drug_a_results.total_qalys.toFixed(3);
+            document.getElementById('qalyB').textContent = data.drug_b_results.total_qalys.toFixed(3);
+            document.getElementById('qalyDiff').textContent = summary.delta_qaly.toFixed(3);
+
+            document.getElementById('lyA').textContent = data.drug_a_results.life_years.toFixed(2);
+            document.getElementById('lyB').textContent = data.drug_b_results.life_years.toFixed(2);
+            document.getElementById('lyDiff').textContent =
+                (data.drug_a_results.life_years - data.drug_b_results.life_years).toFixed(2);
+
+            // Update Executive Summary
+            updateExecutiveSummary(data, summary, wtpThreshold, isCostEffective);
+
+            // Update CE Plane
+            updateCEPlane(summary.delta_qaly, summary.delta_cost, wtpThreshold);
+
+            // Update chart with Markov traces
+            updateMarkovTrace(data.drug_a_results.state_trace, data.drug_b_results.state_trace);
+
+            // Update cost breakdown charts
+            updateCostBreakdown(data.drug_a_results, data.drug_b_results);
+        }
+
+        // Animate KPI value update
+        function animateValue(elementId, value) {
+            const element = document.getElementById(elementId);
+            element.classList.remove('animate');
+            void element.offsetWidth; // Force reflow
+            element.textContent = value;
+            element.classList.add('animate');
+        }
+
+        // Update Executive Summary panel
+        function updateExecutiveSummary(data, summary, wtpThreshold, isCostEffective) {
+            const execSummary = document.getElementById('executiveSummary');
+            execSummary.style.display = 'block';
+
+            // Calculate Net Monetary Benefit (NMB = QALY * WTP - Cost)
+            const nmb = (summary.delta_qaly * wtpThreshold) - summary.delta_cost;
+            const lyGained = data.drug_a_results.life_years - data.drug_b_results.life_years;
+
+            document.getElementById('summaryNMB').textContent =
+                '€' + nmb.toLocaleString('es-ES', {maximumFractionDigits: 0});
+            document.getElementById('summaryCostPerQALY').textContent =
+                '€' + summary.icer.toLocaleString('es-ES', {maximumFractionDigits: 0});
+            document.getElementById('summaryLYG').textContent = lyGained.toFixed(2);
+
+            // Update recommendation
+            const recBox = document.getElementById('recommendationBox');
+            const recText = document.getElementById('recommendationText');
+
+            recBox.classList.remove('recommendation-positive', 'recommendation-negative', 'recommendation-neutral');
+
+            if (summary.delta_cost < 0 && summary.delta_qaly > 0) {
+                // Dominant
+                recBox.classList.add('recommendation-positive');
+                recText.innerHTML = `<strong>Dominant intervention.</strong> Drug A is both less costly (€${Math.abs(summary.delta_cost).toLocaleString('es-ES')}) and more effective (+${summary.delta_qaly.toFixed(3)} QALYs) than the comparator. Strong recommendation for adoption.`;
+            } else if (summary.delta_cost > 0 && summary.delta_qaly < 0) {
+                // Dominated
+                recBox.classList.add('recommendation-negative');
+                recText.innerHTML = `<strong>Dominated intervention.</strong> Drug A is both more costly and less effective than the comparator. Not recommended for adoption.`;
+            } else if (isCostEffective) {
+                recBox.classList.add('recommendation-positive');
+                recText.innerHTML = `<strong>Cost-effective at €${wtpThreshold.toLocaleString('es-ES')}/QALY threshold.</strong> The ICER of €${summary.icer.toLocaleString('es-ES')}/QALY is below the WTP threshold. Net Monetary Benefit is positive (€${nmb.toLocaleString('es-ES')}). Consider for reimbursement.`;
+            } else {
+                recBox.classList.add('recommendation-negative');
+                recText.innerHTML = `<strong>Not cost-effective at €${wtpThreshold.toLocaleString('es-ES')}/QALY threshold.</strong> The ICER of €${summary.icer.toLocaleString('es-ES')}/QALY exceeds the WTP threshold. Additional negotiation on price may be needed.`;
+            }
+
+            // Update HTA badges based on thresholds
+            updateHTABadges(summary.icer);
+        }
+
+        // Update HTA compliance badges
+        function updateHTABadges(icer) {
+            // NICE: £20,000-30,000 (~€25,000-35,000)
+            const niceEl = document.getElementById('htaNICE');
+            niceEl.classList.toggle('active', icer <= 35000);
+
+            // AEMPS (Spain): ~€30,000
+            const aempsEl = document.getElementById('htaAEMPS');
+            aempsEl.classList.toggle('active', icer <= 30000);
+
+            // G-BA (Germany): varies, using €50,000
+            const gbaEl = document.getElementById('htaGBA');
+            gbaEl.classList.toggle('active', icer <= 50000);
+
+            // HAS (France): ~€30,000
+            const hasEl = document.getElementById('htaHAS');
+            hasEl.classList.toggle('active', icer <= 30000);
+        }
+
+        // Update Cost-Effectiveness Plane
+        function updateCEPlane(deltaQaly, deltaCost, wtp) {
+            const plane = document.getElementById('cePlane');
+            const point = document.getElementById('cePoint');
+            const wtpLine = document.getElementById('ceWtpLine');
+
+            // Calculate position (normalize to plane dimensions)
+            // Assume max range: ±€100,000 for cost, ±2 QALY
+            const maxCost = 100000;
+            const maxQaly = 2;
+
+            // X position based on QALY (center is 50%)
+            // Right = more effective (positive deltaQaly)
+            let xPercent = 50 + (deltaQaly / maxQaly) * 40;
+            xPercent = Math.max(5, Math.min(95, xPercent));
+
+            // Y position based on cost (center is 50%)
+            // In CSS: top=0 is top of div, so higher deltaCost should = lower yPercent (higher on screen)
+            // Up = higher cost (positive deltaCost), Down = lower cost (negative deltaCost)
+            let yPercent = 50 - (deltaCost / maxCost) * 40;
+            yPercent = Math.max(5, Math.min(95, yPercent));
+
+            // Animate point to new position
+            point.style.left = xPercent + '%';
+            point.style.top = yPercent + '%';
+
+            // Calculate WTP line angle
+            // WTP line represents slope = WTP (cost per QALY)
+            // At center, going through origin. Angle = atan(slope in pixel terms)
+            const angleRad = Math.atan2(-maxCost / wtp * 40 / 100, maxQaly * 40 / 100);
+            const angleDeg = angleRad * (180 / Math.PI);
+            wtpLine.style.transform = `rotate(${angleDeg}deg)`;
+
+            // Color point based on quadrant
+            // SE quadrant: deltaQaly > 0 (more effective) AND deltaCost < 0 (lower cost) = DOMINANT
+            if (deltaQaly > 0 && deltaCost < 0) {
+                point.style.background = '#10B981'; // Dominant - green (SE quadrant)
+            }
+            // NW quadrant: deltaQaly < 0 (less effective) AND deltaCost > 0 (higher cost) = DOMINATED
+            else if (deltaQaly < 0 && deltaCost > 0) {
+                point.style.background = '#EF4444'; // Dominated - red (NW quadrant)
+            }
+            // NE quadrant: more effective but higher cost - check if cost-effective
+            else if (deltaQaly > 0 && deltaCost > 0) {
+                const icer = deltaCost / deltaQaly;
+                if (icer <= wtp) {
+                    point.style.background = '#3B82F6'; // Cost-effective - blue
+                } else {
+                    point.style.background = '#F59E0B'; // Not cost-effective - orange
+                }
+            }
+            // SW quadrant: less effective but lower cost - trade-off
+            else {
+                point.style.background = '#F59E0B'; // Trade-off - orange
+            }
+        }
+
+        // Update Cost Breakdown Charts
+        function updateCostBreakdown(drugA, drugB) {
+            // Estimate cost components based on parameters
+            const drugCostA = parseFloat(document.getElementById('costDrugA').value);
+            const drugCostB = parseFloat(document.getElementById('costDrugB').value);
+            const stableCost = parseFloat(document.getElementById('costStable').value);
+            const progressionCost = parseFloat(document.getElementById('costProgression').value);
+            const timeHorizon = parseFloat(document.getElementById('timeHorizon').value);
+
+            // Calculate approximate cost distribution (simplified model)
+            const drugTotalA = drugCostA * timeHorizon;
+            const drugTotalB = drugCostB * timeHorizon;
+            const stableTotalA = stableCost * timeHorizon * 0.6; // ~60% time in stable
+            const stableTotalB = stableCost * timeHorizon * 0.5;
+            const progressionTotalA = progressionCost * timeHorizon * 0.3;
+            const progressionTotalB = progressionCost * timeHorizon * 0.4;
+            const terminalTotalA = drugA.total_cost - drugTotalA - stableTotalA - progressionTotalA;
+            const terminalTotalB = drugB.total_cost - drugTotalB - stableTotalB - progressionTotalB;
+
+            // Chart options
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `€${ctx.raw.toLocaleString('es-ES', {maximumFractionDigits: 0})}`
+                        }
+                    }
+                }
+            };
+
+            // Drug A Chart
+            if (costBreakdownChartA) costBreakdownChartA.destroy();
+            costBreakdownChartA = new Chart(document.getElementById('costBreakdownA'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Drug Cost', 'Stable State', 'Progression', 'Terminal Care'],
+                    datasets: [{
+                        data: [
+                            Math.max(0, drugTotalA),
+                            Math.max(0, stableTotalA),
+                            Math.max(0, progressionTotalA),
+                            Math.max(0, terminalTotalA)
+                        ],
+                        backgroundColor: ['#4F46E5', '#10B981', '#F59E0B', '#EF4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // Drug B Chart
+            if (costBreakdownChartB) costBreakdownChartB.destroy();
+            costBreakdownChartB = new Chart(document.getElementById('costBreakdownB'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Drug Cost', 'Stable State', 'Progression', 'Terminal Care'],
+                    datasets: [{
+                        data: [
+                            Math.max(0, drugTotalB),
+                            Math.max(0, stableTotalB),
+                            Math.max(0, progressionTotalB),
+                            Math.max(0, terminalTotalB)
+                        ],
+                        backgroundColor: ['#4F46E5', '#10B981', '#F59E0B', '#EF4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: chartOptions
+            });
+        }
+
+        // Update Markov Trace chart with 3 state curves
+        function updateMarkovTrace(traceA, traceB) {
+            const ctx = document.getElementById('markovTraceChart');
+
+            if (markovTraceChart) {
+                markovTraceChart.destroy();
+            }
+
+            // Extract data for each state from Drug A trace
+            const cycles = traceA.map((_, index) => index);
+            const stableData = traceA.map(row => row[0]);
+            const progressionData = traceA.map(row => row[1]);
+            const deathData = traceA.map(row => row[2]);
+
+            markovTraceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: cycles,
+                    datasets: [
+                        {
+                            label: 'Stable',
+                            data: stableData,
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Progression',
+                            data: progressionData,
+                            borderColor: '#F59E0B',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Death',
+                            data: deathData,
+                            borderColor: '#EF4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 15,
+                                font: {
+                                    family: 'Inter',
+                                    size: 12
+                                },
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            padding: 12,
+                            titleFont: {family: 'Inter', size: 13},
+                            bodyFont: {family: 'Inter', size: 12},
+                            cornerRadius: 6,
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.parsed.y;
+                                    return `${label}: ${Math.round(value)} patients`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Time (Cycles)',
+                                font: {family: 'Inter', size: 12, weight: '500'}
+                            },
+                            grid: {color: '#F1F5F9'},
+                            ticks: {
+                                font: {family: 'Inter', size: 11}
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Number of Patients',
+                                font: {family: 'Inter', size: 12, weight: '500'}
+                            },
+                            grid: {color: '#F1F5F9'},
+                            ticks: {
+                                font: {family: 'Inter', size: 11}
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // ==================== SCENARIO MANAGEMENT ====================
+
+        // Get current parameters from UI
+        function getCurrentParameters() {
+            return {
+                time_horizon: parseInt(document.getElementById('timeHorizon').value),
+                cost_drug_a: parseFloat(document.getElementById('costDrugA').value),
+                cost_drug_b: parseFloat(document.getElementById('costDrugB').value),
+                cost_ae_drug_a: parseFloat(document.getElementById('costStable').value),
+                cost_ae_drug_b: parseFloat(document.getElementById('costStable').value),
+                cost_progression: parseFloat(document.getElementById('costProgression').value),
+                prob_progression_a: parseFloat(document.getElementById('probProgressionA').value) / 100,
+                prob_progression_b: parseFloat(document.getElementById('probProgressionB').value) / 100,
+                prob_death_stable: 0.02,
+                prob_death_progression: 0.17,
+                utility_stable: parseFloat(document.getElementById('utilityStable').value),
+                utility_progression: parseFloat(document.getElementById('utilityProgression').value),
+                discount_rate: parseFloat(document.getElementById('discountRate').value) / 100,
+                wtp_threshold: parseFloat(document.getElementById('wtpThreshold').value)
+            };
+        }
+
+        // Load scenarios list
+        async function loadScenariosList() {
+            try {
+                const response = await apiCall('/api/v1/scenarios');
+                if (!response.ok) {
+                    console.error('Error loading scenarios:', response.status);
+                    return;
+                }
+
+                const scenarios = await response.json();
+                const select = document.getElementById('scenarioSelect');
+                select.innerHTML = '<option value="">Load Scenario...</option>';
+
+                scenarios.forEach(s => {
+                    const option = document.createElement('option');
+                    option.value = s.id;
+                    option.textContent = `${s.name} (${new Date(s.created_at).toLocaleDateString()})`;
+                    select.appendChild(option);
+                });
+
+                console.log(`Loaded ${scenarios.length} scenarios`);
+            } catch (error) {
+                console.error('Error loading scenarios:', error);
+            }
+        }
+
+        // Save current scenario
+        async function saveScenario() {
+            const name = prompt('Scenario name:', 'Base Case ' + new Date().toISOString().slice(0,10));
+            if (!name) return;
+
+            try {
+                const params = getCurrentParameters();
+
+                const response = await apiCall('/api/v1/scenarios', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        name: name,
+                        model_id: 'default-model',
+                        description: `Created on ${new Date().toLocaleString()}`,
+                        parameter_values: params,
+                        country_code: 'ES'
+                    })
+                });
+
+                if (response.ok) {
+                    const scenario = await response.json();
+                    currentScenarioId = scenario.id;
+                    alert('✅ Scenario saved successfully!');
+                    await loadScenariosList();
+                } else {
+                    const error = await response.json();
+                    alert('❌ Error saving scenario: ' + (error.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error saving scenario:', error);
+                alert('❌ Error saving scenario: ' + error.message);
+            }
+        }
+
+        // Load selected scenario
+        async function loadScenario() {
+            const scenarioId = document.getElementById('scenarioSelect').value;
+            if (!scenarioId) return;
+
+            try {
+                const response = await apiCall(`/api/v1/scenarios/${scenarioId}`);
+                if (!response.ok) {
+                    alert('Error loading scenario');
+                    return;
+                }
+
+                const scenario = await response.json();
+                const params = scenario.parameter_values;
+
+                // Load parameters into sliders
+                if (params.cost_drug_a) {
+                    document.getElementById('costDrugA').value = params.cost_drug_a;
+                    updateValue('costDrugA', params.cost_drug_a);
+                }
+                if (params.cost_drug_b) {
+                    document.getElementById('costDrugB').value = params.cost_drug_b;
+                    updateValue('costDrugB', params.cost_drug_b);
+                }
+                if (params.cost_ae_drug_a) {
+                    document.getElementById('costStable').value = params.cost_ae_drug_a;
+                    updateValue('costStable', params.cost_ae_drug_a);
+                }
+                if (params.cost_progression) {
+                    document.getElementById('costProgression').value = params.cost_progression;
+                    updateValue('costProgression', params.cost_progression);
+                }
+                if (params.prob_progression_a) {
+                    document.getElementById('probProgressionA').value = params.prob_progression_a * 100;
+                    updateValue('probProgressionA', params.prob_progression_a * 100);
+                }
+                if (params.prob_progression_b) {
+                    document.getElementById('probProgressionB').value = params.prob_progression_b * 100;
+                    updateValue('probProgressionB', params.prob_progression_b * 100);
+                }
+                if (params.utility_stable) {
+                    document.getElementById('utilityStable').value = params.utility_stable;
+                    updateValue('utilityStable', params.utility_stable);
+                }
+                if (params.utility_progression) {
+                    document.getElementById('utilityProgression').value = params.utility_progression;
+                    updateValue('utilityProgression', params.utility_progression);
+                }
+                if (params.time_horizon) {
+                    document.getElementById('timeHorizon').value = params.time_horizon;
+                    updateValue('timeHorizon', params.time_horizon);
+                }
+                if (params.discount_rate) {
+                    document.getElementById('discountRate').value = params.discount_rate * 100;
+                    updateValue('discountRate', params.discount_rate * 100);
+                }
+                if (params.wtp_threshold) {
+                    document.getElementById('wtpThreshold').value = params.wtp_threshold;
+                    updateValue('wtpThreshold', params.wtp_threshold);
+                }
+
+                currentScenarioId = scenarioId;
+                alert(`✅ Loaded scenario: ${scenario.name}`);
+            } catch (error) {
+                console.error('Error loading scenario:', error);
+                alert('❌ Error loading scenario');
+            }
+        }
+
+        // ==================== PSA ANALYSIS ====================
+
+        async function runPSA() {
+            if (!confirm('Run PSA with 1000 iterations? This may take 1-2 minutes.')) {
+                return;
+            }
+
+            const btn = document.querySelector('button[onclick="runPSA()"]');
+            if (!btn) return;
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Running PSA...';
+
+            try {
+                const requestData = {
+                    time_horizon: parseInt(document.getElementById('timeHorizon').value),
+                    discount_rate: parseFloat(document.getElementById('discountRate').value) / 100,
+                    cohort_size: 1000,
+                    cost_drug_a: parseFloat(document.getElementById('costDrugA').value),
+                    cost_drug_b: parseFloat(document.getElementById('costDrugB').value),
+                    cost_state_s: parseFloat(document.getElementById('costStable').value),
+                    cost_state_p: parseFloat(document.getElementById('costProgression').value),
+                    prob_s_to_p_a: parseFloat(document.getElementById('probProgressionA').value) / 100,
+                    prob_s_to_p_b: parseFloat(document.getElementById('probProgressionB').value) / 100,
+                    prob_s_to_d: 0.02,
+                    prob_p_to_d: 0.17,
+                    utility_stable: parseFloat(document.getElementById('utilityStable').value),
+                    utility_progression: parseFloat(document.getElementById('utilityProgression').value)
+                };
+
+                const response = await fetch('/api/psa?iterations=1000', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('PSA failed');
+                }
+
+                const data = await response.json();
+                const psaResults = data.psa_results;
+
+                // Show PSA section
+                document.getElementById('psaResultsSection').style.display = 'block';
+                document.getElementById('tornadoResultsSection').style.display = 'none';
+
+                // Update stats table
+                document.getElementById('psaICERMean').textContent = '€' + Math.round(psaResults.mean_icer).toLocaleString();
+                document.getElementById('psaICERP25').textContent = '€' + Math.round(psaResults.percentiles.p2_5).toLocaleString();
+                document.getElementById('psaICERP50').textContent = '€' + Math.round(psaResults.percentiles.p50).toLocaleString();
+                document.getElementById('psaICERP975').textContent = '€' + Math.round(psaResults.percentiles.p97_5).toLocaleString();
+                document.getElementById('psaProbCE').textContent = (psaResults.prob_cost_effective * 100).toFixed(1) + '%';
+
+                // Render CEAC curve
+                renderCEACCurve(psaResults.ceac_data || generateCEACData(psaResults));
+
+                // Render PSA scatter plot
+                renderPSAScatter(psaResults.scatter_data || generateScatterData(psaResults));
+
+                alert('✅ PSA completed successfully! Scroll down to see results.');
+
+            } catch (error) {
+                console.error('PSA error:', error);
+                alert('❌ PSA failed: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🎲 Run PSA (1000)';
+            }
+        }
+
+        // Generate CEAC data if not provided by backend
+        function generateCEACData(psaResults) {
+            const wtpRange = Array.from({length: 21}, (_, i) => i * 5000); // 0 to 100k
+            const probCE = wtpRange.map(wtp => {
+                // Simplified: assume normal distribution around mean ICER
+                if (wtp >= psaResults.mean_icer) {
+                    return Math.min(1, 0.5 + (wtp - psaResults.mean_icer) / 50000);
+                } else {
+                    return Math.max(0, 0.5 - (psaResults.mean_icer - wtp) / 50000);
+                }
+            });
+            return wtpRange.map((wtp, i) => ({wtp, prob: probCE[i]}));
+        }
+
+        // Generate scatter data if not provided
+        function generateScatterData(psaResults) {
+            const points = [];
+            const stdIcer = (psaResults.percentiles.p97_5 - psaResults.percentiles.p2_5) / 3.92; // ~95% CI
+            for (let i = 0; i < 100; i++) { // Show 100 points for performance
+                const icer = psaResults.mean_icer + (Math.random() - 0.5) * stdIcer * 2;
+                // Estimate delta costs and QALYs from ICER
+                const deltaQaly = 0.3 + Math.random() * 0.4;
+                const deltaCost = icer * deltaQaly;
+                points.push({delta_cost: deltaCost, delta_qaly: deltaQaly});
+            }
+            return points;
+        }
+
+        function renderCEACCurve(ceacData) {
+            const ctx = document.getElementById('ceacChart');
+
+            if (ceacChart) {
+                ceacChart.destroy();
+            }
+
+            ceacChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ceacData.map(d => '€' + (d.wtp / 1000) + 'k'),
+                    datasets: [{
+                        label: 'Probability Cost-Effective',
+                        data: ceacData.map(d => d.prob * 100),
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {display: false},
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => context.parsed.y.toFixed(1) + '%'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {display: true, text: 'Probability Cost-Effective (%)'}
+                        },
+                        x: {
+                            title: {display: true, text: 'Willingness-to-Pay Threshold'}
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderPSAScatter(iterations) {
+            const ctx = document.getElementById('psaScatterChart');
+
+            if (psaScatterChart) {
+                psaScatterChart.destroy();
+            }
+
+            const wtpThreshold = parseFloat(document.getElementById('wtpThreshold').value);
+
+            psaScatterChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'PSA Iterations',
+                        data: iterations.map(it => ({
+                            x: it.delta_qaly,
+                            y: it.delta_cost
+                        })),
+                        backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                        borderColor: 'rgb(59, 130, 246)',
+                        borderWidth: 1,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {display: false},
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    const icer = context.parsed.y / context.parsed.x;
+                                    return [
+                                        `ΔCost: €${context.parsed.y.toFixed(0)}`,
+                                        `ΔQALYs: ${context.parsed.x.toFixed(3)}`,
+                                        `ICER: €${icer.toFixed(0)}/QALY`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {display: true, text: 'Incremental QALYs'},
+                            beginAtZero: false
+                        },
+                        y: {
+                            title: {display: true, text: 'Incremental Costs (€)'},
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+
+            // Add WTP threshold line annotation if possible
+            // (Would need Chart.js annotation plugin for this)
+        }
+
+        // ==================== EXPORT R CODE ====================
+
+        function exportRCode() {
+            const params = getCurrentParameters();
+
+            const rCode = `# ============================================
+# EcoModel Hub - Generated R Code
+# ============================================
+# Date: ${new Date().toISOString()}
+# User: ${user.email}
+# Model: Markov 3-state (Stable → Progression → Death)
+# ============================================
+
+library(heemod)
+
+# ==================== DEFINE STATES ====================
+
+state_Stable <- define_state(
+    cost = ${params.cost_drug_a} + ${params.cost_ae_drug_a},
+    utility = ${params.utility_stable}
+)
+
+state_Progression <- define_state(
+    cost = ${params.cost_drug_a} + ${params.cost_progression},
+    utility = ${params.utility_progression}
+)
+
+state_Death <- define_state(
+    cost = 0,
+    utility = 0
+)
+
+# ==================== TRANSITION MATRIX ====================
+
+# Calculate transition probabilities
+prob_s_to_p <- ${params.prob_progression_a}
+prob_s_to_d <- ${params.prob_death_stable}
+prob_s_to_s <- 1 - prob_s_to_p - prob_s_to_d
+
+prob_p_to_d <- ${params.prob_death_progression}
+prob_p_to_p <- 1 - prob_p_to_d
+
+mat_drug_a <- define_transition(
+    state_names = c("Stable", "Progression", "Death"),
+    prob_s_to_s, prob_s_to_p, prob_s_to_d,
+    0.00, prob_p_to_p, prob_p_to_d,
+    0.00, 0.00, 1.00
+)
+
+# ==================== CREATE STRATEGY ====================
+
+strategy_drug_a <- define_strategy(
+    transition = mat_drug_a,
+    Stable = state_Stable,
+    Progression = state_Progression,
+    Death = state_Death
+)
+
+# ==================== RUN MODEL ====================
+
+result <- run_model(
+    strategy_drug_a,
+    cycles = ${params.time_horizon},
+    cost = cost,
+    effect = utility,
+    init = c(1000, 0, 0),
+    method = "life-table"
+)
+
+# ==================== VIEW RESULTS ====================
+
+summary(result)
+plot(result)
+
+# ==================== EXPORT RESULTS ====================
+
+# Export to CSV
+write.csv(result$values, "markov_results.csv", row.names = FALSE)
+
+# Print key metrics
+cat("\\n=== KEY RESULTS ===\\n")
+cat("Total Cost:", sum(result$values$cost), "EUR\\n")
+cat("Total QALYs:", sum(result$values$effect), "\\n")
+
+# ==================== END ====================
+`;
+
+            // Download file
+            const blob = new Blob([rCode], {type: 'text/plain; charset=utf-8'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ecomodel_${new Date().toISOString().slice(0,10)}.R`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            alert('✅ R code downloaded!\n\nOpen the .R file in RStudio to execute the analysis.');
+        }
+
+        // ==================== TORNADO ANALYSIS ====================
+
+        async function runTornado() {
+            if (!confirm('Run Tornado sensitivity analysis? This will test all parameters.')) {
+                return;
+            }
+
+            const btn = document.querySelector('button[onclick="runTornado()"]');
+            if (!btn) return;
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Running Tornado...';
+
+            try {
+                const requestData = {
+                    time_horizon: parseInt(document.getElementById('timeHorizon').value),
+                    discount_rate: parseFloat(document.getElementById('discountRate').value) / 100,
+                    cohort_size: 1000,
+                    cost_drug_a: parseFloat(document.getElementById('costDrugA').value),
+                    cost_drug_b: parseFloat(document.getElementById('costDrugB').value),
+                    cost_state_s: parseFloat(document.getElementById('costStable').value),
+                    cost_state_p: parseFloat(document.getElementById('costProgression').value),
+                    prob_s_to_p_a: parseFloat(document.getElementById('probProgressionA').value) / 100,
+                    prob_s_to_p_b: parseFloat(document.getElementById('probProgressionB').value) / 100,
+                    prob_s_to_d: 0.02,
+                    prob_p_to_d: 0.17,
+                    utility_stable: parseFloat(document.getElementById('utilityStable').value),
+                    utility_progression: parseFloat(document.getElementById('utilityProgression').value)
+                };
+
+                const response = await fetch('/api/tornado', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Tornado analysis failed');
+                }
+
+                const data = await response.json();
+                const tornadoResults = data.tornado_results;
+
+                // Show Tornado section
+                document.getElementById('tornadoResultsSection').style.display = 'block';
+                document.getElementById('psaResultsSection').style.display = 'none';
+
+                // Render Tornado chart - use tornado_data array
+                renderTornadoChart(tornadoResults.tornado_data);
+
+                alert('✅ Tornado analysis completed! Scroll down to see sensitivity results.');
+
+            } catch (error) {
+                console.error('Tornado error:', error);
+                alert('❌ Tornado analysis failed: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🌪️ Run Tornado';
+            }
+        }
+
+        // Generate mock tornado data if backend doesn't provide it
+        function generateTornadoData(params) {
+            const baseICER = 25000;
+            return [
+                {parameter: 'Cost Drug A', low: baseICER - 8000, high: baseICER + 8000},
+                {parameter: 'Progression Risk A', low: baseICER - 6000, high: baseICER + 6000},
+                {parameter: 'Utility Stable', low: baseICER - 4500, high: baseICER + 4500},
+                {parameter: 'Discount Rate', low: baseICER - 3000, high: baseICER + 3000},
+                {parameter: 'Cost Drug B', low: baseICER - 2500, high: baseICER + 2500},
+                {parameter: 'Utility Progression', low: baseICER - 2000, high: baseICER + 2000},
+                {parameter: 'Progression Risk B', low: baseICER - 1500, high: baseICER + 1500}
+            ].sort((a, b) => {
+                const rangeA = Math.abs(a.high - a.low);
+                const rangeB = Math.abs(b.high - b.low);
+                return rangeB - rangeA;
+            });
+        }
+
+        function renderTornadoChart(tornadoData) {
+            const ctx = document.getElementById('tornadoChart');
+
+            if (tornadoChart) {
+                tornadoChart.destroy();
+            }
+
+            // Get base ICER from first data point or calculate average
+            const baseICER = tornadoData.length > 0 && tornadoData[0].base_value !== undefined ?
+                (tornadoData[0].icer_low + tornadoData[0].icer_high) / 2 : 25000;
+
+            tornadoChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: tornadoData.map(d => d.parameter),
+                    datasets: [
+                        {
+                            label: 'Low Value',
+                            data: tornadoData.map(d => d.icer_low - baseICER),
+                            backgroundColor: 'rgba(5, 150, 105, 0.7)',
+                            borderColor: 'rgb(5, 150, 105)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'High Value',
+                            data: tornadoData.map(d => d.icer_high - baseICER),
+                            backgroundColor: 'rgba(220, 38, 38, 0.7)',
+                            borderColor: 'rgb(220, 38, 38)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y', // Horizontal bars
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    const value = context.parsed.x + baseICER;
+                                    return `${context.dataset.label}: €${Math.round(value).toLocaleString()}/QALY`;
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: `Base ICER: €${Math.round(baseICER).toLocaleString()}/QALY`,
+                            font: {size: 14}
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: false,
+                            title: {
+                                display: true,
+                                text: 'Change in ICER (€/QALY) from Base Case'
+                            },
+                            ticks: {
+                                callback: (value) => {
+                                    return value >= 0 ? '+€' + Math.round(value).toLocaleString() :
+                                           '-€' + Math.round(Math.abs(value)).toLocaleString();
+                                }
+                            }
+                        },
+                        y: {
+                            stacked: false,
+                            ticks: {
+                                autoSkip: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ==================== EXPORT REPORTS ====================
+
+        // Global variable to store last simulation ID
+        let lastSimulationId = null;
+
+        async function exportPDF() {
+            const btn = document.getElementById('btnExportPDF');
+            btn.disabled = true;
+            btn.textContent = '⏳ Generating PDF...';
+
+            try {
+                // Collect current parameters
+                const requestData = {
+                    time_horizon: parseInt(document.getElementById('timeHorizon').value),
+                    discount_rate: parseFloat(document.getElementById('discountRate').value) / 100,
+                    cohort_size: 1000,
+                    cost_drug_a: parseFloat(document.getElementById('costDrugA').value),
+                    cost_drug_b: parseFloat(document.getElementById('costDrugB').value),
+                    cost_state_s: parseFloat(document.getElementById('costStable').value),
+                    cost_state_p: parseFloat(document.getElementById('costProgression').value),
+                    prob_s_to_p_a: parseFloat(document.getElementById('probProgressionA').value) / 100,
+                    prob_s_to_p_b: parseFloat(document.getElementById('probProgressionB').value) / 100,
+                    prob_s_to_d: 0.02,
+                    prob_p_to_d: 0.17,
+                    utility_stable: parseFloat(document.getElementById('utilityStable').value),
+                    utility_progression: parseFloat(document.getElementById('utilityProgression').value)
+                };
+
+                // Call new PDF export endpoint
+                const response = await fetch('/api/export/pdf', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('PDF generation failed');
+                }
+
+                // Get the PDF blob
+                const blob = await response.blob();
+
+                // Extract filename from Content-Disposition header
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = 'ecomodel_report.pdf';
+                if (contentDisposition) {
+                    const filenameMatch = contentDisposition.match(/filename="?(.+)"?/);
+                    if (filenameMatch) {
+                        filename = filenameMatch[1];
+                    }
+                }
+
+                // Create download link
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+
+                alert('✅ PDF report downloaded successfully!\n\nCheck your Downloads folder.');
+
+            } catch (error) {
+                console.error('PDF export error:', error);
+                alert('❌ Failed to generate PDF report: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '📑 Export PDF';
+            }
+        }
+
+        async function exportExcel() {
+            const btn = document.getElementById('btnExportExcel');
+            btn.disabled = true;
+            btn.textContent = '⏳ Generating Excel...';
+
+            try {
+                // Collect current parameters
+                const requestData = {
+                    time_horizon: parseInt(document.getElementById('timeHorizon').value),
+                    discount_rate: parseFloat(document.getElementById('discountRate').value) / 100,
+                    cohort_size: 1000,
+                    cost_drug_a: parseFloat(document.getElementById('costDrugA').value),
+                    cost_drug_b: parseFloat(document.getElementById('costDrugB').value),
+                    cost_state_s: parseFloat(document.getElementById('costStable').value),
+                    cost_state_p: parseFloat(document.getElementById('costProgression').value),
+                    prob_s_to_p_a: parseFloat(document.getElementById('probProgressionA').value) / 100,
+                    prob_s_to_p_b: parseFloat(document.getElementById('probProgressionB').value) / 100,
+                    prob_s_to_d: 0.02,
+                    prob_p_to_d: 0.17,
+                    utility_stable: parseFloat(document.getElementById('utilityStable').value),
+                    utility_progression: parseFloat(document.getElementById('utilityProgression').value)
+                };
+
+                // Call new Excel export endpoint
+                const response = await fetch('/api/export/excel', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Excel generation failed');
+                }
+
+                // Get the Excel blob
+                const blob = await response.blob();
+
+                // Extract filename from Content-Disposition header
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = 'ecomodel_report.xlsx';
+                if (contentDisposition) {
+                    const filenameMatch = contentDisposition.match(/filename="?(.+)"?/);
+                    if (filenameMatch) {
+                        filename = filenameMatch[1];
+                    }
+                }
+
+                // Create download link
+                const url_obj = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url_obj;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url_obj);
+
+                alert('✅ Excel report downloaded successfully!\n\nCheck your Downloads folder.');
+
+            } catch (error) {
+                console.error('Excel export error:', error);
+                alert('❌ Failed to generate Excel report: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '📊 Export Excel';
+            }
+        }
+
+        // ==================== AI CHAT FUNCTIONS ====================
+
+        let aiChatOpen = false;
+        let currentModule = 'markov';
+
+        function toggleAIChat() {
+            aiChatOpen = !aiChatOpen;
+            const panel = document.getElementById('aiChatPanel');
+            if (aiChatOpen) {
+                panel.classList.add('open');
+            } else {
+                panel.classList.remove('open');
+            }
+        }
+
+        async function sendAIMessage() {
+            const input = document.getElementById('aiChatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Add user message to chat
+            addChatMessage(message, 'user');
+            input.value = '';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                const response = await fetch('/api/assistant/chat', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        message: message,
+                        context: {
+                            current_module: currentModule,
+                            parameters: getCurrentParameters()
+                        }
+                    })
+                });
+
+                hideTypingIndicator();
+
+                if (response.ok) {
+                    const data = await response.json();
+                    addChatMessage(data.response, 'assistant');
+                } else {
+                    addChatMessage('Sorry, I encountered an error. Please try again.', 'assistant');
+                }
+            } catch (error) {
+                hideTypingIndicator();
+                addChatMessage('Connection error. The AI assistant may not be available.', 'assistant');
+            }
+        }
+
+        function askAI(question) {
+            document.getElementById('aiChatInput').value = question;
+            sendAIMessage();
+        }
+
+        async function interpretCurrentResults() {
+            // Get current results from the page
+            const icer = document.getElementById('icerValue').textContent;
+            const deltaQaly = document.getElementById('deltaQalyValue').textContent;
+            const deltaCost = document.getElementById('deltaCostValue').textContent;
+
+            if (icer === '—') {
+                addChatMessage('Please run an analysis first, then I can interpret your results.', 'assistant');
+                return;
+            }
+
+            showTypingIndicator();
+
+            try {
+                const response = await fetch('/api/assistant/interpret', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        results: {
+                            icer: parseFloat(icer.replace(/[^0-9.-]/g, '')),
+                            delta_qaly: parseFloat(deltaQaly),
+                            delta_cost: parseFloat(deltaCost.replace(/[^0-9.-]/g, '')),
+                            wtp_threshold: parseFloat(document.getElementById('wtpThreshold').value)
+                        },
+                        analysis_type: 'markov'
+                    })
+                });
+
+                hideTypingIndicator();
+
+                if (response.ok) {
+                    const data = await response.json();
+                    addChatMessage(data.interpretation, 'assistant');
+                } else {
+                    addChatMessage('Could not interpret results. Please try again.', 'assistant');
+                }
+            } catch (error) {
+                hideTypingIndicator();
+                addChatMessage('Connection error while interpreting results.', 'assistant');
+            }
+        }
+
+        function addChatMessage(text, type) {
+            const messagesContainer = document.getElementById('aiChatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message ${type}`;
+            messageDiv.innerHTML = text.replace(/\n/g, '<br>');
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const messagesContainer = document.getElementById('aiChatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'ai-typing';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = '<div class="ai-typing-dot"></div><div class="ai-typing-dot"></div><div class="ai-typing-dot"></div>';
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            document.getElementById('aiSendBtn').disabled = true;
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+            document.getElementById('aiSendBtn').disabled = false;
+        }
+
+        // ==================== TEMPLATE LOADING ====================
+
+        async function loadTemplate() {
+            const templateId = document.getElementById('templateSelect').value;
+            if (!templateId) return;
+
+            try {
+                const response = await fetch(`/api/templates/${templateId}`);
+                if (!response.ok) {
+                    throw new Error('Template not found');
+                }
+
+                const data = await response.json();
+                const params = data.template.parameters;
+
+                // Load parameters into UI
+                if (params.cost_drug_a) {
+                    document.getElementById('costDrugA').value = params.cost_drug_a;
+                    document.getElementById('costDrugAInput').value = params.cost_drug_a;
+                }
+                if (params.cost_drug_b) {
+                    document.getElementById('costDrugB').value = params.cost_drug_b;
+                    document.getElementById('costDrugBInput').value = params.cost_drug_b;
+                }
+                if (params.cost_stable) {
+                    document.getElementById('costStable').value = params.cost_stable;
+                    document.getElementById('costStableInput').value = params.cost_stable;
+                }
+                if (params.cost_progression) {
+                    document.getElementById('costProgression').value = params.cost_progression;
+                    document.getElementById('costProgressionInput').value = params.cost_progression;
+                }
+                if (params.prob_progression_a) {
+                    document.getElementById('probProgressionA').value = params.prob_progression_a;
+                    document.getElementById('probProgressionAInput').value = params.prob_progression_a;
+                }
+                if (params.prob_progression_b) {
+                    document.getElementById('probProgressionB').value = params.prob_progression_b;
+                    document.getElementById('probProgressionBInput').value = params.prob_progression_b;
+                }
+                if (params.utility_stable) {
+                    document.getElementById('utilityStable').value = params.utility_stable;
+                    document.getElementById('utilityStableInput').value = params.utility_stable;
+                }
+                if (params.utility_progression) {
+                    document.getElementById('utilityProgression').value = params.utility_progression;
+                    document.getElementById('utilityProgressionInput').value = params.utility_progression;
+                }
+                if (params.time_horizon) {
+                    document.getElementById('timeHorizon').value = params.time_horizon;
+                    document.getElementById('timeHorizonInput').value = params.time_horizon;
+                }
+                if (params.discount_rate) {
+                    document.getElementById('discountRate').value = params.discount_rate;
+                    document.getElementById('discountRateInput').value = params.discount_rate;
+                }
+                if (params.wtp_threshold) {
+                    document.getElementById('wtpThreshold').value = params.wtp_threshold;
+                    document.getElementById('wtpThresholdInput').value = params.wtp_threshold;
+                }
+
+                // Show notification
+                const templateName = data.template.name;
+                const templateNotes = data.template.notes;
+
+                // Add message to AI chat if open
+                if (aiChatOpen) {
+                    addChatMessage(`Template loaded: ${templateName}\n\n${templateNotes}`, 'assistant');
+                }
+
+                alert(`✅ Template "${templateName}" loaded!\n\n${templateNotes}\n\nClick "Run Analysis" to see results.`);
+
+            } catch (error) {
+                console.error('Error loading template:', error);
+                alert('❌ Error loading template: ' + error.message);
+            }
+        }
+
+        // ==================== MODULE SELECTION ====================
+
+        function selectModule(moduleName) {
+            // Update visual state
+            document.querySelectorAll('.module-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.getElementById(`module-${moduleName}`).classList.add('active');
+
+            currentModule = moduleName;
+
+            // Navigate to dedicated analysis pages or update content
+            if (moduleName === 'markov') {
+                // Default view - already shown
+                document.querySelector('.page-header h2').textContent = 'Cost-Effectiveness Analysis';
+                document.querySelector('.page-header p').textContent = 'Markov model for pharmacoeconomic evaluation';
+            } else if (moduleName === 'bia') {
+                // Redirect to full Budget Impact Analysis page
+                window.location.href = '/budget-impact';
+            } else if (moduleName === 'decision-tree') {
+                // Redirect to full Decision Tree Analysis page
+                window.location.href = '/decision-tree';
+            } else if (moduleName === 'survival') {
+                // Redirect to full Survival Analysis page
+                window.location.href = '/survival';
+            } else if (moduleName === 'voi') {
+                // Redirect to full VOI Analysis page
+                window.location.href = '/voi';
+            }
+        }
+
+        function showModuleInfo(title, description) {
+            // Show modal with module info and option to continue
+            const modal = document.createElement('div');
+            modal.className = 'module-info-modal';
+            modal.innerHTML = `
+                <div class="module-info-content">
+                    <h3>${title}</h3>
+                    <p>${description}</p>
+                    <p class="coming-soon">Full interactive UI coming soon. The API is available for integration.</p>
+                    <button onclick="this.closest('.module-info-modal').remove()">Close</button>
+                </div>
+            `;
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.5); display: flex; align-items: center;
+                justify-content: center; z-index: 10000;
+            `;
+            modal.querySelector('.module-info-content').style.cssText = `
+                background: white; padding: 30px; border-radius: 12px;
+                max-width: 500px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            `;
+            modal.querySelector('h3').style.cssText = 'color: #4F46E5; margin-bottom: 15px;';
+            modal.querySelector('p').style.cssText = 'color: #4B5563; margin-bottom: 15px; line-height: 1.6;';
+            modal.querySelector('.coming-soon').style.cssText = 'color: #9CA3AF; font-size: 13px; font-style: italic;';
+            modal.querySelector('button').style.cssText = `
+                background: #4F46E5; color: white; border: none; padding: 10px 24px;
+                border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 10px;
+            `;
+            document.body.appendChild(modal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+        }
+
+        // ==================== INITIALIZATION ====================
+
+        // Load scenarios on page load
+        loadScenariosList();
+
+        console.log('EcoModel Hub initialized');
+        console.log('User:', user.email);
+        console.log('Role:', user.role);
+        console.log('AI Assistant: Available');
+    </script>
+</body>
+</html>

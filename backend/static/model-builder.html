@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Builder - EcoModel Hub</title>
+    <style>
+        :root {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --bg-tertiary: #F1F5F9;
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-tertiary: #94A3B8;
+            --accent: #3B82F6;
+            --accent-hover: #2563EB;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .back-btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-tertiary);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        /* Wizard Steps */
+        .wizard-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: var(--border);
+            z-index: -1;
+        }
+
+        .step.active:not(:last-child)::after {
+            background: var(--accent);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .step.active .step-number {
+            background: var(--accent);
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: var(--success);
+            color: white;
+        }
+
+        .step-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .step.active .step-title {
+            color: var(--text-primary);
+        }
+
+        /* Wizard Content */
+        .wizard-content {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            transition: all 0.2s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+        }
+
+        .helper-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        /* Parameters List */
+        .parameters-list {
+            margin-top: 24px;
+        }
+
+        .parameter-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .parameter-info {
+            flex: 1;
+        }
+
+        .parameter-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .parameter-details {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .parameter-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-icon:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .btn-icon.danger:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        /* Buttons */
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-add {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-add:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* Summary */
+        .summary-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .summary-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .summary-value {
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning);
+            color: #B45309;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--accent);
+            color: #1E40AF;
+        }
+
+        .info-icon {
+            cursor: pointer;
+            margin-left: 8px;
+            font-size: 14px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .info-icon:hover {
+            opacity: 1;
+        }
+
+        .guidance-section {
+            margin: 12px 0;
+        }
+
+        .guidance-section h4 {
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .guidance-section ul {
+            margin-left: 20px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .guidance-section ul li {
+            margin-bottom: 6px;
+        }
+
+        .recommendation-badge {
+            background: var(--success);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">🏗️ Model Builder</div>
+        <a href="/app" class="back-btn">← Back to Dashboard</a>
+    </div>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Wizard Steps -->
+        <div class="wizard-steps">
+            <div class="step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-title">Basic Info</div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-title">Parameters</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-title">Review & Publish</div>
+            </div>
+        </div>
+
+        <!-- Wizard Content -->
+        <div class="wizard-content">
+            <!-- Step 1: Basic Info -->
+            <div class="step-content active" data-step="1">
+                <h2>Basic Model Information</h2>
+                <p class="subtitle">Define the fundamental details of your pharmacoeconomic model</p>
+
+                <div class="form-group">
+                    <label>Model Name *</label>
+                    <input type="text" id="modelName" placeholder="e.g., Oncology Drug X Cost-Effectiveness Model">
+                    <div class="helper-text">A clear, descriptive name for your model</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="modelDescription" placeholder="Describe the model purpose, disease area, and key assumptions"></textarea>
+                    <div class="helper-text">Optional: Provide context about the model for other users</div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>
+                            Model Type *
+                            <span class="info-icon" title="Need help choosing? Click for guidance" onclick="showModelTypeGuide()">ℹ️</span>
+                        </label>
+                        <select id="modelType" onchange="updateModelTypeDescription()">
+                            <option value="">-- Select Model Type --</option>
+                            <option value="MARKOV">Markov Model (State Transitions)</option>
+                            <option value="DECISION_TREE">Decision Tree</option>
+                            <option value="PARTITION_SURVIVAL">Partitioned Survival</option>
+                        </select>
+                        <div class="helper-text" id="modelTypeHelp">Choose the type of economic model</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Version</label>
+                        <input type="text" id="modelVersion" placeholder="1.0" value="1.0">
+                        <div class="helper-text">Track model iterations (e.g., 1.0, 1.1, 2.0)</div>
+                    </div>
+                </div>
+
+                <!-- Model Type Guidance Panel -->
+                <div class="alert alert-info" id="modelTypeGuidance" style="display: none; margin-top: 16px;">
+                    <span>💡</span>
+                    <div id="guidanceContent"></div>
+                </div>
+
+                <div class="alert alert-warning">
+                    <span>⚠️</span>
+                    <div>
+                        <strong>Important:</strong> Make sure you have defined all parameters before publishing the model.
+                        Unpublished models are only visible to administrators.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Parameters -->
+            <div class="step-content" data-step="2">
+                <h2>Define Parameters</h2>
+                <p class="subtitle">Add all the input parameters that users will configure for their scenarios</p>
+
+                <div class="alert alert-info" style="margin-bottom: 20px;">
+                    <span>💡</span>
+                    <div>
+                        <strong>Parameter Categories:</strong>
+                        <ul style="margin: 8px 0 0 20px; font-size: 13px; line-height: 1.6;">
+                            <li><strong>Costs:</strong> Drug costs, administration costs, state-specific costs (e.g., cost_drug_a, cost_state_stable)</li>
+                            <li><strong>Probabilities:</strong> Transition probabilities, event risks (e.g., prob_s_to_p_a, mortality_rate)</li>
+                            <li><strong>Utilities:</strong> Quality of life weights (0-1 scale) for each health state (e.g., utility_stable, utility_progression)</li>
+                            <li><strong>Time:</strong> Time horizon, cycle length, discount rates (e.g., time_horizon, discount_rate)</li>
+                        </ul>
+                        <p style="margin: 8px 0 0 0; font-size: 12px; color: #6B7280;"><em>Tip: Use descriptive names like "cost_drug_a" instead of "c1"</em></p>
+                    </div>
+                </div>
+
+                <div class="parameters-list" id="parametersList">
+                    <!-- Parameters will be added here dynamically -->
+                </div>
+
+                <button class="btn-add" onclick="addParameter()">+ Add New Parameter</button>
+
+                <div class="alert alert-warning" style="margin-top: 20px;">
+                    <span>⚠️</span>
+                    <div>
+                        <strong>Typical Markov Model Parameters:</strong>
+                        <ul style="margin: 8px 0 0 20px; font-size: 13px;">
+                            <li>Time horizon (5-20 years for chronic diseases)</li>
+                            <li>Discount rate (typically 3% for costs and QALYs)</li>
+                            <li>Drug costs for each treatment arm</li>
+                            <li>State-specific costs (stable, progression, death)</li>
+                            <li>Transition probabilities between states</li>
+                            <li>Utility values for each health state (0 = death, 1 = perfect health)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Review & Publish -->
+            <div class="step-content" data-step="3">
+                <h2>Review & Publish</h2>
+                <p class="subtitle">Verify all details before publishing your model</p>
+
+                <div class="summary-card">
+                    <div class="summary-title">Model Summary</div>
+                    <div class="summary-item">
+                        <span class="summary-label">Name</span>
+                        <span class="summary-value" id="summaryName">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Type</span>
+                        <span class="summary-value" id="summaryType">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Version</span>
+                        <span class="summary-value" id="summaryVersion">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Parameters</span>
+                        <span class="summary-value" id="summaryParamCount">0</span>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-title">Parameters List</div>
+                    <div id="summaryParams"></div>
+                </div>
+
+                <div class="alert alert-success" style="display: none;" id="successAlert">
+                    <span>✓</span>
+                    <div>
+                        <strong>Model created successfully!</strong> Your model is now ready to be used for creating scenarios.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wizard Actions -->
+        <div class="wizard-actions">
+            <button class="btn btn-secondary" id="btnPrev" onclick="previousStep()" disabled>Previous</button>
+            <button class="btn btn-primary" id="btnNext" onclick="nextStep()">Next</button>
+        </div>
+    </div>
+
+    <!-- Parameter Modal (simplified, will add later) -->
+
+    <script>
+        let currentStep = 1;
+        let modelData = {
+            name: '',
+            description: '',
+            model_type: 'MARKOV',
+            version: '1.0',
+            parameters: []
+        };
+
+        // Model Type Guidance Content
+        const modelTypeGuidance = {
+            'MARKOV': {
+                title: 'Markov Model (State Transitions)',
+                description: 'Best for modeling chronic diseases where patients move between health states over time.',
+                whenToUse: [
+                    'Chronic or progressive diseases (diabetes, cancer, HIV)',
+                    'Long-term treatments (>1 year)',
+                    'Recurring health events or state transitions',
+                    'When patients can move back and forth between states'
+                ],
+                examples: [
+                    'Cancer progression: Stable → Progression → Death',
+                    'Diabetes management: Controlled → Uncontrolled → Complications',
+                    'HIV treatment: Stable → AIDS → Death'
+                ],
+                recommended: true,
+                icon: '🔄'
+            },
+            'DECISION_TREE': {
+                title: 'Decision Tree',
+                description: 'Best for one-time decisions with immediate outcomes or short-term events.',
+                whenToUse: [
+                    'Diagnostic tests or screening programs',
+                    'One-time interventions (surgery, vaccination)',
+                    'Acute conditions with short time horizon (<1 year)',
+                    'Simple decision problems with clear branches'
+                ],
+                examples: [
+                    'Screening test: Test Positive → Treatment / Test Negative → No Treatment',
+                    'Surgical decision: Surgery → Success/Complication / No Surgery → Status Quo',
+                    'Vaccination program: Vaccinate → Protected/Not Protected / No Vaccine → Risk'
+                ],
+                recommended: false,
+                icon: '🌳'
+            },
+            'PARTITION_SURVIVAL': {
+                title: 'Partitioned Survival Analysis',
+                description: 'Best for oncology with survival curve data from clinical trials.',
+                whenToUse: [
+                    'Oncology trials with survival data (PFS, OS)',
+                    'When you have Kaplan-Meier curves',
+                    'Time-to-event data available',
+                    'Advanced cancer treatments'
+                ],
+                examples: [
+                    'Cancer trial: Progression-Free Survival vs Overall Survival curves',
+                    'Immunotherapy: Pre-progression, Post-progression, Death',
+                    'Advanced therapies with published survival data'
+                ],
+                recommended: false,
+                icon: '📊'
+            }
+        };
+
+        // Show Model Type Guidance Modal
+        function showModelTypeGuide() {
+            const guidancePanel = document.getElementById('modelTypeGuidance');
+            const guidanceContent = document.getElementById('guidanceContent');
+
+            let html = '<h3 style="margin-top: 0; color: var(--accent);">💡 Choosing the Right Model Type</h3>';
+
+            for (const [key, guide] of Object.entries(modelTypeGuidance)) {
+                const recommended = guide.recommended ? '<span class="recommendation-badge">RECOMMENDED</span>' : '';
+
+                html += `
+                    <div class="guidance-section" style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #E5E7EB;">
+                        <h4>${guide.icon} ${guide.title} ${recommended}</h4>
+                        <p style="margin: 8px 0; font-size: 13px;"><strong>${guide.description}</strong></p>
+
+                        <p style="margin: 12px 0 4px 0; font-weight: 600; font-size: 13px;">When to Use:</p>
+                        <ul style="margin: 4px 0;">
+                            ${guide.whenToUse.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+
+                        <p style="margin: 12px 0 4px 0; font-weight: 600; font-size: 13px;">Examples:</p>
+                        <ul style="margin: 4px 0;">
+                            ${guide.examples.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            html += `
+                <div style="margin-top: 16px; padding: 12px; background: #FEF3C7; border-radius: 6px; font-size: 13px;">
+                    <strong>💡 Not sure which to choose?</strong><br>
+                    For most pharmacoeconomic evaluations, <strong>Markov Models</strong> are the most common choice
+                    because they can model long-term chronic conditions with recurring costs and health benefits.
+                </div>
+            `;
+
+            guidanceContent.innerHTML = html;
+            guidancePanel.style.display = 'block';
+        }
+
+        // Update Model Type Description
+        function updateModelTypeDescription() {
+            const modelType = document.getElementById('modelType').value;
+            const helpText = document.getElementById('modelTypeHelp');
+            const guidancePanel = document.getElementById('modelTypeGuidance');
+            const guidanceContent = document.getElementById('guidanceContent');
+
+            if (!modelType) {
+                helpText.textContent = 'Choose the type of economic model';
+                guidancePanel.style.display = 'none';
+                return;
+            }
+
+            const guide = modelTypeGuidance[modelType];
+            if (guide) {
+                // Update brief help text
+                helpText.innerHTML = `${guide.icon} <strong>${guide.title}:</strong> ${guide.description}`;
+
+                // Show focused guidance for selected type
+                const recommended = guide.recommended ? '<span class="recommendation-badge">RECOMMENDED FOR MOST CASES</span>' : '';
+
+                let html = `
+                    <h4 style="margin-top: 0;">${guide.icon} ${guide.title} ${recommended}</h4>
+                    <p style="margin: 8px 0;"><strong>${guide.description}</strong></p>
+
+                    <div style="margin-top: 16px;">
+                        <p style="font-weight: 600; margin-bottom: 8px;">✅ Best for:</p>
+                        <ul style="margin: 4px 0 12px 20px; font-size: 13px; line-height: 1.6;">
+                            ${guide.whenToUse.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+
+                        <p style="font-weight: 600; margin-bottom: 8px;">📋 Examples:</p>
+                        <ul style="margin: 4px 0; font-size: 13px; line-height: 1.6;">
+                            ${guide.examples.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div style="margin-top: 12px; font-size: 12px; color: #6B7280;">
+                        <em>Need help choosing? Click the ℹ️ icon above to compare all model types.</em>
+                    </div>
+                `;
+
+                guidanceContent.innerHTML = html;
+                guidancePanel.style.display = 'block';
+            }
+        }
+
+        // Step navigation
+        function nextStep() {
+            if (currentStep === 1) {
+                if (!validateStep1()) return;
+                saveStep1Data();
+            } else if (currentStep === 2) {
+                if (modelData.parameters.length === 0) {
+                    alert('⚠️ Please add at least one parameter before continuing');
+                    return;
+                }
+                updateSummary();
+            } else if (currentStep === 3) {
+                createModel();
+                return;
+            }
+
+            if (currentStep < 3) {
+                currentStep++;
+                updateStepUI();
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepUI();
+            }
+        }
+
+        function updateStepUI() {
+            // Update step indicators
+            document.querySelectorAll('.step').forEach(step => {
+                const stepNum = parseInt(step.dataset.step);
+                step.classList.remove('active', 'completed');
+                if (stepNum === currentStep) {
+                    step.classList.add('active');
+                } else if (stepNum < currentStep) {
+                    step.classList.add('completed');
+                }
+            });
+
+            // Update step content
+            document.querySelectorAll('.step-content').forEach(content => {
+                content.classList.remove('active');
+                if (parseInt(content.dataset.step) === currentStep) {
+                    content.classList.add('active');
+                }
+            });
+
+            // Update buttons
+            document.getElementById('btnPrev').disabled = currentStep === 1;
+            document.getElementById('btnNext').textContent = currentStep === 3 ? 'Create Model' : 'Next';
+        }
+
+        // Step 1 validation
+        function validateStep1() {
+            const name = document.getElementById('modelName').value.trim();
+            if (!name) {
+                alert('⚠️ Please enter a model name');
+                return false;
+            }
+            return true;
+        }
+
+        function saveStep1Data() {
+            modelData.name = document.getElementById('modelName').value.trim();
+            modelData.description = document.getElementById('modelDescription').value.trim();
+            modelData.model_type = document.getElementById('modelType').value;
+            modelData.version = document.getElementById('modelVersion').value.trim();
+        }
+
+        // Parameter management
+        let parameterCount = 0;
+
+        function addParameter() {
+            const paramId = `param-${Date.now()}`;
+            const paramHTML = `
+                <div class="parameter-item" id="${paramId}">
+                    <div class="parameter-info">
+                        <div class="parameter-name">
+                            <input type="text" placeholder="Parameter name (e.g., cost_drug_a)"
+                                   style="border: none; background: transparent; width: 100%; font-weight: 600;"
+                                   onchange="updateParameter('${paramId}')">
+                        </div>
+                        <div class="parameter-details">
+                            <input type="text" placeholder="Display name (e.g., Drug A Cost)"
+                                   style="border: none; background: transparent; width: 100%; font-size: 12px; color: var(--text-secondary);"
+                                   onchange="updateParameter('${paramId}')">
+                        </div>
+                    </div>
+                    <div class="parameter-actions">
+                        <button class="btn-icon danger" onclick="removeParameter('${paramId}')" title="Delete">×</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('parametersList').insertAdjacentHTML('beforeend', paramHTML);
+            parameterCount++;
+        }
+
+        function updateParameter(paramId) {
+            // This would update the parameter in modelData.parameters
+            console.log('Update parameter:', paramId);
+        }
+
+        function removeParameter(paramId) {
+            if (confirm('Are you sure you want to remove this parameter?')) {
+                document.getElementById(paramId).remove();
+                parameterCount--;
+            }
+        }
+
+        // Summary update
+        function updateSummary() {
+            document.getElementById('summaryName').textContent = modelData.name;
+            document.getElementById('summaryType').textContent = modelData.model_type;
+            document.getElementById('summaryVersion').textContent = modelData.version;
+            document.getElementById('summaryParamCount').textContent = modelData.parameters.length;
+
+            // Show parameters
+            const paramsHTML = modelData.parameters.map(p => `
+                <div class="summary-item">
+                    <span class="summary-label">${p.display_name}</span>
+                    <span class="summary-value">${p.data_type}</span>
+                </div>
+            `).join('');
+            document.getElementById('summaryParams').innerHTML = paramsHTML || '<p style="color: var(--text-secondary);">No parameters defined</p>';
+        }
+
+        // Create model API call
+        async function createModel() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                alert('⚠️ You must be logged in as admin to create models');
+                window.location.href = '/login';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/v1/models', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(modelData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to create model');
+                }
+
+                const result = await response.json();
+                document.getElementById('successAlert').style.display = 'flex';
+                document.getElementById('btnNext').disabled = true;
+
+                setTimeout(() => {
+                    window.location.href = '/app';
+                }, 2000);
+            } catch (error) {
+                alert('❌ Error creating model: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: ecomodel_db
+    environment:
+      POSTGRES_USER: ecomodel
+      POSTGRES_PASSWORD: ecomodel_pass
+      POSTGRES_DB: ecomodel
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecomodel"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: ecomodel_redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.backend
+    container_name: ecomodel_backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ../backend:/app
+    ports:
+      - "8001:8000"
+    environment:
+      DATABASE_URL: postgresql://ecomodel:ecomodel_pass@db:5432/ecomodel
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: your-secret-key-change-in-production
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  celery_worker:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.worker
+    container_name: ecomodel_celery
+    command: celery -A app.tasks.celery_app worker --loglevel=info -Q simulations_quick,simulations_heavy,reports
+    volumes:
+      - ../backend:/app
+    environment:
+      DATABASE_URL: postgresql://ecomodel:ecomodel_pass@db:5432/ecomodel
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - redis
+      - db
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    container_name: ecomodel_frontend
+    command: npm run dev -- --host
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+    ports:
+      - "3001:5173"
+    environment:
+      VITE_API_URL: http://localhost:8001/api/v1
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  redis_data:

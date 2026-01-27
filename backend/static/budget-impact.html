@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Impact Analysis - EcoModel Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #0F172A;
+            --primary-light: #1E293B;
+            --accent: #3B82F6;
+            --accent-hover: #2563EB;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --purple: #8B5CF6;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --bg-tertiary: #F1F5F9;
+            --border: #E2E8F0;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-tertiary: #94A3B8;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            border: none;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--border);
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        .form-section {
+            margin-bottom: 24px;
+        }
+
+        .form-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-hint {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 24px 0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        /* Results Section */
+        .results-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .kpi-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+
+        .kpi-card:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-md);
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'SF Mono', monospace;
+        }
+
+        .kpi-value.positive { color: var(--danger); }
+        .kpi-value.negative { color: var(--success); }
+
+        .kpi-change {
+            font-size: 12px;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .kpi-change.up { color: var(--danger); }
+        .kpi-change.down { color: var(--success); }
+
+        .chart-container {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-header h4 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .chart-header p {
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .chart-wrapper {
+            height: 300px;
+            position: relative;
+        }
+
+        /* Budget Table */
+        .budget-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .budget-table th,
+        .budget-table td {
+            padding: 12px 16px;
+            text-align: right;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .budget-table th {
+            background: var(--bg-tertiary);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .budget-table th:first-child,
+        .budget-table td:first-child {
+            text-align: left;
+        }
+
+        .budget-table td {
+            font-size: 14px;
+            font-family: 'SF Mono', monospace;
+        }
+
+        .budget-table tr:last-child td {
+            border-bottom: none;
+            font-weight: 600;
+            background: var(--bg-tertiary);
+        }
+
+        .budget-table .positive { color: var(--danger); }
+        .budget-table .negative { color: var(--success); }
+
+        /* Market Share Slider */
+        .market-share-group {
+            margin-bottom: 20px;
+        }
+
+        .market-share-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .market-share-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .market-share-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+            font-family: 'SF Mono', monospace;
+        }
+
+        .market-share-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--bg-tertiary);
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .market-share-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .scenario-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .scenario-tab {
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .scenario-tab.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .scenario-tab:hover:not(.active) {
+            background: var(--border);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-tertiary);
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state h4 {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 1200px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .kpi-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <a href="/app" class="back-btn">← Back to Dashboard</a>
+            <div class="header-title">
+                <h1>💰 Budget Impact Analysis</h1>
+                <p>ISPOR-compliant budget impact model</p>
+            </div>
+        </div>
+        <div style="display: flex; gap: 12px;">
+            <button class="btn btn-secondary" onclick="exportPDF()">📄 Export PDF</button>
+            <button class="btn btn-secondary" onclick="exportResults()">📊 Export Excel</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="grid">
+            <!-- Left Panel: Parameters -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Model Parameters</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Population Section -->
+                    <div class="form-section">
+                        <div class="form-section-title">
+                            <span>👥</span> Target Population
+                        </div>
+                        <div class="form-group">
+                            <label>Total Eligible Population</label>
+                            <input type="number" class="form-control" id="totalPopulation" value="100000" min="1000">
+                            <p class="form-hint">Number of patients eligible for treatment</p>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Annual Growth Rate (%)</label>
+                                <input type="number" class="form-control" id="growthRate" value="2" min="0" max="20" step="0.5">
+                            </div>
+                            <div class="form-group">
+                                <label>Time Horizon (years)</label>
+                                <select class="form-control" id="timeHorizon">
+                                    <option value="3">3 years</option>
+                                    <option value="5" selected>5 years</option>
+                                    <option value="7">7 years</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Treatment Costs Section -->
+                    <div class="form-section">
+                        <div class="form-section-title">
+                            <span>💊</span> Treatment Costs (Annual)
+                        </div>
+                        <div class="form-group">
+                            <label>New Treatment Cost (€/year)</label>
+                            <input type="number" class="form-control" id="costNewTreatment" value="15000" min="0" step="100">
+                        </div>
+                        <div class="form-group">
+                            <label>Current Treatment Cost (€/year)</label>
+                            <input type="number" class="form-control" id="costCurrentTreatment" value="8000" min="0" step="100">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Administration Cost (€)</label>
+                                <input type="number" class="form-control" id="costAdmin" value="500" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Monitoring Cost (€)</label>
+                                <input type="number" class="form-control" id="costMonitoring" value="300" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Market Share Section -->
+                    <div class="form-section">
+                        <div class="form-section-title">
+                            <span>📈</span> Market Share Projections
+                        </div>
+                        <div class="scenario-tabs">
+                            <button class="scenario-tab active" onclick="setScenario('base')">Base Case</button>
+                            <button class="scenario-tab" onclick="setScenario('optimistic')">Optimistic</button>
+                            <button class="scenario-tab" onclick="setScenario('conservative')">Conservative</button>
+                        </div>
+
+                        <div id="marketShareSliders">
+                            <div class="market-share-group">
+                                <div class="market-share-header">
+                                    <span class="market-share-label">Year 1</span>
+                                    <span class="market-share-value" id="shareYear1Value">10%</span>
+                                </div>
+                                <input type="range" class="market-share-slider" id="shareYear1" value="10" min="0" max="100" oninput="updateMarketShare(1)">
+                            </div>
+                            <div class="market-share-group">
+                                <div class="market-share-header">
+                                    <span class="market-share-label">Year 2</span>
+                                    <span class="market-share-value" id="shareYear2Value">20%</span>
+                                </div>
+                                <input type="range" class="market-share-slider" id="shareYear2" value="20" min="0" max="100" oninput="updateMarketShare(2)">
+                            </div>
+                            <div class="market-share-group">
+                                <div class="market-share-header">
+                                    <span class="market-share-label">Year 3</span>
+                                    <span class="market-share-value" id="shareYear3Value">30%</span>
+                                </div>
+                                <input type="range" class="market-share-slider" id="shareYear3" value="30" min="0" max="100" oninput="updateMarketShare(3)">
+                            </div>
+                            <div class="market-share-group">
+                                <div class="market-share-header">
+                                    <span class="market-share-label">Year 4</span>
+                                    <span class="market-share-value" id="shareYear4Value">35%</span>
+                                </div>
+                                <input type="range" class="market-share-slider" id="shareYear4" value="35" min="0" max="100" oninput="updateMarketShare(4)">
+                            </div>
+                            <div class="market-share-group">
+                                <div class="market-share-header">
+                                    <span class="market-share-label">Year 5</span>
+                                    <span class="market-share-value" id="shareYear5Value">40%</span>
+                                </div>
+                                <input type="range" class="market-share-slider" id="shareYear5" value="40" min="0" max="100" oninput="updateMarketShare(5)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <button class="btn btn-primary" onclick="runAnalysis()">
+                        Calculate Budget Impact
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Panel: Results -->
+            <div class="results-grid" id="resultsSection">
+                <!-- KPI Cards -->
+                <div class="kpi-row">
+                    <div class="kpi-card">
+                        <div class="kpi-label">5-Year Total Impact</div>
+                        <div class="kpi-value positive" id="kpiTotalImpact">—</div>
+                        <div class="kpi-change up" id="kpiTotalChange"></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Average Annual Impact</div>
+                        <div class="kpi-value" id="kpiAnnualAvg">—</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Peak Year Impact</div>
+                        <div class="kpi-value" id="kpiPeakImpact">—</div>
+                        <div class="kpi-change" id="kpiPeakYear"></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Patients on New Tx (Y5)</div>
+                        <div class="kpi-value" id="kpiPatientsY5">—</div>
+                    </div>
+                </div>
+
+                <!-- Budget Impact Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div>
+                            <h4>Annual Budget Impact</h4>
+                            <p>Incremental cost vs current scenario</p>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="budgetChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Detailed Budget Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Detailed Budget Breakdown</h3>
+                    </div>
+                    <div class="card-body" style="padding: 0;">
+                        <table class="budget-table" id="budgetTable">
+                            <thead>
+                                <tr>
+                                    <th>Component</th>
+                                    <th>Year 1</th>
+                                    <th>Year 2</th>
+                                    <th>Year 3</th>
+                                    <th>Year 4</th>
+                                    <th>Year 5</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="budgetTableBody">
+                                <tr>
+                                    <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-tertiary);">
+                                        Run analysis to see results
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Market Share Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div>
+                            <h4>Market Share & Patient Distribution</h4>
+                            <p>Projected uptake of new treatment over time</p>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="marketShareChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let budgetChart = null;
+        let marketShareChart = null;
+        let currentScenario = 'base';
+        let lastResults = null;
+
+        // Scenario presets
+        const scenarios = {
+            base: [10, 20, 30, 35, 40],
+            optimistic: [15, 30, 45, 55, 65],
+            conservative: [5, 10, 15, 20, 25]
+        };
+
+        // Update market share display
+        function updateMarketShare(year) {
+            const value = document.getElementById(`shareYear${year}`).value;
+            document.getElementById(`shareYear${year}Value`).textContent = value + '%';
+        }
+
+        // Set scenario presets
+        function setScenario(scenario) {
+            currentScenario = scenario;
+            document.querySelectorAll('.scenario-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const shares = scenarios[scenario];
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`shareYear${i}`).value = shares[i-1];
+                document.getElementById(`shareYear${i}Value`).textContent = shares[i-1] + '%';
+            }
+        }
+
+        // Run budget impact analysis
+        async function runAnalysis() {
+            const params = {
+                eligible_population: parseInt(document.getElementById('totalPopulation').value),
+                time_horizon: parseInt(document.getElementById('timeHorizon').value),
+                population_growth_rate: parseFloat(document.getElementById('growthRate').value) / 100,
+                treatments: [
+                    {
+                        name: "New Treatment",
+                        annual_cost: parseFloat(document.getElementById('costNewTreatment').value),
+                        administration_cost: parseFloat(document.getElementById('costAdmin').value),
+                        monitoring_cost: parseFloat(document.getElementById('costMonitoring').value),
+                        is_new: true
+                    },
+                    {
+                        name: "Current Treatment",
+                        annual_cost: parseFloat(document.getElementById('costCurrentTreatment').value),
+                        administration_cost: 200,
+                        monitoring_cost: 200,
+                        is_new: false
+                    }
+                ],
+                market_shares: {
+                    "New Treatment": Array.from({length: 5}, (_, i) =>
+                        parseFloat(document.getElementById(`shareYear${i+1}`).value) / 100
+                    ),
+                    "Current Treatment": Array.from({length: 5}, (_, i) =>
+                        1 - parseFloat(document.getElementById(`shareYear${i+1}`).value) / 100
+                    )
+                }
+            };
+
+            try {
+                const response = await fetch('/api/budget-impact', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(params)
+                });
+
+                if (!response.ok) throw new Error('Analysis failed');
+
+                const data = await response.json();
+                lastResults = data;
+                updateResults(data);
+
+            } catch (error) {
+                console.error('Error:', error);
+                // Use local calculation as fallback
+                const localResults = calculateLocalBIA(params);
+                lastResults = localResults;
+                updateResults(localResults);
+            }
+        }
+
+        // Local BIA calculation fallback
+        function calculateLocalBIA(params) {
+            const years = params.time_horizon;
+            const basePopulation = params.eligible_population;
+            const growthRate = params.population_growth_rate;
+
+            const newTreatmentCost = params.treatments[0].annual_cost +
+                                     params.treatments[0].administration_cost +
+                                     params.treatments[0].monitoring_cost;
+            const currentTreatmentCost = params.treatments[1].annual_cost +
+                                         params.treatments[1].administration_cost +
+                                         params.treatments[1].monitoring_cost;
+
+            const yearlyData = [];
+            let totalImpact = 0;
+
+            for (let y = 0; y < years; y++) {
+                const population = Math.round(basePopulation * Math.pow(1 + growthRate, y));
+                const newShare = params.market_shares["New Treatment"][y] || params.market_shares["New Treatment"][years-1];
+                const currentShare = 1 - newShare;
+
+                const patientsNew = Math.round(population * newShare);
+                const patientsCurrent = population - patientsNew;
+
+                const costWithNew = patientsNew * newTreatmentCost + patientsCurrent * currentTreatmentCost;
+                const costWithoutNew = population * currentTreatmentCost;
+                const incrementalCost = costWithNew - costWithoutNew;
+
+                totalImpact += incrementalCost;
+
+                yearlyData.push({
+                    year: y + 1,
+                    population,
+                    patients_new: patientsNew,
+                    patients_current: patientsCurrent,
+                    cost_with_new: costWithNew,
+                    cost_without_new: costWithoutNew,
+                    incremental_cost: incrementalCost,
+                    market_share_new: newShare * 100
+                });
+            }
+
+            return {
+                status: 'success',
+                yearly_results: yearlyData,
+                summary: {
+                    total_budget_impact: totalImpact,
+                    average_annual_impact: totalImpact / years,
+                    peak_year: yearlyData.reduce((max, y) => y.incremental_cost > max.incremental_cost ? y : max, yearlyData[0]).year,
+                    peak_impact: Math.max(...yearlyData.map(y => y.incremental_cost)),
+                    final_year_patients_new: yearlyData[years-1].patients_new
+                }
+            };
+        }
+
+        // Update UI with results
+        function updateResults(data) {
+            const summary = data.summary;
+            const yearly = data.yearly_results;
+
+            // Update KPIs
+            document.getElementById('kpiTotalImpact').textContent =
+                '€' + formatNumber(summary.total_budget_impact);
+            document.getElementById('kpiTotalImpact').className =
+                'kpi-value ' + (summary.total_budget_impact > 0 ? 'positive' : 'negative');
+
+            document.getElementById('kpiAnnualAvg').textContent =
+                '€' + formatNumber(summary.average_annual_impact);
+
+            document.getElementById('kpiPeakImpact').textContent =
+                '€' + formatNumber(summary.peak_impact);
+            document.getElementById('kpiPeakYear').textContent = 'Year ' + summary.peak_year;
+
+            document.getElementById('kpiPatientsY5').textContent =
+                formatNumber(summary.final_year_patients_new);
+
+            // Update charts
+            updateBudgetChart(yearly);
+            updateMarketShareChart(yearly);
+
+            // Update table
+            updateBudgetTable(yearly, summary);
+        }
+
+        // Update budget impact chart
+        function updateBudgetChart(yearly) {
+            const ctx = document.getElementById('budgetChart');
+
+            if (budgetChart) budgetChart.destroy();
+
+            budgetChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: yearly.map(y => 'Year ' + y.year),
+                    datasets: [
+                        {
+                            label: 'With New Treatment',
+                            data: yearly.map(y => y.cost_with_new),
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderColor: 'rgb(59, 130, 246)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Without New Treatment',
+                            data: yearly.map(y => y.cost_without_new),
+                            backgroundColor: 'rgba(148, 163, 184, 0.8)',
+                            borderColor: 'rgb(148, 163, 184)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => context.dataset.label + ': €' + formatNumber(context.raw)
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: (value) => '€' + formatNumber(value)
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update market share chart
+        function updateMarketShareChart(yearly) {
+            const ctx = document.getElementById('marketShareChart');
+
+            if (marketShareChart) marketShareChart.destroy();
+
+            marketShareChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: yearly.map(y => 'Year ' + y.year),
+                    datasets: [
+                        {
+                            label: 'Patients on New Treatment',
+                            data: yearly.map(y => y.patients_new),
+                            borderColor: 'rgb(59, 130, 246)',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Patients on Current Treatment',
+                            data: yearly.map(y => y.patients_current),
+                            borderColor: 'rgb(148, 163, 184)',
+                            backgroundColor: 'rgba(148, 163, 184, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            stacked: true,
+                            ticks: {
+                                callback: (value) => formatNumber(value)
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update budget table
+        function updateBudgetTable(yearly, summary) {
+            const tbody = document.getElementById('budgetTableBody');
+            const years = yearly.length;
+
+            let html = '';
+
+            // Population row
+            html += '<tr><td>Eligible Population</td>';
+            yearly.forEach(y => html += `<td>${formatNumber(y.population)}</td>`);
+            html += `<td>—</td></tr>`;
+
+            // Patients on new treatment
+            html += '<tr><td>Patients on New Treatment</td>';
+            yearly.forEach(y => html += `<td>${formatNumber(y.patients_new)}</td>`);
+            html += `<td>—</td></tr>`;
+
+            // Cost with new treatment
+            html += '<tr><td>Cost (With New Treatment)</td>';
+            yearly.forEach(y => html += `<td>€${formatNumber(y.cost_with_new)}</td>`);
+            const totalWith = yearly.reduce((sum, y) => sum + y.cost_with_new, 0);
+            html += `<td>€${formatNumber(totalWith)}</td></tr>`;
+
+            // Cost without new treatment
+            html += '<tr><td>Cost (Without New Treatment)</td>';
+            yearly.forEach(y => html += `<td>€${formatNumber(y.cost_without_new)}</td>`);
+            const totalWithout = yearly.reduce((sum, y) => sum + y.cost_without_new, 0);
+            html += `<td>€${formatNumber(totalWithout)}</td></tr>`;
+
+            // Incremental impact
+            html += '<tr><td><strong>Incremental Budget Impact</strong></td>';
+            yearly.forEach(y => {
+                const cls = y.incremental_cost > 0 ? 'positive' : 'negative';
+                html += `<td class="${cls}">€${formatNumber(y.incremental_cost)}</td>`;
+            });
+            const totalCls = summary.total_budget_impact > 0 ? 'positive' : 'negative';
+            html += `<td class="${totalCls}"><strong>€${formatNumber(summary.total_budget_impact)}</strong></td></tr>`;
+
+            tbody.innerHTML = html;
+        }
+
+        // Format number with thousand separators
+        function formatNumber(num) {
+            return Math.round(num).toLocaleString('es-ES');
+        }
+
+        // Export results
+        function exportResults() {
+            if (!lastResults) {
+                alert('Please run analysis first');
+                return;
+            }
+            alert('Excel export would download here.\n\nTotal 5-Year Impact: €' +
+                  formatNumber(lastResults.summary.total_budget_impact));
+        }
+
+        // Export PDF
+        async function exportPDF() {
+            if (!lastResults) {
+                alert('Please run analysis first');
+                return;
+            }
+
+            try {
+                const requestData = {
+                    scenario_name: 'Budget Impact Analysis',
+                    user_email: 'user@ecomodel.com',
+                    organization: 'Demo Organization',
+                    time_horizon: parseInt(document.getElementById('timeHorizon').value),
+                    target_population: parseInt(document.getElementById('targetPopulation').value),
+                    market_share_trajectory: [
+                        parseInt(document.getElementById('shareYear1').value),
+                        parseInt(document.getElementById('shareYear2').value),
+                        parseInt(document.getElementById('shareYear3').value),
+                        parseInt(document.getElementById('shareYear4').value),
+                        parseInt(document.getElementById('shareYear5').value)
+                    ],
+                    cost_new_treatment: parseInt(document.getElementById('costNewTreatment').value),
+                    cost_current_treatment: parseInt(document.getElementById('costCurrentTreatment').value),
+                    cost_admin: parseInt(document.getElementById('costAdmin').value),
+                    cost_monitoring: parseInt(document.getElementById('costMonitoring').value)
+                };
+
+                const response = await fetch('/api/export/budget-impact/pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('PDF generation failed');
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `BIA_Report_${new Date().toISOString().slice(0,10)}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                console.log('PDF exported successfully');
+            } catch (error) {
+                console.error('Export PDF error:', error);
+                alert('Failed to generate PDF. Please try again.');
+            }
+        }
+
+        // Initialize with empty charts
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize sliders
+            for (let i = 1; i <= 5; i++) {
+                updateMarketShare(i);
+            }
+        });
+    </script>
+</body>
+</html>

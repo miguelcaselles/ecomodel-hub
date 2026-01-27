@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision Tree Analysis - EcoModel Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #0F172A;
+            --accent: #3B82F6;
+            --accent-hover: #2563EB;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --purple: #8B5CF6;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --bg-tertiary: #F1F5F9;
+            --border: #E2E8F0;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-tertiary: #94A3B8;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            border: none;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .back-btn:hover { background: var(--border); }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 380px 1fr 320px;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-header h3 { font-size: 15px; font-weight: 600; }
+
+        .card-body { padding: 20px; }
+
+        .form-group { margin-bottom: 14px; }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .btn-success { background: var(--success); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-secondary { background: var(--bg-tertiary); color: var(--text-secondary); }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 16px 0;
+        }
+
+        /* Tree Visualization */
+        .tree-canvas {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            min-height: 600px;
+            position: relative;
+            overflow: auto;
+        }
+
+        .tree-container {
+            padding: 40px;
+            min-width: 800px;
+        }
+
+        .tree-node {
+            position: absolute;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            min-width: 140px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tree-node:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-md);
+        }
+
+        .tree-node.selected {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .tree-node.decision {
+            border-color: var(--accent);
+            border-style: solid;
+        }
+
+        .tree-node.decision::before {
+            content: "□";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 20px;
+        }
+
+        .tree-node.chance {
+            border-color: var(--success);
+        }
+
+        .tree-node.chance::before {
+            content: "○";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--success);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 14px;
+            line-height: 20px;
+        }
+
+        .tree-node.terminal {
+            border-color: var(--warning);
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        .tree-node.terminal::before {
+            content: "△";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--warning);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            font-size: 12px;
+            line-height: 20px;
+        }
+
+        .node-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .node-value {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            font-family: monospace;
+        }
+
+        .node-ev {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-top: 4px;
+        }
+
+        .tree-edge {
+            position: absolute;
+            background: var(--border);
+            height: 2px;
+            transform-origin: left center;
+        }
+
+        .edge-label {
+            position: absolute;
+            font-size: 10px;
+            color: var(--text-tertiary);
+            background: var(--bg-secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Node List */
+        .node-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .node-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .node-item:hover {
+            border-color: var(--accent);
+            background: var(--bg-tertiary);
+        }
+
+        .node-item.selected {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .node-type-badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .node-type-badge.decision { background: rgba(59, 130, 246, 0.1); color: var(--accent); }
+        .node-type-badge.chance { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .node-type-badge.terminal { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+
+        .node-item-info {
+            flex: 1;
+        }
+
+        .node-item-name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .node-item-value {
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
+        /* Results Panel */
+        .results-section {
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .result-label {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .result-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: monospace;
+        }
+
+        .result-value.highlight { color: var(--success); }
+        .result-value.negative { color: var(--danger); }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .comparison-table td:last-child {
+            text-align: right;
+            font-family: monospace;
+        }
+
+        .optimal-badge {
+            background: var(--success);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        /* Templates */
+        .template-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .template-btn {
+            padding: 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .template-btn:hover {
+            border-color: var(--accent);
+            background: var(--bg-primary);
+        }
+
+        .template-icon {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+
+        .template-name {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 1200px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <a href="/app" class="back-btn">← Back to Dashboard</a>
+            <div class="header-title">
+                <h1>🌳 Decision Tree Analysis</h1>
+                <p>Short-term cost-effectiveness with roll-back algorithm</p>
+            </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary" onclick="exportPDF()">📄 Export PDF</button>
+            <button class="btn btn-secondary" onclick="resetTree()">Reset</button>
+            <button class="btn btn-success" onclick="calculateTree()">Calculate</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="grid">
+            <!-- Left Panel: Node Editor -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Tree Builder</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Quick Templates -->
+                    <div style="margin-bottom: 16px;">
+                        <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; display: block;">
+                            Quick Templates
+                        </label>
+                        <div class="template-grid">
+                            <div class="template-btn" onclick="loadTemplate('screening')">
+                                <div class="template-icon">🔬</div>
+                                <div class="template-name">Screening</div>
+                            </div>
+                            <div class="template-btn" onclick="loadTemplate('treatment')">
+                                <div class="template-icon">💊</div>
+                                <div class="template-name">Treatment</div>
+                            </div>
+                            <div class="template-btn" onclick="loadTemplate('surgery')">
+                                <div class="template-icon">🏥</div>
+                                <div class="template-name">Surgery</div>
+                            </div>
+                            <div class="template-btn" onclick="loadTemplate('vaccine')">
+                                <div class="template-icon">💉</div>
+                                <div class="template-name">Vaccine</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Node Editor -->
+                    <div id="nodeEditor">
+                        <div style="margin-bottom: 12px;">
+                            <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">
+                                Selected Node
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Node Name</label>
+                            <input type="text" class="form-control" id="nodeName" placeholder="Enter node name">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Node Type</label>
+                            <select class="form-control" id="nodeType" onchange="onNodeTypeChange()">
+                                <option value="decision">Decision (□)</option>
+                                <option value="chance">Chance (○)</option>
+                                <option value="terminal">Terminal (△)</option>
+                            </select>
+                        </div>
+
+                        <div id="probabilityField" style="display: none;">
+                            <div class="form-group">
+                                <label>Probability</label>
+                                <input type="number" class="form-control" id="nodeProbability" min="0" max="1" step="0.01" placeholder="0.00 - 1.00">
+                            </div>
+                        </div>
+
+                        <div id="payoffFields" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Cost (€)</label>
+                                    <input type="number" class="form-control" id="nodeCost" placeholder="0">
+                                </div>
+                                <div class="form-group">
+                                    <label>QALY</label>
+                                    <input type="number" class="form-control" id="nodeQaly" step="0.001" placeholder="0.000">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Parent Node</label>
+                            <select class="form-control" id="nodeParent">
+                                <option value="">None (Root)</option>
+                            </select>
+                        </div>
+
+                        <div style="display: flex; gap: 8px; margin-top: 16px;">
+                            <button class="btn btn-primary" onclick="saveNode()" style="flex: 1;">
+                                Save Node
+                            </button>
+                            <button class="btn btn-secondary" onclick="addChildNode()">
+                                + Child
+                            </button>
+                        </div>
+
+                        <button class="btn btn-secondary" onclick="deleteSelectedNode()" style="width: 100%; margin-top: 8px; color: var(--danger);">
+                            Delete Node
+                        </button>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Node List -->
+                    <div>
+                        <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; display: block;">
+                            All Nodes (<span id="nodeCount">0</span>)
+                        </label>
+                        <div class="node-list" id="nodeList">
+                            <p style="text-align: center; color: var(--text-tertiary); padding: 20px; font-size: 13px;">
+                                Load a template or add nodes manually
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center: Tree Visualization -->
+            <div class="tree-canvas" id="treeCanvas">
+                <div class="tree-container" id="treeContainer">
+                    <div style="text-align: center; padding: 100px 40px; color: var(--text-tertiary);">
+                        <div style="font-size: 64px; margin-bottom: 16px; opacity: 0.3;">🌳</div>
+                        <h3 style="color: var(--text-secondary); margin-bottom: 8px;">No Tree Yet</h3>
+                        <p>Select a template or start building your decision tree</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Results -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Results</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>WTP Threshold (€/QALY)</label>
+                        <input type="number" class="form-control" id="wtpThreshold" value="30000">
+                    </div>
+
+                    <div class="results-section" id="resultsSection">
+                        <div class="result-card">
+                            <div class="result-label">Optimal Strategy</div>
+                            <div class="result-value" id="optimalStrategy">—</div>
+                        </div>
+
+                        <div class="result-card">
+                            <div class="result-label">Expected Value (Optimal)</div>
+                            <div class="result-value highlight" id="optimalEV">—</div>
+                        </div>
+
+                        <div class="result-card">
+                            <div class="result-label">ICER vs Comparator</div>
+                            <div class="result-value" id="resultICER">—</div>
+                        </div>
+
+                        <div class="result-card">
+                            <div class="result-label">Net Monetary Benefit</div>
+                            <div class="result-value" id="resultNMB">—</div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <h4 style="font-size: 13px; font-weight: 600; margin-bottom: 12px;">Strategy Comparison</h4>
+                        <table class="comparison-table" id="comparisonTable">
+                            <thead>
+                                <tr>
+                                    <th>Strategy</th>
+                                    <th>Expected Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="comparisonBody">
+                                <tr>
+                                    <td colspan="2" style="text-align: center; color: var(--text-tertiary);">
+                                        Run calculation to see results
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tree data structure
+        let nodes = [];
+        let selectedNodeId = null;
+        let nodeIdCounter = 0;
+        let lastResults = null;
+
+        // Templates
+        const templates = {
+            screening: {
+                name: "Screening Program",
+                nodes: [
+                    { id: 1, name: "Screening Decision", type: "decision", parent: null },
+                    { id: 2, name: "Screen", type: "chance", parent: 1, probability: 1 },
+                    { id: 3, name: "No Screen", type: "chance", parent: 1, probability: 1 },
+                    { id: 4, name: "True Positive", type: "terminal", parent: 2, probability: 0.08, cost: 500, qaly: 0.95 },
+                    { id: 5, name: "False Positive", type: "terminal", parent: 2, probability: 0.12, cost: 800, qaly: 0.90 },
+                    { id: 6, name: "True Negative", type: "terminal", parent: 2, probability: 0.75, cost: 100, qaly: 1.0 },
+                    { id: 7, name: "False Negative", type: "terminal", parent: 2, probability: 0.05, cost: 100, qaly: 0.70 },
+                    { id: 8, name: "Disease (Undetected)", type: "terminal", parent: 3, probability: 0.10, cost: 2000, qaly: 0.60 },
+                    { id: 9, name: "No Disease", type: "terminal", parent: 3, probability: 0.90, cost: 0, qaly: 1.0 }
+                ]
+            },
+            treatment: {
+                name: "Treatment Comparison",
+                nodes: [
+                    { id: 1, name: "Treatment Choice", type: "decision", parent: null },
+                    { id: 2, name: "New Drug", type: "chance", parent: 1, probability: 1 },
+                    { id: 3, name: "Standard Care", type: "chance", parent: 1, probability: 1 },
+                    { id: 4, name: "Response", type: "terminal", parent: 2, probability: 0.70, cost: 15000, qaly: 0.85 },
+                    { id: 5, name: "No Response", type: "terminal", parent: 2, probability: 0.30, cost: 15000, qaly: 0.50 },
+                    { id: 6, name: "Response", type: "terminal", parent: 3, probability: 0.50, cost: 5000, qaly: 0.80 },
+                    { id: 7, name: "No Response", type: "terminal", parent: 3, probability: 0.50, cost: 5000, qaly: 0.45 }
+                ]
+            },
+            surgery: {
+                name: "Surgery vs Medical",
+                nodes: [
+                    { id: 1, name: "Intervention", type: "decision", parent: null },
+                    { id: 2, name: "Surgery", type: "chance", parent: 1, probability: 1 },
+                    { id: 3, name: "Medical Management", type: "chance", parent: 1, probability: 1 },
+                    { id: 4, name: "Success", type: "terminal", parent: 2, probability: 0.85, cost: 25000, qaly: 0.90 },
+                    { id: 5, name: "Complication", type: "terminal", parent: 2, probability: 0.10, cost: 40000, qaly: 0.60 },
+                    { id: 6, name: "Mortality", type: "terminal", parent: 2, probability: 0.05, cost: 30000, qaly: 0 },
+                    { id: 7, name: "Controlled", type: "terminal", parent: 3, probability: 0.60, cost: 8000, qaly: 0.75 },
+                    { id: 8, name: "Progression", type: "terminal", parent: 3, probability: 0.40, cost: 15000, qaly: 0.50 }
+                ]
+            },
+            vaccine: {
+                name: "Vaccination Program",
+                nodes: [
+                    { id: 1, name: "Vaccination", type: "decision", parent: null },
+                    { id: 2, name: "Vaccinate", type: "chance", parent: 1, probability: 1 },
+                    { id: 3, name: "No Vaccine", type: "chance", parent: 1, probability: 1 },
+                    { id: 4, name: "Protected", type: "terminal", parent: 2, probability: 0.90, cost: 50, qaly: 1.0 },
+                    { id: 5, name: "Mild AE", type: "terminal", parent: 2, probability: 0.08, cost: 150, qaly: 0.98 },
+                    { id: 6, name: "Severe AE", type: "terminal", parent: 2, probability: 0.02, cost: 5000, qaly: 0.80 },
+                    { id: 7, name: "No Infection", type: "terminal", parent: 3, probability: 0.70, cost: 0, qaly: 1.0 },
+                    { id: 8, name: "Mild Disease", type: "terminal", parent: 3, probability: 0.20, cost: 500, qaly: 0.90 },
+                    { id: 9, name: "Severe Disease", type: "terminal", parent: 3, probability: 0.10, cost: 10000, qaly: 0.50 }
+                ]
+            }
+        };
+
+        // Load template
+        function loadTemplate(templateKey) {
+            const template = templates[templateKey];
+            nodes = JSON.parse(JSON.stringify(template.nodes));
+            nodeIdCounter = Math.max(...nodes.map(n => n.id)) + 1;
+            selectedNodeId = null;
+            renderTree();
+            renderNodeList();
+            updateParentDropdown();
+        }
+
+        // Render tree visualization
+        function renderTree() {
+            const container = document.getElementById('treeContainer');
+
+            if (nodes.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 100px 40px; color: var(--text-tertiary);">
+                        <div style="font-size: 64px; margin-bottom: 16px; opacity: 0.3;">🌳</div>
+                        <h3 style="color: var(--text-secondary); margin-bottom: 8px;">No Tree Yet</h3>
+                        <p>Select a template or start building your decision tree</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Calculate positions
+            const positions = calculateNodePositions();
+
+            // Render nodes and edges
+            let html = '';
+
+            // Draw edges first
+            nodes.forEach(node => {
+                if (node.parent) {
+                    const parentPos = positions[node.parent];
+                    const nodePos = positions[node.id];
+                    if (parentPos && nodePos) {
+                        const dx = nodePos.x - parentPos.x - 70;
+                        const dy = nodePos.y - parentPos.y;
+                        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                        const length = Math.sqrt(dx*dx + dy*dy);
+
+                        html += `<div class="tree-edge" style="
+                            left: ${parentPos.x + 70}px;
+                            top: ${parentPos.y + 25}px;
+                            width: ${length}px;
+                            transform: rotate(${angle}deg);
+                        "></div>`;
+
+                        // Edge label (probability)
+                        if (node.probability !== undefined && node.probability < 1) {
+                            html += `<div class="edge-label" style="
+                                left: ${parentPos.x + 70 + length/2 - 20}px;
+                                top: ${parentPos.y + 15 + dy/2}px;
+                            ">${(node.probability * 100).toFixed(0)}%</div>`;
+                        }
+                    }
+                }
+            });
+
+            // Draw nodes
+            nodes.forEach(node => {
+                const pos = positions[node.id];
+                if (pos) {
+                    const selectedClass = node.id === selectedNodeId ? 'selected' : '';
+                    html += `
+                        <div class="tree-node ${node.type} ${selectedClass}"
+                             style="left: ${pos.x}px; top: ${pos.y}px;"
+                             onclick="selectNode(${node.id})">
+                            <div class="node-name">${node.name}</div>
+                            ${node.type === 'terminal' ?
+                                `<div class="node-value">€${node.cost || 0} | ${node.qaly || 0} QALY</div>` :
+                                ''
+                            }
+                            ${node.ev !== undefined ?
+                                `<div class="node-ev">EV: €${node.ev.toFixed(0)}</div>` :
+                                ''
+                            }
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Calculate node positions using simple layout
+        function calculateNodePositions() {
+            const positions = {};
+            const levelNodes = {};
+
+            // Group nodes by level
+            nodes.forEach(node => {
+                const level = getNodeLevel(node.id);
+                if (!levelNodes[level]) levelNodes[level] = [];
+                levelNodes[level].push(node);
+            });
+
+            // Position nodes
+            const xSpacing = 180;
+            const ySpacing = 80;
+
+            Object.keys(levelNodes).forEach(level => {
+                const nodesAtLevel = levelNodes[level];
+                const totalHeight = (nodesAtLevel.length - 1) * ySpacing;
+                const startY = 150 - totalHeight / 2;
+
+                nodesAtLevel.forEach((node, index) => {
+                    positions[node.id] = {
+                        x: parseInt(level) * xSpacing + 40,
+                        y: startY + index * ySpacing + 50
+                    };
+                });
+            });
+
+            return positions;
+        }
+
+        // Get node level (depth)
+        function getNodeLevel(nodeId) {
+            const node = nodes.find(n => n.id === nodeId);
+            if (!node || !node.parent) return 0;
+            return 1 + getNodeLevel(node.parent);
+        }
+
+        // Render node list
+        function renderNodeList() {
+            const list = document.getElementById('nodeList');
+            document.getElementById('nodeCount').textContent = nodes.length;
+
+            if (nodes.length === 0) {
+                list.innerHTML = `<p style="text-align: center; color: var(--text-tertiary); padding: 20px; font-size: 13px;">
+                    Load a template or add nodes manually
+                </p>`;
+                return;
+            }
+
+            list.innerHTML = nodes.map(node => `
+                <div class="node-item ${node.id === selectedNodeId ? 'selected' : ''}"
+                     onclick="selectNode(${node.id})">
+                    <span class="node-type-badge ${node.type}">${node.type.charAt(0).toUpperCase()}</span>
+                    <div class="node-item-info">
+                        <div class="node-item-name">${node.name}</div>
+                        <div class="node-item-value">
+                            ${node.type === 'terminal' ? `€${node.cost || 0} | ${node.qaly || 0} QALY` :
+                              node.probability && node.probability < 1 ? `P: ${(node.probability*100).toFixed(0)}%` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Select node
+        function selectNode(nodeId) {
+            selectedNodeId = nodeId;
+            const node = nodes.find(n => n.id === nodeId);
+
+            if (node) {
+                document.getElementById('nodeName').value = node.name;
+                document.getElementById('nodeType').value = node.type;
+                document.getElementById('nodeParent').value = node.parent || '';
+
+                if (node.probability !== undefined) {
+                    document.getElementById('nodeProbability').value = node.probability;
+                }
+                if (node.cost !== undefined) {
+                    document.getElementById('nodeCost').value = node.cost;
+                }
+                if (node.qaly !== undefined) {
+                    document.getElementById('nodeQaly').value = node.qaly;
+                }
+
+                onNodeTypeChange();
+            }
+
+            renderTree();
+            renderNodeList();
+        }
+
+        // Node type change
+        function onNodeTypeChange() {
+            const type = document.getElementById('nodeType').value;
+            document.getElementById('probabilityField').style.display =
+                type === 'chance' || type === 'terminal' ? 'block' : 'none';
+            document.getElementById('payoffFields').style.display =
+                type === 'terminal' ? 'block' : 'none';
+        }
+
+        // Save node
+        function saveNode() {
+            const name = document.getElementById('nodeName').value.trim();
+            const type = document.getElementById('nodeType').value;
+            const parent = document.getElementById('nodeParent').value || null;
+
+            if (!name) {
+                alert('Please enter a node name');
+                return;
+            }
+
+            const nodeData = {
+                name,
+                type,
+                parent: parent ? parseInt(parent) : null
+            };
+
+            if (type === 'chance' || type === 'terminal') {
+                nodeData.probability = parseFloat(document.getElementById('nodeProbability').value) || 0;
+            }
+
+            if (type === 'terminal') {
+                nodeData.cost = parseFloat(document.getElementById('nodeCost').value) || 0;
+                nodeData.qaly = parseFloat(document.getElementById('nodeQaly').value) || 0;
+            }
+
+            if (selectedNodeId) {
+                // Update existing
+                const index = nodes.findIndex(n => n.id === selectedNodeId);
+                if (index >= 0) {
+                    nodes[index] = { ...nodes[index], ...nodeData };
+                }
+            } else {
+                // Add new
+                nodeData.id = nodeIdCounter++;
+                nodes.push(nodeData);
+                selectedNodeId = nodeData.id;
+            }
+
+            renderTree();
+            renderNodeList();
+            updateParentDropdown();
+        }
+
+        // Add child node
+        function addChildNode() {
+            if (!selectedNodeId) {
+                alert('Please select a parent node first');
+                return;
+            }
+
+            const newNode = {
+                id: nodeIdCounter++,
+                name: 'New Node',
+                type: 'terminal',
+                parent: selectedNodeId,
+                probability: 0.5,
+                cost: 0,
+                qaly: 0
+            };
+
+            nodes.push(newNode);
+            selectedNodeId = newNode.id;
+            selectNode(newNode.id);
+            updateParentDropdown();
+        }
+
+        // Delete selected node
+        function deleteSelectedNode() {
+            if (!selectedNodeId) return;
+
+            // Remove node and all children
+            const toDelete = [selectedNodeId];
+            let found = true;
+            while (found) {
+                found = false;
+                nodes.forEach(n => {
+                    if (toDelete.includes(n.parent) && !toDelete.includes(n.id)) {
+                        toDelete.push(n.id);
+                        found = true;
+                    }
+                });
+            }
+
+            nodes = nodes.filter(n => !toDelete.includes(n.id));
+            selectedNodeId = null;
+
+            document.getElementById('nodeName').value = '';
+            document.getElementById('nodeCost').value = '';
+            document.getElementById('nodeQaly').value = '';
+
+            renderTree();
+            renderNodeList();
+            updateParentDropdown();
+        }
+
+        // Update parent dropdown
+        function updateParentDropdown() {
+            const select = document.getElementById('nodeParent');
+            const currentValue = select.value;
+
+            select.innerHTML = '<option value="">None (Root)</option>';
+            nodes.filter(n => n.type !== 'terminal').forEach(node => {
+                select.innerHTML += `<option value="${node.id}">${node.name}</option>`;
+            });
+
+            select.value = currentValue;
+        }
+
+        // Reset tree
+        function resetTree() {
+            if (confirm('Reset the entire tree?')) {
+                nodes = [];
+                selectedNodeId = null;
+                nodeIdCounter = 1;
+                renderTree();
+                renderNodeList();
+                updateParentDropdown();
+                clearResults();
+            }
+        }
+
+        // Calculate tree (roll-back)
+        function calculateTree() {
+            if (nodes.length === 0) {
+                alert('Please build a tree first');
+                return;
+            }
+
+            const wtp = parseFloat(document.getElementById('wtpThreshold').value) || 30000;
+
+            // Roll-back algorithm
+            // Start from terminal nodes and work back
+            const nodesCopy = JSON.parse(JSON.stringify(nodes));
+
+            // Calculate expected values
+            function calcEV(nodeId) {
+                const node = nodesCopy.find(n => n.id === nodeId);
+                if (!node) return 0;
+
+                if (node.type === 'terminal') {
+                    // NMB = QALY * WTP - Cost
+                    node.ev = node.qaly * wtp - node.cost;
+                    return node.ev;
+                }
+
+                // Get children
+                const children = nodesCopy.filter(n => n.parent === nodeId);
+
+                if (node.type === 'chance') {
+                    // Expected value = sum of (probability * child EV)
+                    node.ev = children.reduce((sum, child) => {
+                        return sum + (child.probability || 0) * calcEV(child.id);
+                    }, 0);
+                } else if (node.type === 'decision') {
+                    // Decision = max of child EVs
+                    const childEVs = children.map(child => ({
+                        name: child.name,
+                        ev: calcEV(child.id)
+                    }));
+                    node.childEVs = childEVs;
+                    node.ev = Math.max(...childEVs.map(c => c.ev));
+                    node.optimalChild = childEVs.find(c => c.ev === node.ev)?.name;
+                }
+
+                return node.ev;
+            }
+
+            // Find root and calculate
+            const root = nodesCopy.find(n => !n.parent);
+            if (root) {
+                calcEV(root.id);
+            }
+
+            // Update main nodes with EVs
+            nodes = nodesCopy;
+            renderTree();
+
+            // Display results
+            displayResults(root, wtp);
+        }
+
+        // Display results
+        function displayResults(root, wtp) {
+            if (!root) return;
+
+            document.getElementById('optimalStrategy').textContent = root.optimalChild || '—';
+            document.getElementById('optimalEV').textContent = '€' + Math.round(root.ev).toLocaleString();
+
+            // ICER calculation if we have 2 strategies
+            if (root.childEVs && root.childEVs.length >= 2) {
+                const sorted = [...root.childEVs].sort((a, b) => b.ev - a.ev);
+                const diff = sorted[0].ev - sorted[1].ev;
+                document.getElementById('resultICER').textContent = diff > 0 ? 'Dominant' : '€' + Math.abs(Math.round(diff)).toLocaleString();
+                document.getElementById('resultNMB').textContent = '€' + Math.round(root.ev).toLocaleString();
+
+                // Comparison table
+                const tbody = document.getElementById('comparisonBody');
+                tbody.innerHTML = root.childEVs.map((child, i) => `
+                    <tr>
+                        <td>
+                            ${child.name}
+                            ${child.ev === root.ev ? '<span class="optimal-badge">Optimal</span>' : ''}
+                        </td>
+                        <td>€${Math.round(child.ev).toLocaleString()}</td>
+                    </tr>
+                `).join('');
+            }
+
+            // Store results for export
+            lastResults = {
+                optimal_strategy: { name: root.optimalChild, expected_cost: root.ev },
+                strategies: root.childEVs ? root.childEVs.map(child => ({
+                    name: child.name,
+                    expected_cost: child.ev,
+                    expected_qalys: 0,
+                    status: child.ev === root.ev ? 'Optimal' : 'Not Selected'
+                })) : []
+            };
+        }
+
+        // Clear results
+        function clearResults() {
+            document.getElementById('optimalStrategy').textContent = '—';
+            document.getElementById('optimalEV').textContent = '—';
+            document.getElementById('resultICER').textContent = '—';
+            document.getElementById('resultNMB').textContent = '—';
+            document.getElementById('comparisonBody').innerHTML = `
+                <tr>
+                    <td colspan="2" style="text-align: center; color: var(--text-tertiary);">
+                        Run calculation to see results
+                    </td>
+                </tr>
+            `;
+        }
+
+        // Export PDF
+        async function exportPDF() {
+            if (!lastResults) {
+                alert('Please calculate the tree first');
+                return;
+            }
+
+            try {
+                const requestData = {
+                    scenario_name: 'Decision Tree Analysis',
+                    user_email: 'user@ecomodel.com',
+                    organization: 'Demo Organization',
+                    wtp_threshold: parseFloat(document.getElementById('wtpThreshold').value) || 30000,
+                    tree_structure: nodes,
+                    strategies: lastResults.strategies,
+                    optimal_strategy: lastResults.optimal_strategy
+                };
+
+                const response = await fetch('/api/export/decision-tree/pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('PDF generation failed');
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `DecisionTree_Report_${new Date().toISOString().slice(0,10)}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                console.log('PDF exported successfully');
+            } catch (error) {
+                console.error('Export PDF error:', error);
+                alert('Failed to generate PDF. Please try again.');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            onNodeTypeChange();
+        });
+    </script>
+</body>
+</html>

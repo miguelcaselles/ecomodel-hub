@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Value of Information Analysis - EcoModel Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #4338CA;
+            --secondary: #667eea;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --bg-dark: #0F172A;
+            --bg-card: #1E293B;
+            --border: #334155;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .page-title {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 24px;
+            padding: 24px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* Panel */
+        .panel {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .panel-header p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .panel-body {
+            padding: 20px;
+        }
+
+        /* Form */
+        .form-section {
+            margin-bottom: 24px;
+        }
+
+        .form-section h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Parameter Cards */
+        .param-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+
+        .param-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .param-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .param-remove {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .param-inputs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .param-inputs input {
+            padding: 8px;
+            font-size: 12px;
+        }
+
+        .param-inputs label {
+            font-size: 10px;
+            margin-bottom: 4px;
+        }
+
+        .add-param-btn {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: 1px dashed var(--border);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .add-param-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Results Section */
+        .results-container {
+            display: grid;
+            gap: 24px;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .kpi-card.highlight {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(102, 126, 234, 0.1));
+            border-color: var(--primary);
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 700;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+
+        .kpi-value.positive { color: var(--success); }
+        .kpi-value.warning { color: var(--warning); }
+        .kpi-value.primary { color: var(--primary); }
+
+        .kpi-unit {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Chart Panel */
+        .chart-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .chart-header p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 350px;
+        }
+
+        /* EVPPI Table */
+        .evppi-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .evppi-table th,
+        .evppi-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .evppi-table th {
+            background: var(--bg-dark);
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .evppi-table tbody tr:hover {
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .evppi-bar {
+            height: 8px;
+            background: var(--primary);
+            border-radius: 4px;
+            margin-top: 4px;
+        }
+
+        /* Decision Rule */
+        .decision-rule {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+            border: 1px solid var(--success);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .decision-rule h4 {
+            color: var(--success);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .decision-rule p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(79, 70, 229, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .info-box h5 {
+            color: var(--primary);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Preset selector */
+        .preset-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .preset-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .preset-card:hover {
+            border-color: var(--primary);
+        }
+
+        .preset-card.active {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.1);
+        }
+
+        .preset-card h5 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .preset-card p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <div class="loading-text">Running Monte Carlo simulation...</div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <button class="back-btn" onclick="window.location.href='/app'">Back to App</button>
+            <span class="logo">EcoModel Hub</span>
+            <span class="page-title">/ Value of Information Analysis</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Left Panel: Configuration -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2>VOI Analysis Configuration</h2>
+                <p>Calculate EVPI and EVPPI for research prioritization</p>
+            </div>
+            <div class="panel-body">
+                <!-- Info Box -->
+                <div class="info-box">
+                    <h5>About VOI Analysis</h5>
+                    <p>Value of Information analysis quantifies the expected value of reducing uncertainty.
+                       EVPI represents the maximum value of eliminating all uncertainty, while EVPPI
+                       identifies which parameters contribute most to decision uncertainty.</p>
+                </div>
+
+                <!-- Presets -->
+                <div class="form-section">
+                    <h4>Quick Presets</h4>
+                    <div class="preset-grid">
+                        <div class="preset-card" onclick="loadPreset('oncology')">
+                            <h5>Oncology CEA</h5>
+                            <p>Cancer drug evaluation</p>
+                        </div>
+                        <div class="preset-card" onclick="loadPreset('diabetes')">
+                            <h5>Diabetes</h5>
+                            <p>Chronic disease model</p>
+                        </div>
+                        <div class="preset-card" onclick="loadPreset('vaccine')">
+                            <h5>Vaccine</h5>
+                            <p>Preventive intervention</p>
+                        </div>
+                        <div class="preset-card" onclick="loadPreset('device')">
+                            <h5>Medical Device</h5>
+                            <p>Short-term outcomes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Base Parameters -->
+                <div class="form-section">
+                    <h4>Population & Decision Context</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Eligible Population</label>
+                            <input type="number" id="population" value="50000" min="1000">
+                        </div>
+                        <div class="form-group">
+                            <label>Time Horizon (years)</label>
+                            <input type="number" id="timeHorizon" value="10" min="1" max="50">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>WTP Threshold (€/QALY)</label>
+                            <input type="number" id="wtpThreshold" value="30000" min="10000" step="5000">
+                        </div>
+                        <div class="form-group">
+                            <label>PSA Iterations</label>
+                            <select id="iterations">
+                                <option value="1000">1,000 (Fast)</option>
+                                <option value="5000" selected>5,000 (Balanced)</option>
+                                <option value="10000">10,000 (Precise)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Uncertain Parameters -->
+                <div class="form-section">
+                    <h4>Uncertain Parameters</h4>
+                    <div id="parametersList">
+                        <!-- Parameters will be added here -->
+                    </div>
+                    <button class="add-param-btn" onclick="addParameter()">+ Add Parameter</button>
+                </div>
+
+                <!-- Treatments -->
+                <div class="form-section">
+                    <h4>Treatment Comparison</h4>
+                    <div class="form-group">
+                        <label>New Treatment - Expected NMB (€)</label>
+                        <input type="number" id="nmbNew" value="15000">
+                    </div>
+                    <div class="form-group">
+                        <label>Comparator - Expected NMB (€)</label>
+                        <input type="number" id="nmbComparator" value="12000">
+                    </div>
+                </div>
+
+                <!-- Run Button -->
+                <button class="btn btn-primary" onclick="runVOIAnalysis()">
+                    Calculate EVPI & EVPPI
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Panel: Results -->
+        <div class="results-container">
+            <!-- KPI Grid -->
+            <div class="kpi-grid">
+                <div class="kpi-card highlight">
+                    <div class="kpi-label">EVPI (Total)</div>
+                    <div class="kpi-value primary" id="evpiTotal">--</div>
+                    <div class="kpi-unit">Expected value of perfect info</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">EVPI per Patient</div>
+                    <div class="kpi-value" id="evpiPerPatient">--</div>
+                    <div class="kpi-unit">Per eligible patient</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Prob. Wrong Decision</div>
+                    <div class="kpi-value warning" id="probWrong">--</div>
+                    <div class="kpi-unit">Current uncertainty</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Optimal Decision</div>
+                    <div class="kpi-value positive" id="optimalDecision">--</div>
+                    <div class="kpi-unit">Based on expected NMB</div>
+                </div>
+            </div>
+
+            <!-- EVPPI Chart -->
+            <div class="chart-panel">
+                <div class="chart-header">
+                    <div>
+                        <h3>EVPPI by Parameter</h3>
+                        <p>Expected value of partial perfect information</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="exportPDF()">📄 Export PDF</button>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="evppiChart"></canvas>
+                </div>
+
+                <!-- EVPPI Table -->
+                <table class="evppi-table" id="evppiTable">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>EVPPI (€)</th>
+                            <th>% of EVPI</th>
+                            <th>Research Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody id="evppiTableBody">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                                Configure parameters and run analysis to see results
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Decision Rule -->
+                <div class="decision-rule" id="decisionRule" style="display: none;">
+                    <h4>Research Recommendation</h4>
+                    <p id="decisionRuleText"></p>
+                </div>
+            </div>
+
+            <!-- CEAC Chart -->
+            <div class="chart-panel">
+                <div class="chart-header">
+                    <div>
+                        <h3>Cost-Effectiveness Acceptability Curve</h3>
+                        <p>Probability of being cost-effective across WTP thresholds</p>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="ceacChart"></canvas>
+                </div>
+            </div>
+
+            <!-- EVPI by WTP Chart -->
+            <div class="chart-panel">
+                <div class="chart-header">
+                    <div>
+                        <h3>EVPI Across WTP Thresholds</h3>
+                        <p>How the value of information changes with willingness-to-pay</p>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="evpiWtpChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let evppiChart = null;
+        let ceacChart = null;
+        let evpiWtpChart = null;
+        let parameters = [];
+        let paramIdCounter = 0;
+        let lastResults = null;
+
+        // Presets
+        const presets = {
+            oncology: {
+                name: 'Oncology CEA',
+                population: 50000,
+                timeHorizon: 10,
+                wtpThreshold: 30000,
+                nmbNew: 18000,
+                nmbComparator: 12000,
+                parameters: [
+                    { name: 'Hazard Ratio OS', mean: 0.75, se: 0.08, distribution: 'lognormal' },
+                    { name: 'Drug Cost (€/mo)', mean: 8000, se: 500, distribution: 'gamma' },
+                    { name: 'Utility PFS', mean: 0.78, se: 0.05, distribution: 'beta' },
+                    { name: 'Utility PD', mean: 0.52, se: 0.08, distribution: 'beta' },
+                    { name: 'AE Rate Grade 3+', mean: 0.15, se: 0.03, distribution: 'beta' }
+                ]
+            },
+            diabetes: {
+                name: 'Diabetes',
+                population: 200000,
+                timeHorizon: 20,
+                wtpThreshold: 30000,
+                nmbNew: 8500,
+                nmbComparator: 7000,
+                parameters: [
+                    { name: 'HbA1c Reduction', mean: 0.8, se: 0.15, distribution: 'normal' },
+                    { name: 'Hypoglycemia Rate', mean: 0.12, se: 0.03, distribution: 'beta' },
+                    { name: 'CV Risk Reduction', mean: 0.15, se: 0.05, distribution: 'beta' },
+                    { name: 'Drug Cost (€/yr)', mean: 2500, se: 200, distribution: 'gamma' },
+                    { name: 'Weight Change (kg)', mean: -2.5, se: 0.8, distribution: 'normal' }
+                ]
+            },
+            vaccine: {
+                name: 'Vaccine',
+                population: 500000,
+                timeHorizon: 5,
+                wtpThreshold: 30000,
+                nmbNew: 3500,
+                nmbComparator: 1000,
+                parameters: [
+                    { name: 'Efficacy', mean: 0.85, se: 0.05, distribution: 'beta' },
+                    { name: 'Disease Incidence', mean: 0.02, se: 0.005, distribution: 'beta' },
+                    { name: 'Vaccine Cost (€)', mean: 120, se: 15, distribution: 'gamma' },
+                    { name: 'Disease Cost (€)', mean: 15000, se: 3000, distribution: 'gamma' },
+                    { name: 'AE Serious Rate', mean: 0.001, se: 0.0003, distribution: 'beta' }
+                ]
+            },
+            device: {
+                name: 'Medical Device',
+                population: 25000,
+                timeHorizon: 5,
+                wtpThreshold: 30000,
+                nmbNew: 22000,
+                nmbComparator: 18000,
+                parameters: [
+                    { name: 'Procedure Success', mean: 0.92, se: 0.03, distribution: 'beta' },
+                    { name: 'Complication Rate', mean: 0.08, se: 0.02, distribution: 'beta' },
+                    { name: 'Device Cost (€)', mean: 15000, se: 1500, distribution: 'gamma' },
+                    { name: 'Recovery Time (days)', mean: 14, se: 3, distribution: 'gamma' },
+                    { name: 'Reoperation Rate', mean: 0.05, se: 0.015, distribution: 'beta' }
+                ]
+            }
+        };
+
+        // Load preset
+        function loadPreset(presetId) {
+            const preset = presets[presetId];
+            if (!preset) return;
+
+            document.getElementById('population').value = preset.population;
+            document.getElementById('timeHorizon').value = preset.timeHorizon;
+            document.getElementById('wtpThreshold').value = preset.wtpThreshold;
+            document.getElementById('nmbNew').value = preset.nmbNew;
+            document.getElementById('nmbComparator').value = preset.nmbComparator;
+
+            // Clear and reload parameters
+            parameters = [];
+            document.getElementById('parametersList').innerHTML = '';
+
+            preset.parameters.forEach(p => {
+                addParameter(p.name, p.mean, p.se, p.distribution);
+            });
+
+            // Update preset cards
+            document.querySelectorAll('.preset-card').forEach(card => card.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        // Add parameter
+        function addParameter(name = '', mean = 0, se = 0, distribution = 'normal') {
+            const id = paramIdCounter++;
+            const param = { id, name, mean, se, distribution };
+            parameters.push(param);
+
+            const container = document.getElementById('parametersList');
+            const card = document.createElement('div');
+            card.className = 'param-card';
+            card.id = `param-${id}`;
+            card.innerHTML = `
+                <div class="param-header">
+                    <input type="text" class="param-name" placeholder="Parameter name"
+                           value="${name}" style="background: transparent; border: none; color: var(--text-primary); font-weight: 600; width: 60%;"
+                           onchange="updateParameter(${id}, 'name', this.value)">
+                    <button class="param-remove" onclick="removeParameter(${id})">x</button>
+                </div>
+                <div class="param-inputs">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Mean</label>
+                        <input type="number" value="${mean}" step="any"
+                               onchange="updateParameter(${id}, 'mean', parseFloat(this.value))">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>SE</label>
+                        <input type="number" value="${se}" step="any"
+                               onchange="updateParameter(${id}, 'se', parseFloat(this.value))">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Distribution</label>
+                        <select onchange="updateParameter(${id}, 'distribution', this.value)">
+                            <option value="normal" ${distribution === 'normal' ? 'selected' : ''}>Normal</option>
+                            <option value="beta" ${distribution === 'beta' ? 'selected' : ''}>Beta</option>
+                            <option value="gamma" ${distribution === 'gamma' ? 'selected' : ''}>Gamma</option>
+                            <option value="lognormal" ${distribution === 'lognormal' ? 'selected' : ''}>Log-Normal</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+
+        // Update parameter
+        function updateParameter(id, field, value) {
+            const param = parameters.find(p => p.id === id);
+            if (param) {
+                param[field] = value;
+            }
+        }
+
+        // Remove parameter
+        function removeParameter(id) {
+            parameters = parameters.filter(p => p.id !== id);
+            document.getElementById(`param-${id}`)?.remove();
+        }
+
+        // Random number generators
+        function randomNormal(mean, sd) {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random();
+            while (v === 0) v = Math.random();
+            return mean + sd * Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+        }
+
+        function randomBeta(mean, se) {
+            // Method of moments
+            const variance = se * se;
+            const alpha = mean * ((mean * (1 - mean)) / variance - 1);
+            const beta = (1 - mean) * ((mean * (1 - mean)) / variance - 1);
+
+            // Simple beta approximation using normal bounds
+            const sample = randomNormal(mean, se);
+            return Math.max(0.001, Math.min(0.999, sample));
+        }
+
+        function randomGamma(mean, se) {
+            const variance = se * se;
+            const shape = (mean * mean) / variance;
+            const scale = variance / mean;
+
+            // Simple approximation
+            const sample = randomNormal(mean, se);
+            return Math.max(0.001, sample);
+        }
+
+        function randomLognormal(mean, se) {
+            const sigma2 = Math.log(1 + (se * se) / (mean * mean));
+            const mu = Math.log(mean) - sigma2 / 2;
+            const sigma = Math.sqrt(sigma2);
+            return Math.exp(randomNormal(mu, sigma));
+        }
+
+        // Sample from distribution
+        function sampleParameter(param) {
+            switch (param.distribution) {
+                case 'beta': return randomBeta(param.mean, param.se);
+                case 'gamma': return randomGamma(param.mean, param.se);
+                case 'lognormal': return randomLognormal(param.mean, param.se);
+                default: return randomNormal(param.mean, param.se);
+            }
+        }
+
+        // Calculate NMB given parameter samples
+        function calculateNMB(samples, isNew, wtp) {
+            // Simplified model - NMB depends on parameter values
+            // This is a placeholder - in a real model, this would be the actual model
+            const baseNMB = isNew ?
+                parseFloat(document.getElementById('nmbNew').value) :
+                parseFloat(document.getElementById('nmbComparator').value);
+
+            // Add noise based on parameter uncertainty
+            let modifier = 0;
+            samples.forEach((val, i) => {
+                const param = parameters[i];
+                if (param) {
+                    modifier += (val - param.mean) * 1000 * (isNew ? 1.2 : 0.8);
+                }
+            });
+
+            return baseNMB + modifier;
+        }
+
+        // Run VOI Analysis
+        function runVOIAnalysis() {
+            if (parameters.length < 2) {
+                alert('Please add at least 2 uncertain parameters');
+                return;
+            }
+
+            document.getElementById('loading').classList.add('active');
+
+            setTimeout(() => {
+                const iterations = parseInt(document.getElementById('iterations').value);
+                const wtp = parseFloat(document.getElementById('wtpThreshold').value);
+                const population = parseFloat(document.getElementById('population').value);
+                const timeHorizon = parseFloat(document.getElementById('timeHorizon').value);
+
+                // Run PSA
+                const results = {
+                    nmbNew: [],
+                    nmbComparator: [],
+                    inmbValues: [],
+                    optimalDecisions: []
+                };
+
+                for (let i = 0; i < iterations; i++) {
+                    const samples = parameters.map(p => sampleParameter(p));
+
+                    const nmbNew = calculateNMB(samples, true, wtp);
+                    const nmbComp = calculateNMB(samples, false, wtp);
+
+                    results.nmbNew.push(nmbNew);
+                    results.nmbComparator.push(nmbComp);
+                    results.inmbValues.push(nmbNew - nmbComp);
+                    results.optimalDecisions.push(nmbNew > nmbComp ? 'New' : 'Comparator');
+                }
+
+                // Calculate EVPI
+                const meanNMBNew = results.nmbNew.reduce((a, b) => a + b, 0) / iterations;
+                const meanNMBComp = results.nmbComparator.reduce((a, b) => a + b, 0) / iterations;
+
+                const expectedValueWithCurrentInfo = Math.max(meanNMBNew, meanNMBComp);
+
+                const expectedValueWithPerfectInfo = results.nmbNew.reduce((sum, nmb, i) => {
+                    return sum + Math.max(nmb, results.nmbComparator[i]);
+                }, 0) / iterations;
+
+                const evpiPerPatient = expectedValueWithPerfectInfo - expectedValueWithCurrentInfo;
+                const evpiTotal = evpiPerPatient * population * timeHorizon;
+
+                // Probability of wrong decision
+                const currentBest = meanNMBNew > meanNMBComp ? 'New' : 'Comparator';
+                const probWrong = results.optimalDecisions.filter(d => d !== currentBest).length / iterations;
+
+                // Calculate EVPPI for each parameter
+                const evppiResults = [];
+                parameters.forEach((param, paramIndex) => {
+                    // Group iterations by parameter value (simplified)
+                    const sortedByParam = results.inmbValues
+                        .map((inmb, i) => ({ inmb, paramVal: sampleParameter(param) }))
+                        .sort((a, b) => a.paramVal - b.paramVal);
+
+                    // Calculate conditional expectations
+                    const groups = 10;
+                    const groupSize = Math.floor(iterations / groups);
+                    let conditionalValue = 0;
+
+                    for (let g = 0; g < groups; g++) {
+                        const start = g * groupSize;
+                        const end = start + groupSize;
+                        const groupInmb = sortedByParam.slice(start, end).map(x => x.inmb);
+                        const groupMean = groupInmb.reduce((a, b) => a + b, 0) / groupInmb.length;
+                        conditionalValue += Math.max(groupMean, 0);
+                    }
+                    conditionalValue /= groups;
+
+                    const evppi = conditionalValue - Math.max(0, meanNMBNew - meanNMBComp);
+
+                    evppiResults.push({
+                        name: param.name,
+                        evppi: Math.max(0, evppi * population),
+                        evppiPct: 0 // Will calculate after
+                    });
+                });
+
+                // Calculate percentage of EVPI
+                const totalEVPPI = evppiResults.reduce((sum, r) => sum + r.evppi, 0);
+                evppiResults.forEach(r => {
+                    r.evppiPct = evpiTotal > 0 ? (r.evppi / evpiTotal * 100) : 0;
+                });
+
+                // Sort by EVPPI
+                evppiResults.sort((a, b) => b.evppi - a.evppi);
+
+                // Calculate CEAC
+                const ceacData = [];
+                for (let w = 10000; w <= 100000; w += 5000) {
+                    const probCE = results.inmbValues.filter(inmb => inmb > 0).length / iterations;
+                    ceacData.push({ wtp: w, prob: probCE * 100 });
+                }
+
+                // Calculate EVPI across WTP
+                const evpiWtpData = [];
+                for (let w = 10000; w <= 100000; w += 5000) {
+                    const evpi = evpiPerPatient * (w / wtp) * population;
+                    evpiWtpData.push({ wtp: w, evpi: evpi });
+                }
+
+                // Update UI
+                document.getElementById('evpiTotal').textContent =
+                    '€' + Math.round(evpiTotal).toLocaleString();
+                document.getElementById('evpiPerPatient').textContent =
+                    '€' + evpiPerPatient.toFixed(0);
+                document.getElementById('probWrong').textContent =
+                    (probWrong * 100).toFixed(1) + '%';
+                document.getElementById('optimalDecision').textContent =
+                    currentBest === 'New' ? 'Adopt New' : 'Keep Standard';
+
+                // Render charts
+                renderEVPPIChart(evppiResults);
+                renderCEACChart(ceacData);
+                renderEVPIWtpChart(evpiWtpData, wtp);
+                renderEVPPITable(evppiResults, evpiTotal);
+                renderDecisionRule(evpiTotal, evppiResults[0], probWrong, population);
+
+                // Store results for PDF export
+                lastResults = {
+                    evpiTotal,
+                    evpiPerPatient,
+                    probWrong,
+                    optimalDecision: currentBest,
+                    evppiResults,
+                    ceacData,
+                    evpiWtpData
+                };
+
+                document.getElementById('loading').classList.remove('active');
+            }, 500);
+        }
+
+        // Render EVPPI Chart
+        function renderEVPPIChart(data) {
+            const ctx = document.getElementById('evppiChart');
+            if (evppiChart) evppiChart.destroy();
+
+            evppiChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.name),
+                    datasets: [{
+                        label: 'EVPPI (€)',
+                        data: data.map(d => d.evppi),
+                        backgroundColor: data.map((d, i) =>
+                            i === 0 ? '#4F46E5' :
+                            i === 1 ? '#667eea' :
+                            '#94A3B8'
+                        ),
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => '€' + Math.round(ctx.raw).toLocaleString()
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(51, 65, 85, 0.5)' },
+                            ticks: {
+                                color: '#94A3B8',
+                                callback: (v) => '€' + (v / 1000000).toFixed(1) + 'M'
+                            }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { color: '#F8FAFC' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render CEAC Chart
+        function renderCEACChart(data) {
+            const ctx = document.getElementById('ceacChart');
+            if (ceacChart) ceacChart.destroy();
+
+            ceacChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => '€' + (d.wtp / 1000) + 'k'),
+                    datasets: [{
+                        label: 'Probability Cost-Effective (%)',
+                        data: data.map(d => d.prob),
+                        borderColor: '#4F46E5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#4F46E5'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'WTP Threshold', color: '#94A3B8' },
+                            grid: { color: 'rgba(51, 65, 85, 0.5)' },
+                            ticks: { color: '#94A3B8' }
+                        },
+                        y: {
+                            title: { display: true, text: 'Probability (%)', color: '#94A3B8' },
+                            grid: { color: 'rgba(51, 65, 85, 0.5)' },
+                            ticks: { color: '#94A3B8' },
+                            min: 0,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render EVPI by WTP Chart
+        function renderEVPIWtpChart(data, currentWtp) {
+            const ctx = document.getElementById('evpiWtpChart');
+            if (evpiWtpChart) evpiWtpChart.destroy();
+
+            evpiWtpChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => '€' + (d.wtp / 1000) + 'k'),
+                    datasets: [{
+                        label: 'EVPI (€)',
+                        data: data.map(d => d.evpi),
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: data.map(d => d.wtp === currentWtp ? 8 : 4),
+                        pointBackgroundColor: data.map(d => d.wtp === currentWtp ? '#F59E0B' : '#10B981')
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => '€' + Math.round(ctx.raw).toLocaleString()
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'WTP Threshold', color: '#94A3B8' },
+                            grid: { color: 'rgba(51, 65, 85, 0.5)' },
+                            ticks: { color: '#94A3B8' }
+                        },
+                        y: {
+                            title: { display: true, text: 'EVPI', color: '#94A3B8' },
+                            grid: { color: 'rgba(51, 65, 85, 0.5)' },
+                            ticks: {
+                                color: '#94A3B8',
+                                callback: (v) => '€' + (v / 1000000).toFixed(1) + 'M'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render EVPPI Table
+        function renderEVPPITable(data, evpiTotal) {
+            const tbody = document.getElementById('evppiTableBody');
+            tbody.innerHTML = '';
+
+            data.forEach((row, i) => {
+                const priority = row.evppiPct > 30 ? 'High' : row.evppiPct > 10 ? 'Medium' : 'Low';
+                const priorityColor = priority === 'High' ? '#EF4444' : priority === 'Medium' ? '#F59E0B' : '#10B981';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.name}</td>
+                    <td style="font-family: 'SF Mono', monospace;">€${Math.round(row.evppi).toLocaleString()}</td>
+                    <td>
+                        ${row.evppiPct.toFixed(1)}%
+                        <div class="evppi-bar" style="width: ${Math.min(row.evppiPct, 100)}%;"></div>
+                    </td>
+                    <td style="color: ${priorityColor}; font-weight: 600;">${priority}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Render Decision Rule
+        function renderDecisionRule(evpiTotal, topParam, probWrong, population) {
+            const decisionRule = document.getElementById('decisionRule');
+            const decisionText = document.getElementById('decisionRuleText');
+            decisionRule.style.display = 'block';
+
+            const researchCost = evpiTotal * 0.1; // Assume 10% of EVPI as reasonable research cost
+
+            let recommendation = '';
+            if (probWrong < 0.05) {
+                recommendation = `Current evidence is sufficient for decision-making (${(probWrong * 100).toFixed(1)}% probability of wrong decision). Additional research is unlikely to be cost-effective.`;
+            } else if (evpiTotal > researchCost * 10) {
+                recommendation = `Strong case for additional research. The EVPI of €${Math.round(evpiTotal).toLocaleString()} significantly exceeds typical research costs. Priority should be given to "${topParam?.name}" which accounts for ${topParam?.evppiPct.toFixed(1)}% of decision uncertainty.`;
+            } else {
+                recommendation = `Moderate case for targeted research. Consider studies to better characterize "${topParam?.name}". A study costing up to €${Math.round(researchCost).toLocaleString()} would be worthwhile.`;
+            }
+
+            decisionText.textContent = recommendation;
+        }
+
+        // Export PDF
+        async function exportPDF() {
+            if (!lastResults) {
+                alert('Please run the VOI analysis first');
+                return;
+            }
+
+            try {
+                const requestData = {
+                    scenario_name: 'Value of Information Analysis',
+                    user_email: 'user@ecomodel.com',
+                    organization: 'Demo Organization',
+                    population: parseFloat(document.getElementById('population').value),
+                    time_horizon: parseFloat(document.getElementById('timeHorizon').value),
+                    wtp_threshold: parseFloat(document.getElementById('wtpThreshold').value),
+                    iterations: parseInt(document.getElementById('iterations').value),
+                    uncertain_parameters: parameters.map(p => ({
+                        name: p.name,
+                        mean: p.mean,
+                        se: p.se,
+                        distribution: p.distribution
+                    })),
+                    evpi_total: lastResults.evpiTotal,
+                    evpi_per_patient: lastResults.evpiPerPatient,
+                    prob_wrong_decision: lastResults.probWrong,
+                    optimal_decision: lastResults.optimalDecision,
+                    evppi_results: lastResults.evppiResults
+                };
+
+                const response = await fetch('/api/export/voi/pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate PDF');
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `VOI_Analysis_${new Date().toISOString().slice(0, 10)}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Failed to generate PDF. Please try again.');
+            }
+        }
+
+        // Initialize with oncology preset
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPreset('oncology');
+        });
+    </script>
+</body>
+</html>

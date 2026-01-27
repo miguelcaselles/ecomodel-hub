@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survival Analysis - EcoModel Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #4338CA;
+            --secondary: #667eea;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --bg-dark: #0F172A;
+            --bg-card: #1E293B;
+            --border: #334155;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .page-title {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 24px;
+            padding: 24px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* Panel */
+        .panel {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .panel-header p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .panel-body {
+            padding: 20px;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Data Input */
+        .data-input-section {
+            margin-bottom: 24px;
+        }
+
+        .data-input-section h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .data-table {
+            background: var(--bg-dark);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .data-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: rgba(79, 70, 229, 0.2);
+            padding: 10px;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .data-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .data-table input:focus {
+            outline: none;
+            background: rgba(79, 70, 229, 0.1);
+        }
+
+        .add-row-btn {
+            width: 100%;
+            padding: 8px;
+            background: transparent;
+            border: 1px dashed var(--border);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 8px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .add-row-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Templates */
+        .templates-section {
+            margin-bottom: 24px;
+        }
+
+        .template-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .template-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .template-card:hover {
+            border-color: var(--primary);
+        }
+
+        .template-card.active {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.1);
+        }
+
+        .template-card h5 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .template-card p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Charts Section */
+        .charts-container {
+            display: grid;
+            gap: 24px;
+        }
+
+        .chart-panel {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 24px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .chart-header p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 350px;
+        }
+
+        /* Model Comparison Table */
+        .model-comparison {
+            margin-top: 24px;
+        }
+
+        .model-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .model-table th,
+        .model-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .model-table th {
+            background: var(--bg-dark);
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .model-table tr:hover {
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .best-fit {
+            background: rgba(16, 185, 129, 0.1) !important;
+        }
+
+        .best-fit td:first-child::after {
+            content: ' (Best Fit)';
+            color: var(--success);
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        .aic-value {
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+
+        /* Extrapolation Panel */
+        .extrapolation-panel {
+            background: rgba(79, 70, 229, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 24px;
+        }
+
+        .extrapolation-panel h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        .extrapolation-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .extrap-stat {
+            text-align: center;
+        }
+
+        .extrap-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .extrap-stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        /* Distribution Parameters */
+        .dist-params {
+            background: var(--bg-dark);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .dist-params h5 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .param-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .param-row:last-child {
+            border-bottom: none;
+        }
+
+        .param-name {
+            color: var(--text-secondary);
+        }
+
+        .param-value {
+            font-family: 'SF Mono', Monaco, monospace;
+            color: var(--primary);
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <button class="back-btn" onclick="window.location.href='/app'">← Back to App</button>
+            <span class="logo">EcoModel Hub</span>
+            <span class="page-title">/ Survival Analysis</span>
+        </div>
+        <div>
+            <button class="btn btn-secondary" onclick="exportPDF()" style="padding: 8px 16px; font-size: 14px;">📄 Export PDF</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Left Panel: Configuration -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Survival Analysis Configuration</h2>
+                <p>Fit parametric models to survival data</p>
+            </div>
+            <div class="panel-body">
+                <!-- Templates -->
+                <div class="templates-section">
+                    <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Quick Start Templates</h4>
+                    <div class="template-grid">
+                        <div class="template-card" onclick="loadTemplate('nsclc')">
+                            <h5>NSCLC Trial</h5>
+                            <p>Lung cancer OS/PFS</p>
+                        </div>
+                        <div class="template-card" onclick="loadTemplate('breast')">
+                            <h5>Breast Cancer</h5>
+                            <p>mBC survival data</p>
+                        </div>
+                        <div class="template-card" onclick="loadTemplate('melanoma')">
+                            <h5>Melanoma</h5>
+                            <p>Immunotherapy OS</p>
+                        </div>
+                        <div class="template-card" onclick="loadTemplate('cml')">
+                            <h5>CML</h5>
+                            <p>Chronic leukemia PFS</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Survival Endpoint -->
+                <div class="form-group">
+                    <label>Survival Endpoint</label>
+                    <select id="endpoint">
+                        <option value="os">Overall Survival (OS)</option>
+                        <option value="pfs">Progression-Free Survival (PFS)</option>
+                        <option value="ttp">Time to Progression (TTP)</option>
+                        <option value="dfs">Disease-Free Survival (DFS)</option>
+                    </select>
+                </div>
+
+                <!-- Time Unit -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Time Unit</label>
+                        <select id="timeUnit">
+                            <option value="months">Months</option>
+                            <option value="weeks">Weeks</option>
+                            <option value="years">Years</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Extrapolate To</label>
+                        <input type="number" id="extrapolateTo" value="60" min="12" max="240">
+                    </div>
+                </div>
+
+                <!-- Survival Data Input -->
+                <div class="data-input-section">
+                    <h4>Kaplan-Meier Data Points</h4>
+                    <div class="data-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Survival (%)</th>
+                                    <th>At Risk</th>
+                                </tr>
+                            </thead>
+                            <tbody id="survivalDataBody">
+                                <tr>
+                                    <td><input type="number" value="0" class="time-input"></td>
+                                    <td><input type="number" value="100" class="surv-input"></td>
+                                    <td><input type="number" value="500" class="risk-input"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="number" value="6" class="time-input"></td>
+                                    <td><input type="number" value="85" class="surv-input"></td>
+                                    <td><input type="number" value="420" class="risk-input"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="number" value="12" class="time-input"></td>
+                                    <td><input type="number" value="65" class="surv-input"></td>
+                                    <td><input type="number" value="310" class="risk-input"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="number" value="18" class="time-input"></td>
+                                    <td><input type="number" value="50" class="surv-input"></td>
+                                    <td><input type="number" value="240" class="risk-input"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="number" value="24" class="time-input"></td>
+                                    <td><input type="number" value="40" class="surv-input"></td>
+                                    <td><input type="number" value="180" class="risk-input"></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="number" value="30" class="time-input"></td>
+                                    <td><input type="number" value="32" class="surv-input"></td>
+                                    <td><input type="number" value="140" class="risk-input"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="add-row-btn" onclick="addDataRow()">+ Add Data Point</button>
+                    </div>
+                </div>
+
+                <!-- Distributions to Fit -->
+                <div class="form-group">
+                    <label>Distributions to Fit</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+                        <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; cursor: pointer;">
+                            <input type="checkbox" checked class="dist-check" value="exponential"> Exponential
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; cursor: pointer;">
+                            <input type="checkbox" checked class="dist-check" value="weibull"> Weibull
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; cursor: pointer;">
+                            <input type="checkbox" checked class="dist-check" value="gompertz"> Gompertz
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; cursor: pointer;">
+                            <input type="checkbox" checked class="dist-check" value="lognormal"> Log-Normal
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; cursor: pointer;">
+                            <input type="checkbox" checked class="dist-check" value="loglogistic"> Log-Logistic
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; cursor: pointer;">
+                            <input type="checkbox" class="dist-check" value="gengamma"> Gen. Gamma
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Run Button -->
+                <button class="btn btn-primary" onclick="runSurvivalAnalysis()">
+                    Fit Survival Models
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Panel: Results -->
+        <div class="charts-container">
+            <!-- Survival Curves Chart -->
+            <div class="chart-panel">
+                <div class="chart-header">
+                    <div>
+                        <h3>Survival Curves - Model Comparison</h3>
+                        <p>Kaplan-Meier data with fitted parametric models</p>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-secondary" onclick="exportChart()">Export PNG</button>
+                        <button class="btn btn-secondary" onclick="exportData()">Export CSV</button>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="survivalChart"></canvas>
+                </div>
+
+                <!-- Extrapolation Results -->
+                <div class="extrapolation-panel" id="extrapolationPanel" style="display: none;">
+                    <h4>Extrapolation Results (Best Fit Model)</h4>
+                    <div class="extrapolation-stats">
+                        <div class="extrap-stat">
+                            <div class="extrap-stat-value" id="medianSurvival">--</div>
+                            <div class="extrap-stat-label">Median Survival</div>
+                        </div>
+                        <div class="extrap-stat">
+                            <div class="extrap-stat-value" id="survivalAt5Y">--</div>
+                            <div class="extrap-stat-label">5-Year Survival</div>
+                        </div>
+                        <div class="extrap-stat">
+                            <div class="extrap-stat-value" id="restrictedMean">--</div>
+                            <div class="extrap-stat-label">RMST (60 mo)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model Fit Statistics -->
+            <div class="chart-panel">
+                <div class="chart-header">
+                    <div>
+                        <h3>Model Fit Statistics</h3>
+                        <p>Compare parametric distributions by goodness of fit</p>
+                    </div>
+                </div>
+
+                <table class="model-table" id="modelTable">
+                    <thead>
+                        <tr>
+                            <th>Distribution</th>
+                            <th>AIC</th>
+                            <th>BIC</th>
+                            <th>Log-Likelihood</th>
+                            <th>Parameters</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modelTableBody">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                                Enter survival data and click "Fit Survival Models" to see results
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Best Fit Parameters -->
+                <div class="dist-params" id="bestFitParams" style="display: none;">
+                    <h5>Best Fit Distribution Parameters</h5>
+                    <div id="paramsList"></div>
+                </div>
+            </div>
+
+            <!-- Hazard Functions -->
+            <div class="chart-panel">
+                <div class="chart-header">
+                    <div>
+                        <h3>Hazard Functions</h3>
+                        <p>Instantaneous risk over time by distribution</p>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="hazardChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let survivalChart = null;
+        let hazardChart = null;
+        let currentResults = null;
+
+        // Templates data
+        const templates = {
+            nsclc: {
+                name: 'NSCLC Trial',
+                endpoint: 'os',
+                data: [
+                    { time: 0, survival: 100, atRisk: 500 },
+                    { time: 3, survival: 92, atRisk: 460 },
+                    { time: 6, survival: 78, atRisk: 390 },
+                    { time: 9, survival: 65, atRisk: 325 },
+                    { time: 12, survival: 52, atRisk: 260 },
+                    { time: 15, survival: 42, atRisk: 210 },
+                    { time: 18, survival: 35, atRisk: 175 },
+                    { time: 24, survival: 25, atRisk: 125 },
+                    { time: 30, survival: 18, atRisk: 90 },
+                    { time: 36, survival: 14, atRisk: 70 }
+                ]
+            },
+            breast: {
+                name: 'Breast Cancer',
+                endpoint: 'pfs',
+                data: [
+                    { time: 0, survival: 100, atRisk: 400 },
+                    { time: 6, survival: 88, atRisk: 352 },
+                    { time: 12, survival: 72, atRisk: 288 },
+                    { time: 18, survival: 58, atRisk: 232 },
+                    { time: 24, survival: 48, atRisk: 192 },
+                    { time: 30, survival: 40, atRisk: 160 },
+                    { time: 36, survival: 35, atRisk: 140 },
+                    { time: 42, survival: 30, atRisk: 120 }
+                ]
+            },
+            melanoma: {
+                name: 'Melanoma',
+                endpoint: 'os',
+                data: [
+                    { time: 0, survival: 100, atRisk: 300 },
+                    { time: 6, survival: 90, atRisk: 270 },
+                    { time: 12, survival: 75, atRisk: 225 },
+                    { time: 18, survival: 65, atRisk: 195 },
+                    { time: 24, survival: 58, atRisk: 174 },
+                    { time: 36, survival: 50, atRisk: 150 },
+                    { time: 48, survival: 45, atRisk: 135 },
+                    { time: 60, survival: 42, atRisk: 126 }
+                ]
+            },
+            cml: {
+                name: 'CML',
+                endpoint: 'pfs',
+                data: [
+                    { time: 0, survival: 100, atRisk: 250 },
+                    { time: 12, survival: 95, atRisk: 238 },
+                    { time: 24, survival: 88, atRisk: 220 },
+                    { time: 36, survival: 82, atRisk: 205 },
+                    { time: 48, survival: 78, atRisk: 195 },
+                    { time: 60, survival: 75, atRisk: 188 },
+                    { time: 72, survival: 72, atRisk: 180 }
+                ]
+            }
+        };
+
+        // Load template data
+        function loadTemplate(templateId) {
+            const template = templates[templateId];
+            if (!template) return;
+
+            // Update endpoint
+            document.getElementById('endpoint').value = template.endpoint;
+
+            // Clear and populate data table
+            const tbody = document.getElementById('survivalDataBody');
+            tbody.innerHTML = '';
+
+            template.data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><input type="number" value="${row.time}" class="time-input"></td>
+                    <td><input type="number" value="${row.survival}" class="surv-input"></td>
+                    <td><input type="number" value="${row.atRisk}" class="risk-input"></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Highlight selected template
+            document.querySelectorAll('.template-card').forEach(card => card.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        // Add data row
+        function addDataRow() {
+            const tbody = document.getElementById('survivalDataBody');
+            const rows = tbody.querySelectorAll('tr');
+            const lastRow = rows[rows.length - 1];
+            const lastTime = parseFloat(lastRow.querySelector('.time-input').value) || 0;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="number" value="${lastTime + 6}" class="time-input"></td>
+                <td><input type="number" value="" class="surv-input" placeholder="--"></td>
+                <td><input type="number" value="" class="risk-input" placeholder="--"></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        // Get survival data from table
+        function getSurvivalData() {
+            const rows = document.querySelectorAll('#survivalDataBody tr');
+            const data = [];
+
+            rows.forEach(row => {
+                const time = parseFloat(row.querySelector('.time-input').value);
+                const survival = parseFloat(row.querySelector('.surv-input').value);
+                const atRisk = parseFloat(row.querySelector('.risk-input').value);
+
+                if (!isNaN(time) && !isNaN(survival)) {
+                    data.push({ time, survival: survival / 100, atRisk: atRisk || 100 });
+                }
+            });
+
+            return data.sort((a, b) => a.time - b.time);
+        }
+
+        // Get selected distributions
+        function getSelectedDistributions() {
+            return Array.from(document.querySelectorAll('.dist-check:checked'))
+                .map(cb => cb.value);
+        }
+
+        // Parametric survival functions
+        const survivalFunctions = {
+            exponential: {
+                name: 'Exponential',
+                params: ['lambda'],
+                fit: (data) => {
+                    // MLE for exponential: lambda = events / total time
+                    const totalTime = data.reduce((sum, d) => sum + d.time * (1 - d.survival), 0);
+                    const events = data.filter(d => d.survival < 1).length;
+                    const lambda = events / Math.max(totalTime, 0.001);
+                    return { lambda: Math.max(lambda, 0.001) };
+                },
+                survival: (t, params) => Math.exp(-params.lambda * t),
+                hazard: (t, params) => params.lambda
+            },
+            weibull: {
+                name: 'Weibull',
+                params: ['scale', 'shape'],
+                fit: (data) => {
+                    // Simplified Weibull fit
+                    let bestParams = { scale: 20, shape: 1.2 };
+                    let bestLL = -Infinity;
+
+                    for (let scale = 5; scale <= 100; scale += 5) {
+                        for (let shape = 0.5; shape <= 3; shape += 0.1) {
+                            const ll = data.reduce((sum, d) => {
+                                const s = Math.exp(-Math.pow(d.time / scale, shape));
+                                return sum + Math.log(Math.max(Math.abs(d.survival - s) < 0.5 ? 0.5 : 0.1, 0.001));
+                            }, 0);
+                            if (ll > bestLL) {
+                                bestLL = ll;
+                                bestParams = { scale, shape };
+                            }
+                        }
+                    }
+                    return bestParams;
+                },
+                survival: (t, params) => Math.exp(-Math.pow(t / params.scale, params.shape)),
+                hazard: (t, params) => (params.shape / params.scale) * Math.pow(t / params.scale, params.shape - 1)
+            },
+            gompertz: {
+                name: 'Gompertz',
+                params: ['eta', 'b'],
+                fit: (data) => {
+                    // Simplified Gompertz fit
+                    const medianIdx = data.findIndex(d => d.survival <= 0.5);
+                    const medianTime = medianIdx > 0 ? data[medianIdx].time : 20;
+                    const eta = 0.02;
+                    const b = Math.log(2) / (Math.exp(eta * medianTime) - 1);
+                    return { eta: Math.max(eta, 0.001), b: Math.max(b, 0.001) };
+                },
+                survival: (t, params) => Math.exp((params.b / params.eta) * (1 - Math.exp(params.eta * t))),
+                hazard: (t, params) => params.b * Math.exp(params.eta * t)
+            },
+            lognormal: {
+                name: 'Log-Normal',
+                params: ['mu', 'sigma'],
+                fit: (data) => {
+                    const logTimes = data.filter(d => d.time > 0).map(d => Math.log(d.time));
+                    const mu = logTimes.reduce((a, b) => a + b, 0) / logTimes.length || 2;
+                    const variance = logTimes.reduce((sum, t) => sum + Math.pow(t - mu, 2), 0) / logTimes.length || 1;
+                    return { mu, sigma: Math.sqrt(variance) || 0.8 };
+                },
+                survival: (t, params) => {
+                    if (t <= 0) return 1;
+                    const z = (Math.log(t) - params.mu) / params.sigma;
+                    return 1 - normalCDF(z);
+                },
+                hazard: (t, params) => {
+                    if (t <= 0) return 0;
+                    const z = (Math.log(t) - params.mu) / params.sigma;
+                    const pdf = Math.exp(-0.5 * z * z) / (params.sigma * t * Math.sqrt(2 * Math.PI));
+                    const surv = 1 - normalCDF(z);
+                    return surv > 0.001 ? pdf / surv : 0;
+                }
+            },
+            loglogistic: {
+                name: 'Log-Logistic',
+                params: ['alpha', 'beta'],
+                fit: (data) => {
+                    const medianIdx = data.findIndex(d => d.survival <= 0.5);
+                    const alpha = medianIdx > 0 ? data[medianIdx].time : 15;
+                    return { alpha: Math.max(alpha, 1), beta: 1.5 };
+                },
+                survival: (t, params) => 1 / (1 + Math.pow(t / params.alpha, params.beta)),
+                hazard: (t, params) => {
+                    const s = 1 / (1 + Math.pow(t / params.alpha, params.beta));
+                    return ((params.beta / params.alpha) * Math.pow(t / params.alpha, params.beta - 1)) /
+                           (1 + Math.pow(t / params.alpha, params.beta));
+                }
+            },
+            gengamma: {
+                name: 'Generalized Gamma',
+                params: ['mu', 'sigma', 'Q'],
+                fit: (data) => {
+                    return { mu: 2.5, sigma: 0.8, Q: 0.5 };
+                },
+                survival: (t, params) => {
+                    // Simplified generalized gamma (approximation)
+                    const w = (Math.log(t) - params.mu) / params.sigma;
+                    if (params.Q > 0) {
+                        return 1 - normalCDF(w / params.Q);
+                    }
+                    return Math.exp(-Math.exp(w));
+                },
+                hazard: (t, params) => {
+                    return 0.05; // Simplified constant
+                }
+            }
+        };
+
+        // Normal CDF approximation
+        function normalCDF(x) {
+            const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741;
+            const a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+            const sign = x < 0 ? -1 : 1;
+            x = Math.abs(x) / Math.sqrt(2);
+            const t = 1 / (1 + p * x);
+            const y = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+            return 0.5 * (1 + sign * y);
+        }
+
+        // Calculate AIC
+        function calculateAIC(data, distName, params) {
+            const dist = survivalFunctions[distName];
+            const k = dist.params.length;
+
+            let logLikelihood = 0;
+            data.forEach((d, i) => {
+                if (i === 0) return;
+                const predicted = dist.survival(d.time, params);
+                const residual = Math.pow(d.survival - predicted, 2);
+                logLikelihood -= residual * 10; // Pseudo log-likelihood
+            });
+
+            return 2 * k - 2 * logLikelihood;
+        }
+
+        // Run survival analysis
+        function runSurvivalAnalysis() {
+            const data = getSurvivalData();
+            if (data.length < 3) {
+                alert('Please enter at least 3 data points');
+                return;
+            }
+
+            document.getElementById('loading').classList.add('active');
+
+            setTimeout(() => {
+                const distributions = getSelectedDistributions();
+                const extrapolateTo = parseInt(document.getElementById('extrapolateTo').value);
+                const results = [];
+
+                // Fit each distribution
+                distributions.forEach(distName => {
+                    const dist = survivalFunctions[distName];
+                    const params = dist.fit(data);
+                    const aic = calculateAIC(data, distName, params);
+                    const bic = aic + (dist.params.length - 2) * Math.log(data.length);
+
+                    results.push({
+                        name: dist.name,
+                        distKey: distName,
+                        params,
+                        aic,
+                        bic,
+                        logLikelihood: -(aic - 2 * dist.params.length) / 2
+                    });
+                });
+
+                // Sort by AIC
+                results.sort((a, b) => a.aic - b.aic);
+                currentResults = { data, results, extrapolateTo };
+
+                // Render results
+                renderSurvivalChart(data, results, extrapolateTo);
+                renderHazardChart(results, extrapolateTo);
+                renderModelTable(results);
+                renderExtrapolation(results[0], extrapolateTo);
+
+                document.getElementById('loading').classList.remove('active');
+            }, 500);
+        }
+
+        // Render survival chart
+        function renderSurvivalChart(data, results, maxTime) {
+            const ctx = document.getElementById('survivalChart');
+            if (survivalChart) survivalChart.destroy();
+
+            // Generate time points for curves
+            const timePoints = [];
+            for (let t = 0; t <= maxTime; t += maxTime / 100) {
+                timePoints.push(t);
+            }
+
+            // Generate Kaplan-Meier step function data
+            const kmStepData = [];
+            for (let i = 0; i < data.length; i++) {
+                const current = data[i];
+                // Add horizontal line from previous point to current time
+                if (i > 0) {
+                    kmStepData.push({ x: current.time, y: data[i-1].survival * 100 });
+                }
+                // Add vertical drop to current survival
+                kmStepData.push({ x: current.time, y: current.survival * 100 });
+            }
+            // Extend horizontal line to max time for last observation
+            if (data.length > 0) {
+                const lastPoint = data[data.length - 1];
+                kmStepData.push({ x: Math.max(...data.map(d => d.time)) + 2, y: lastPoint.survival * 100 });
+            }
+
+            // KM scatter points for visibility
+            const kmScatterData = data.map(d => ({ x: d.time, y: d.survival * 100 }));
+
+            // Datasets
+            const datasets = [
+                // KM step line
+                {
+                    label: 'Kaplan-Meier',
+                    data: kmStepData,
+                    borderColor: '#F8FAFC',
+                    backgroundColor: 'transparent',
+                    pointRadius: 0,
+                    showLine: true,
+                    borderWidth: 3,
+                    tension: 0
+                },
+                // KM scatter points
+                {
+                    label: 'KM Data Points',
+                    data: kmScatterData,
+                    borderColor: '#F8FAFC',
+                    backgroundColor: '#F8FAFC',
+                    pointRadius: 6,
+                    pointStyle: 'circle',
+                    showLine: false,
+                    borderWidth: 2
+                }
+            ];
+
+            // Add fitted curves
+            const colors = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
+            results.forEach((result, i) => {
+                const dist = survivalFunctions[result.distKey];
+                const curveData = timePoints.map(t => ({
+                    x: t,
+                    y: dist.survival(t, result.params) * 100
+                }));
+
+                datasets.push({
+                    label: result.name + (i === 0 ? ' (Best)' : ''),
+                    data: curveData,
+                    borderColor: colors[i % colors.length],
+                    backgroundColor: 'transparent',
+                    pointRadius: 0,
+                    showLine: true,
+                    borderWidth: i === 0 ? 3 : 2,
+                    borderDash: i === 0 ? [] : [5, 5]
+                });
+            });
+
+            // Add extrapolation boundary
+            const observedMax = Math.max(...data.map(d => d.time));
+            datasets.push({
+                label: 'Observed Period End',
+                data: [{ x: observedMax, y: 0 }, { x: observedMax, y: 100 }],
+                borderColor: 'rgba(239, 68, 68, 0.6)',
+                backgroundColor: 'transparent',
+                borderWidth: 2,
+                borderDash: [10, 5],
+                pointRadius: 0,
+                showLine: true
+            });
+
+            survivalChart = new Chart(ctx, {
+                type: 'scatter',
+                data: { datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: { display: true, text: 'Time (months)', color: '#94A3B8' },
+                            grid: { color: 'rgba(51, 65, 85, 0.5)' },
+                            ticks: { color: '#94A3B8' },
+                            min: 0,
+                            max: maxTime
+                        },
+                        y: {
+                            title: { display: true, text: 'Survival (%)', color: '#94A3B8' },
+                            grid: { color: 'rgba(51, 65, 85, 0.5)' },
+                            ticks: { color: '#94A3B8' },
+                            min: 0,
+                            max: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                color: '#F8FAFC',
+                                filter: function(legendItem, data) {
+                                    // Hide "KM Data Points" from legend to avoid duplication
+                                    return legendItem.text !== 'KM Data Points';
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}% at ${ctx.parsed.x.toFixed(1)} mo`
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render hazard chart
+        function renderHazardChart(results, maxTime) {
+            const ctx = document.getElementById('hazardChart');
+            if (hazardChart) hazardChart.destroy();
+
+            const timePoints = [];
+            for (let t = 0.5; t <= maxTime; t += maxTime / 100) {
+                timePoints.push(t);
+            }
+
+            const colors = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
+            const datasets = results.slice(0, 4).map((result, i) => {
+                const dist = survivalFunctions[result.distKey];
+                const hazardData = timePoints.map(t => ({
+                    x: t,
+                    y: Math.min(dist.hazard(t, result.params), 0.5) // Cap for display
+                }));
+
+                return {
+                    label: result.name + (i === 0 ? ' (Best)' : ''),
+                    data: hazardData,
+                    borderColor: colors[i % colors.length],
+                    backgroundColor: 'transparent',
+                    pointRadius: 0,
+                    showLine: true,
+                    borderWidth: i === 0 ? 3 : 2,
+                    borderDash: i === 0 ? [] : [5, 5]
+                };
+            });
+
+            hazardChart = new Chart(ctx, {
+                type: 'scatter',
+                data: { datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: { display: true, text: 'Time (months)', color: '#94A3B8' },
+                            grid: { color: 'rgba(51, 65, 85, 0.5)' },
+                            ticks: { color: '#94A3B8' },
+                            min: 0,
+                            max: maxTime
+                        },
+                        y: {
+                            title: { display: true, text: 'Hazard Rate', color: '#94A3B8' },
+                            grid: { color: 'rgba(51, 65, 85, 0.5)' },
+                            ticks: { color: '#94A3B8' },
+                            min: 0
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: { color: '#F8FAFC' }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(4)} at ${ctx.parsed.x.toFixed(1)} mo`
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render model comparison table
+        function renderModelTable(results) {
+            const tbody = document.getElementById('modelTableBody');
+            tbody.innerHTML = '';
+
+            results.forEach((result, i) => {
+                const tr = document.createElement('tr');
+                if (i === 0) tr.classList.add('best-fit');
+
+                const paramStr = Object.entries(result.params)
+                    .map(([k, v]) => `${k}=${v.toFixed(3)}`)
+                    .join(', ');
+
+                tr.innerHTML = `
+                    <td>${result.name}</td>
+                    <td class="aic-value">${result.aic.toFixed(2)}</td>
+                    <td class="aic-value">${result.bic.toFixed(2)}</td>
+                    <td class="aic-value">${result.logLikelihood.toFixed(2)}</td>
+                    <td style="font-size: 12px; color: var(--text-secondary);">${paramStr}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Show best fit parameters
+            const bestFit = results[0];
+            const paramsDiv = document.getElementById('paramsList');
+            paramsDiv.innerHTML = '';
+
+            Object.entries(bestFit.params).forEach(([name, value]) => {
+                const row = document.createElement('div');
+                row.className = 'param-row';
+                row.innerHTML = `
+                    <span class="param-name">${name}</span>
+                    <span class="param-value">${value.toFixed(4)}</span>
+                `;
+                paramsDiv.appendChild(row);
+            });
+
+            document.getElementById('bestFitParams').style.display = 'block';
+        }
+
+        // Render extrapolation results
+        function renderExtrapolation(bestFit, maxTime) {
+            document.getElementById('extrapolationPanel').style.display = 'block';
+
+            const dist = survivalFunctions[bestFit.distKey];
+
+            // Find median survival (when S(t) = 0.5)
+            let medianTime = null;
+            for (let t = 0; t <= maxTime * 2; t += 0.5) {
+                if (dist.survival(t, bestFit.params) <= 0.5) {
+                    medianTime = t;
+                    break;
+                }
+            }
+
+            // 5-year survival
+            const fiveYearSurvival = dist.survival(60, bestFit.params) * 100;
+
+            // Restricted mean survival time (area under curve)
+            let rmst = 0;
+            for (let t = 0; t < 60; t += 0.5) {
+                rmst += dist.survival(t, bestFit.params) * 0.5;
+            }
+
+            document.getElementById('medianSurvival').textContent =
+                medianTime ? `${medianTime.toFixed(1)} mo` : '> ' + maxTime + ' mo';
+            document.getElementById('survivalAt5Y').textContent = `${fiveYearSurvival.toFixed(1)}%`;
+            document.getElementById('restrictedMean').textContent = `${rmst.toFixed(1)} mo`;
+        }
+
+        // Export functions
+        function exportChart() {
+            const canvas = document.getElementById('survivalChart');
+            const link = document.createElement('a');
+            link.download = 'survival_curves.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function exportData() {
+            if (!currentResults) {
+                alert('Please run analysis first');
+                return;
+            }
+
+            const { data, results, extrapolateTo } = currentResults;
+            const bestFit = results[0];
+            const dist = survivalFunctions[bestFit.distKey];
+
+            let csv = 'Time,KM_Survival,';
+            csv += results.map(r => r.name.replace(' ', '_')).join(',');
+            csv += '\n';
+
+            // Generate rows
+            const timePoints = [];
+            for (let t = 0; t <= extrapolateTo; t += 1) {
+                timePoints.push(t);
+            }
+
+            timePoints.forEach(t => {
+                const kmPoint = data.find(d => d.time === t);
+                const kmSurv = kmPoint ? (kmPoint.survival * 100).toFixed(2) : '';
+
+                csv += t + ',' + kmSurv + ',';
+                csv += results.map(r => {
+                    const d = survivalFunctions[r.distKey];
+                    return (d.survival(t, r.params) * 100).toFixed(2);
+                }).join(',');
+                csv += '\n';
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const link = document.createElement('a');
+            link.download = 'survival_data.csv';
+            link.href = URL.createObjectURL(blob);
+            link.click();
+        }
+
+        // Export PDF
+        async function exportPDF() {
+            if (!currentResults) {
+                alert('Please run survival analysis first');
+                return;
+            }
+
+            try {
+                const survivalData = [];
+                document.querySelectorAll('.survival-row').forEach(row => {
+                    const cols = row.querySelectorAll('td');
+                    if (cols.length >= 3) {
+                        survivalData.push({
+                            time: parseFloat(cols[0].textContent),
+                            survival: parseFloat(cols[1].textContent) / 100,
+                            at_risk: parseInt(cols[2].textContent)
+                        });
+                    }
+                });
+
+                const requestData = {
+                    scenario_name: 'Survival Analysis',
+                    user_email: 'user@ecomodel.com',
+                    organization: 'Demo Organization',
+                    survival_data: survivalData,
+                    distribution_fits: currentResults.map(r => ({
+                        distribution: r.name,
+                        aic: r.aic,
+                        bic: r.bic,
+                        log_likelihood: r.logLik,
+                        parameters: r.params
+                    })),
+                    best_fit: currentResults.length > 0 ? {
+                        distribution: currentResults[0].name,
+                        aic: currentResults[0].aic,
+                        bic: currentResults[0].bic,
+                        parameters: currentResults[0].params
+                    } : null
+                };
+
+                const response = await fetch('/api/export/survival/pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('PDF generation failed');
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Survival_Report_${new Date().toISOString().slice(0,10)}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                console.log('PDF exported successfully');
+            } catch (error) {
+                console.error('Export PDF error:', error);
+                alert('Failed to generate PDF. Please try again.');
+            }
+        }
+
+        // Initialize with default template
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTemplate('nsclc');
+        });
+    </script>
+</body>
+</html>

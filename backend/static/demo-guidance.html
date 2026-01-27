@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo: Model Builder Guidance System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #6B7280;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .demo-section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #F9FAFB;
+            border-radius: 12px;
+            border: 2px solid #E5E7EB;
+        }
+
+        .demo-section h2 {
+            color: #4F46E5;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-card h3 {
+            color: #1F2937;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .feature-card p {
+            color: #6B7280;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .code-example {
+            background: #1F2937;
+            color: #F3F4F6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+        }
+
+        .screenshot {
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 20px;
+            background: white;
+            margin: 20px 0;
+        }
+
+        .label-demo {
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .info-icon {
+            cursor: pointer;
+            margin-left: 8px;
+            font-size: 18px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            color: #3B82F6;
+        }
+
+        .info-icon:hover {
+            opacity: 1;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3B82F6;
+            color: #1E40AF;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .recommendation-badge {
+            background: #10B981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .btn-demo {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 10px 10px 10px 0;
+        }
+
+        .btn-demo:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .steps-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .steps-list li {
+            counter-increment: step-counter;
+            margin-bottom: 20px;
+            padding-left: 50px;
+            position: relative;
+        }
+
+        .steps-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 35px;
+            height: 35px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .highlight {
+            background: #FEF3C7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Sistema de Orientación del Model Builder</h1>
+        <p class="subtitle">Guía visual de cómo funciona el sistema de ayuda para usuarios no expertos</p>
+
+        <!-- Section 1: Overview -->
+        <div class="demo-section">
+            <h2>📋 Resumen General</h2>
+            <p style="margin-bottom: 20px;">El Model Builder ahora incluye un <strong>sistema completo de orientación educativa</strong> que guía a los usuarios paso a paso en la creación de modelos farmacoeconómicos.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🔄 Markov Model</h3>
+                    <span class="recommendation-badge">RECOMENDADO</span>
+                    <p style="margin-top: 10px;">Para enfermedades crónicas con transiciones recurrentes entre estados de salud a lo largo del tiempo.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🌳 Decision Tree</h3>
+                    <p>Para decisiones únicas o intervenciones a corto plazo como programas de cribado o cirugías.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📊 Partitioned Survival</h3>
+                    <p>Para ensayos oncológicos con datos de supervivencia (PFS, OS) de estudios clínicos.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: How to Use -->
+        <div class="demo-section">
+            <h2>🚀 Cómo Usar el Sistema de Guía</h2>
+
+            <ol class="steps-list">
+                <li>
+                    <strong>Acceder al Model Builder</strong><br>
+                    Desde la app principal, haz clic en el botón <span class="highlight">🏗️ Model Builder</span>
+                </li>
+                <li>
+                    <strong>Ver el icono de ayuda (ℹ️)</strong><br>
+                    En el Step 1, junto al campo "Model Type", encontrarás un icono de información azul
+                </li>
+                <li>
+                    <strong>Hacer clic en el icono ℹ️</strong><br>
+                    Se desplegará un panel completo con la comparación de los 3 tipos de modelos
+                </li>
+                <li>
+                    <strong>Seleccionar un tipo de modelo</strong><br>
+                    Al seleccionar en el dropdown, aparecerá automáticamente la guía específica para ese modelo
+                </li>
+                <li>
+                    <strong>Continuar a Step 2: Parameters</strong><br>
+                    Verás paneles informativos con categorías de parámetros y ejemplos de nomenclatura
+                </li>
+            </ol>
+        </div>
+
+        <!-- Section 3: Visual Demo -->
+        <div class="demo-section">
+            <h2>👁️ Demostración Visual</h2>
+
+            <div class="screenshot">
+                <label class="label-demo">
+                    Model Type *
+                    <span class="info-icon" title="Need help choosing? Click for guidance">ℹ️</span>
+                </label>
+                <select style="width: 100%; padding: 10px; border: 2px solid #E5E7EB; border-radius: 6px; margin-top: 8px;">
+                    <option>-- Select Model Type --</option>
+                    <option>Markov Model (State Transitions)</option>
+                    <option>Decision Tree</option>
+                    <option>Partitioned Survival</option>
+                </select>
+                <p style="margin-top: 8px; color: #6B7280; font-size: 13px;">Choose the type of economic model</p>
+            </div>
+
+            <div class="alert-info">
+                <h4 style="margin: 0 0 10px 0;">💡 Choosing the Right Model Type</h4>
+
+                <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #E5E7EB;">
+                    <h4 style="margin-bottom: 8px;">🔄 Markov Model (State Transitions) <span class="recommendation-badge">RECOMMENDED</span></h4>
+                    <p style="font-size: 13px; margin: 8px 0;"><strong>Best for modeling chronic diseases where patients move between health states over time.</strong></p>
+
+                    <p style="font-weight: 600; margin: 12px 0 4px 0; font-size: 13px;">When to Use:</p>
+                    <ul style="margin-left: 20px; font-size: 13px; line-height: 1.6;">
+                        <li>Chronic or progressive diseases (diabetes, cancer, HIV)</li>
+                        <li>Long-term treatments (>1 year)</li>
+                        <li>Recurring health events or state transitions</li>
+                    </ul>
+
+                    <p style="font-weight: 600; margin: 12px 0 4px 0; font-size: 13px;">Examples:</p>
+                    <ul style="margin-left: 20px; font-size: 13px; line-height: 1.6;">
+                        <li>Cancer progression: Stable → Progression → Death</li>
+                        <li>Diabetes management: Controlled → Uncontrolled → Complications</li>
+                        <li>HIV treatment: Stable → AIDS → Death</li>
+                    </ul>
+                </div>
+
+                <div style="padding: 12px; background: #FEF3C7; border-radius: 6px; font-size: 13px;">
+                    <strong>💡 Not sure which to choose?</strong><br>
+                    For most pharmacoeconomic evaluations, <strong>Markov Models</strong> are the most common choice because they can model long-term chronic conditions with recurring costs and health benefits.
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Features -->
+        <div class="demo-section">
+            <h2>✨ Características Implementadas</h2>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>📘 Guía de Selección</h3>
+                    <p>Comparación detallada de los 3 tipos de modelos con ejemplos concretos y recomendaciones.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔄 Actualización Dinámica</h3>
+                    <p>El panel de ayuda se actualiza automáticamente al seleccionar un tipo de modelo.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🏷️ Badge Recomendado</h3>
+                    <p>El modelo Markov muestra un badge verde "RECOMMENDED" por ser el más común.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📋 Guía de Parámetros</h3>
+                    <p>Categorías de parámetros (costes, probabilidades, utilidades, tiempo) con ejemplos de nomenclatura.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✅ Checklist Típico</h3>
+                    <p>Lista de parámetros típicos para validar que el modelo está completo antes de publicar.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>💡 Tooltips Interactivos</h3>
+                    <p>Ayuda contextual que aparece solo cuando es relevante, sin saturar la interfaz.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: Testing -->
+        <div class="demo-section">
+            <h2>🧪 Cómo Probar la Funcionalidad</h2>
+
+            <div style="margin-bottom: 20px;">
+                <button class="btn-demo" onclick="window.open('/model-builder', '_blank')">Abrir Model Builder</button>
+                <button class="btn-demo" onclick="alert('1. Haz clic en el icono ℹ️ junto a Model Type\n2. Selecciona un tipo de modelo en el dropdown\n3. Observa cómo el panel de ayuda se actualiza automáticamente')">Ver Instrucciones</button>
+            </div>
+
+            <div class="code-example">
+# Pasos para probar:
+
+1. Abrir http://localhost:8000/model-builder
+2. En Step 1: Basic Info, localizar el campo "Model Type"
+3. Hacer clic en el icono ℹ️ (azul, junto al label)
+4. Verificar que aparece el panel con los 3 modelos
+5. Seleccionar "Markov Model" en el dropdown
+6. Verificar que aparece el badge "RECOMMENDED FOR MOST CASES"
+7. Verificar que el texto de ayuda se actualiza dinámicamente
+8. Hacer clic en "Next" para ir a Step 2
+9. Verificar que aparecen los paneles de guía de parámetros
+            </div>
+        </div>
+
+        <!-- Section 6: Benefits -->
+        <div class="demo-section">
+            <h2>🎯 Beneficios para Usuarios No Expertos</h2>
+
+            <ul style="list-style: none; padding-left: 0;">
+                <li style="margin-bottom: 15px; padding-left: 30px; position: relative;">
+                    <span style="position: absolute; left: 0;">✅</span>
+                    <strong>Decisión informada</strong> sobre qué tipo de modelo usar basado en la enfermedad y datos disponibles
+                </li>
+                <li style="margin-bottom: 15px; padding-left: 30px; position: relative;">
+                    <span style="position: absolute; left: 0;">✅</span>
+                    <strong>Ejemplos concretos</strong> de casos de uso reales en la industria farmacéutica
+                </li>
+                <li style="margin-bottom: 15px; padding-left: 30px; position: relative;">
+                    <span style="position: absolute; left: 0;">✅</span>
+                    <strong>Nomenclatura estandarizada</strong> siguiendo las mejores prácticas de la industria
+                </li>
+                <li style="margin-bottom: 15px; padding-left: 30px; position: relative;">
+                    <span style="position: absolute; left: 0;">✅</span>
+                    <strong>Checklist de validación</strong> para asegurar que no faltan parámetros críticos
+                </li>
+                <li style="margin-bottom: 15px; padding-left: 30px; position: relative;">
+                    <span style="position: absolute; left: 0;">✅</span>
+                    <strong>Orientación contextual</strong> que aparece solo cuando es necesaria
+                </li>
+                <li style="margin-bottom: 15px; padding-left: 30px; position: relative;">
+                    <span style="position: absolute; left: 0;">✅</span>
+                    <strong>Recomendación clara</strong> del modelo más común (Markov) para reducir la incertidumbre
+                </li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; padding: 40px 0; border-top: 2px solid #E5E7EB; margin-top: 40px;">
+            <p style="color: #6B7280; font-size: 14px;">EcoModel Hub - Model Builder Guidance System</p>
+            <p style="color: #9CA3AF; font-size: 12px; margin-top: 8px;">Implementado en Enero 2026</p>
+        </div>
+    </div>
+</body>
+</html>

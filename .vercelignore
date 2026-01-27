@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Docker
+docker/
+.dockerignore
+Dockerfile
+
+# Tests
+tests/
+pytest_cache/
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+
+# Documentation
+docs/
+*.md
+!DEPLOYMENT_VERCEL.md
+
+# Alembic
+alembic/versions/*.py
+alembic.ini
+
+# Misc
+Makefile
+seed_data.py
