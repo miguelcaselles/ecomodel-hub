@@ -25,6 +25,36 @@ app = FastAPI(
     docs_url=f"{settings.API_V1_PREFIX}/docs",
 )
 
+
+@app.on_event("startup")
+async def startup_event():
+    """Create admin user on startup if it doesn't exist"""
+    try:
+        from app.db.session import SessionLocal
+        from app.crud import crud_user
+        from app.schemas.user import UserCreate
+
+        db = SessionLocal()
+        try:
+            # Check if admin user exists
+            existing = crud_user.get_by_email(db, email="admin@ecomodel.com")
+            if not existing:
+                # Create admin user
+                user_in = UserCreate(
+                    email="admin@ecomodel.com",
+                    password="admin123",
+                    full_name="Administrator",
+                    role="global_admin"
+                )
+                user = crud_user.create(db, obj_in=user_in)
+                print(f"✅ Admin user created: {user.email}")
+            else:
+                print(f"✅ Admin user already exists: {existing.email}")
+        finally:
+            db.close()
+    except Exception as e:
+        print(f"⚠️  Could not create admin user: {e}")
+
 # CORS
 app.add_middleware(
     CORSMiddleware,
