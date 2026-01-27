@@ -39,11 +39,11 @@ async def startup_event():
             # Check if admin user exists
             existing = db.query(User).filter(User.email == "admin@ecomodel.com").first()
             if not existing:
-                # Create admin user
+                # Create admin user with role value as string
                 admin_user = User(
                     email="admin@ecomodel.com",
                     full_name="Administrator",
-                    role=UserRole.GLOBAL_ADMIN,
+                    role=UserRole.GLOBAL_ADMIN.value,  # Use .value to get "global_admin" string
                     password_hash=get_password_hash("admin123"),
                     is_active=True,
                     organization_id=None
