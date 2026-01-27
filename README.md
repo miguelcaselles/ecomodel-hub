@@ -1,6 +1,15 @@
 # EcoModel Hub 🏥
 
+[![GitHub](https://img.shields.io/badge/GitHub-miguelcaselles%2Fecomodel--hub-blue?logo=github)](https://github.com/miguelcaselles/ecomodel-hub)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/miguelcaselles/ecomodel-hub)
+
 > Plataforma SaaS B2B para gestión centralizada y visualización de modelos farmacoeconómicos (HEOR)
+
+## 🌐 Links
+
+- **GitHub Repository**: [github.com/miguelcaselles/ecomodel-hub](https://github.com/miguelcaselles/ecomodel-hub)
+- **Documentation**: Ver [DEPLOYMENT_VERCEL.md](DEPLOYMENT_VERCEL.md) para deployment en Vercel
+- **Quick Start**: Ver [QUICK_START.md](QUICK_START.md) para desarrollo local
 
 ## 🎯 Características Principales
 
