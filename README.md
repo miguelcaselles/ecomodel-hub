@@ -5,11 +5,28 @@
 
 > Plataforma SaaS B2B para gestión centralizada y visualización de modelos farmacoeconómicos (HEOR)
 
-## 🌐 Links
+## 🌐 Links & Deployment
 
-- **GitHub Repository**: [github.com/miguelcaselles/ecomodel-hub](https://github.com/miguelcaselles/ecomodel-hub)
-- **Documentation**: Ver [DEPLOYMENT_VERCEL.md](DEPLOYMENT_VERCEL.md) para deployment en Vercel
-- **Quick Start**: Ver [QUICK_START.md](QUICK_START.md) para desarrollo local
+### GitHub Repository
+- **Repo**: [github.com/miguelcaselles/ecomodel-hub](https://github.com/miguelcaselles/ecomodel-hub)
+
+### Deployment en Producción
+
+**🚂 Railway (Recomendado - Funcionalidad Completa)**
+- ✅ Soporta NumPy, SciPy, Pandas sin restricciones
+- ✅ PostgreSQL y Redis incluidos
+- ✅ Sin timeouts ni límites de tamaño
+- ⚡ **Deploy en 5 minutos**: [RAILWAY_QUICKSTART.md](RAILWAY_QUICKSTART.md)
+- 📚 **Guía completa**: [DEPLOYMENT_RAILWAY.md](DEPLOYMENT_RAILWAY.md)
+- 🚀 **Deploy directo**: [railway.app/new](https://railway.app/new)
+
+**⚡ Vercel (Funcionalidad Limitada)**
+- ⚠️ Sin NumPy, SciPy, Pandas (excede límites)
+- ⚠️ Solo funcionalidades básicas (CRUD, PDFs, Excel)
+- 📚 **Guía**: [DEPLOYMENT_VERCEL.md](DEPLOYMENT_VERCEL.md)
+
+### Desarrollo Local
+- **Quick Start**: [QUICK_START.md](QUICK_START.md)
 
 ## 🎯 Características Principales
 
