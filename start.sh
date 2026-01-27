@@ -14,6 +14,13 @@ alembic upgrade head
 
 if [ $? -eq 0 ]; then
     echo "✅ Migraciones completadas"
+
+    # Run seed script if it exists
+    if [ -f "/app/seed-remote.sh" ]; then
+        bash /app/seed-remote.sh
+        # Remove seed script after execution so it doesn't run again
+        rm -f /app/seed-remote.sh
+    fi
 else
     echo "⚠️  Error en migraciones, continuando de todos modos..."
 fi
