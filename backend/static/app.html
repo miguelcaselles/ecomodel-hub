@@ -1560,9 +1560,6 @@
                             <button class="btn-secondary" onclick="saveScenario()" title="Save current parameters">
                                 💾 Save
                             </button>
-                            <button class="btn-secondary" onclick="exportRCode()" title="Download R script">
-                                📄 Export R
-                            </button>
                         </div>
                         <select id="scenarioSelect" class="form-control" onchange="loadScenario()" style="margin-bottom: 8px;">
                             <option value="">Load Scenario...</option>
@@ -2783,106 +2780,6 @@
             // (Would need Chart.js annotation plugin for this)
         }
 
-        // ==================== EXPORT R CODE ====================
-
-        function exportRCode() {
-            const params = getCurrentParameters();
-
-            const rCode = `# ============================================
-# EcoModel Hub - Generated R Code
-# ============================================
-# Date: ${new Date().toISOString()}
-# User: ${user.email}
-# Model: Markov 3-state (Stable → Progression → Death)
-# ============================================
-
-library(heemod)
-
-# ==================== DEFINE STATES ====================
-
-state_Stable <- define_state(
-    cost = ${params.cost_drug_a} + ${params.cost_ae_drug_a},
-    utility = ${params.utility_stable}
-)
-
-state_Progression <- define_state(
-    cost = ${params.cost_drug_a} + ${params.cost_progression},
-    utility = ${params.utility_progression}
-)
-
-state_Death <- define_state(
-    cost = 0,
-    utility = 0
-)
-
-# ==================== TRANSITION MATRIX ====================
-
-# Calculate transition probabilities
-prob_s_to_p <- ${params.prob_progression_a}
-prob_s_to_d <- ${params.prob_death_stable}
-prob_s_to_s <- 1 - prob_s_to_p - prob_s_to_d
-
-prob_p_to_d <- ${params.prob_death_progression}
-prob_p_to_p <- 1 - prob_p_to_d
-
-mat_drug_a <- define_transition(
-    state_names = c("Stable", "Progression", "Death"),
-    prob_s_to_s, prob_s_to_p, prob_s_to_d,
-    0.00, prob_p_to_p, prob_p_to_d,
-    0.00, 0.00, 1.00
-)
-
-# ==================== CREATE STRATEGY ====================
-
-strategy_drug_a <- define_strategy(
-    transition = mat_drug_a,
-    Stable = state_Stable,
-    Progression = state_Progression,
-    Death = state_Death
-)
-
-# ==================== RUN MODEL ====================
-
-result <- run_model(
-    strategy_drug_a,
-    cycles = ${params.time_horizon},
-    cost = cost,
-    effect = utility,
-    init = c(1000, 0, 0),
-    method = "life-table"
-)
-
-# ==================== VIEW RESULTS ====================
-
-summary(result)
-plot(result)
-
-# ==================== EXPORT RESULTS ====================
-
-# Export to CSV
-write.csv(result$values, "markov_results.csv", row.names = FALSE)
-
-# Print key metrics
-cat("\\n=== KEY RESULTS ===\\n")
-cat("Total Cost:", sum(result$values$cost), "EUR\\n")
-cat("Total QALYs:", sum(result$values$effect), "\\n")
-
-# ==================== END ====================
-`;
-
-            // Download file
-            const blob = new Blob([rCode], {type: 'text/plain; charset=utf-8'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `ecomodel_${new Date().toISOString().slice(0,10)}.R`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-
-            alert('✅ R code downloaded!\n\nOpen the .R file in RStudio to execute the analysis.');
-        }
 
         // ==================== TORNADO ANALYSIS ====================
 
