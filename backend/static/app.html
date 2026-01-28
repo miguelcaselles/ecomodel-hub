@@ -2169,6 +2169,23 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- PSA Interpretation -->
+                    <div class="card" id="psaInterpretation" style="margin-top: 24px; display: none;">
+                        <div class="card-header">
+                            <h4 style="display: flex; align-items: center; gap: 8px;">
+                                <svg class="icon" viewBox="0 0 24 24" style="stroke: var(--accent);">
+                                    <path d="M9 18h6"/>
+                                    <path d="M10 22h4"/>
+                                    <path d="M15 2a6 6 0 0 1 2 11.659V16a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-2.341A6 6 0 0 1 9 2z"/>
+                                </svg>
+                                Interpretation
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="psaInterpretationText" style="line-height: 1.7; color: var(--text-secondary);"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Tornado Results Section (hidden by default) -->
@@ -3002,18 +3019,36 @@
                 document.getElementById('psaResultsSection').style.display = 'block';
                 document.getElementById('tornadoResultsSection').style.display = 'none';
 
-                // Update stats table
-                document.getElementById('psaICERMean').textContent = '€' + Math.round(psaResults.mean_icer).toLocaleString();
-                document.getElementById('psaICERP25').textContent = '€' + Math.round(psaResults.percentiles.p2_5).toLocaleString();
-                document.getElementById('psaICERP50').textContent = '€' + Math.round(psaResults.percentiles.p50).toLocaleString();
-                document.getElementById('psaICERP975').textContent = '€' + Math.round(psaResults.percentiles.p97_5).toLocaleString();
-                document.getElementById('psaProbCE').textContent = (psaResults.prob_cost_effective * 100).toFixed(1) + '%';
+                // Update stats table with formatted numbers
+                document.getElementById('psaICERMean').textContent = '€' + Math.round(psaResults.mean_icer).toLocaleString('es-ES');
+                document.getElementById('psaICERP25').textContent = '€' + Math.round(psaResults.percentiles.p2_5).toLocaleString('es-ES');
+                document.getElementById('psaICERP50').textContent = '€' + Math.round(psaResults.percentiles.p50).toLocaleString('es-ES');
+                document.getElementById('psaICERP975').textContent = '€' + Math.round(psaResults.percentiles.p97_5).toLocaleString('es-ES');
+
+                const probCE = (psaResults.prob_cost_effective * 100).toFixed(1);
+                document.getElementById('psaProbCE').textContent = probCE + '%';
+
+                // Add color coding for probability
+                const psaProbCEEl = document.getElementById('psaProbCE');
+                if (probCE >= 70) {
+                    psaProbCEEl.style.color = '#059669'; // Green for high probability
+                    psaProbCEEl.style.fontWeight = '700';
+                } else if (probCE >= 50) {
+                    psaProbCEEl.style.color = '#f59e0b'; // Amber for moderate
+                    psaProbCEEl.style.fontWeight = '600';
+                } else {
+                    psaProbCEEl.style.color = '#dc2626'; // Red for low probability
+                    psaProbCEEl.style.fontWeight = '600';
+                }
 
                 // Render CEAC curve
-                renderCEACCurve(psaResults.ceac_data || generateCEACData(psaResults));
+                renderCEACCurve(psaResults.ceac_data);
 
                 // Render PSA scatter plot
-                renderPSAScatter(psaResults.scatter_data || generateScatterData(psaResults));
+                renderPSAScatter(psaResults.psa_iterations);
+
+                // Generate and show interpretation
+                generatePSAInterpretation(psaResults);
 
                 // Show success with better UX
                 btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> PSA Complete!';
@@ -3050,32 +3085,58 @@
             }
         }
 
-        // Generate CEAC data if not provided by backend
-        function generateCEACData(psaResults) {
-            const wtpRange = Array.from({length: 21}, (_, i) => i * 5000); // 0 to 100k
-            const probCE = wtpRange.map(wtp => {
-                // Simplified: assume normal distribution around mean ICER
-                if (wtp >= psaResults.mean_icer) {
-                    return Math.min(1, 0.5 + (wtp - psaResults.mean_icer) / 50000);
-                } else {
-                    return Math.max(0, 0.5 - (psaResults.mean_icer - wtp) / 50000);
-                }
-            });
-            return wtpRange.map((wtp, i) => ({wtp, prob: probCE[i]}));
-        }
+        // Note: Backend now provides real PSA data - no need to generate synthetic data
 
-        // Generate scatter data if not provided
-        function generateScatterData(psaResults) {
-            const points = [];
-            const stdIcer = (psaResults.percentiles.p97_5 - psaResults.percentiles.p2_5) / 3.92; // ~95% CI
-            for (let i = 0; i < 100; i++) { // Show 100 points for performance
-                const icer = psaResults.mean_icer + (Math.random() - 0.5) * stdIcer * 2;
-                // Estimate delta costs and QALYs from ICER
-                const deltaQaly = 0.3 + Math.random() * 0.4;
-                const deltaCost = icer * deltaQaly;
-                points.push({delta_cost: deltaCost, delta_qaly: deltaQaly});
+        function generatePSAInterpretation(psaResults) {
+            const probCE = psaResults.prob_cost_effective * 100;
+            const meanICER = psaResults.mean_icer;
+            const medianICER = psaResults.percentiles.p50;
+            const ci95 = [psaResults.percentiles.p2_5, psaResults.percentiles.p97_5];
+            const wtpThreshold = 30000;
+
+            let interpretation = '<p>';
+
+            // Uncertainty assessment
+            const ciWidth = ci95[1] - ci95[0];
+            const relativeUncertainty = ciWidth / meanICER;
+
+            if (relativeUncertainty < 0.5) {
+                interpretation += '<strong>Low uncertainty:</strong> The 95% confidence interval is relatively narrow, indicating stable results across simulations. ';
+            } else if (relativeUncertainty < 1.5) {
+                interpretation += '<strong>Moderate uncertainty:</strong> The 95% confidence interval shows some variability in results. ';
+            } else {
+                interpretation += '<strong>High uncertainty:</strong> The 95% confidence interval is wide, indicating substantial variability in outcomes. ';
             }
-            return points;
+
+            // Cost-effectiveness assessment
+            interpretation += `</p><p><strong>Cost-effectiveness:</strong> `;
+
+            if (probCE >= 80) {
+                interpretation += `With a ${probCE.toFixed(1)}% probability of being cost-effective at €${(wtpThreshold/1000).toFixed(0)}k WTP, the intervention shows <span style="color: #059669; font-weight: 600;">strong evidence of cost-effectiveness</span>. `;
+            } else if (probCE >= 50) {
+                interpretation += `With a ${probCE.toFixed(1)}% probability of being cost-effective at €${(wtpThreshold/1000).toFixed(0)}k WTP, the intervention shows <span style="color: #f59e0b; font-weight: 600;">moderate evidence of cost-effectiveness</span>. `;
+            } else {
+                interpretation += `With only ${probCE.toFixed(1)}% probability of being cost-effective at €${(wtpThreshold/1000).toFixed(0)}k WTP, the intervention shows <span style="color: #dc2626; font-weight: 600;">limited evidence of cost-effectiveness</span>. `;
+            }
+
+            // ICER interpretation
+            const icerDisplay = meanICER.toLocaleString('es-ES', {maximumFractionDigits: 0});
+            interpretation += `The mean ICER is €${icerDisplay}/QALY (median: €${medianICER.toLocaleString('es-ES', {maximumFractionDigits: 0})}/QALY).`;
+            interpretation += '</p>';
+
+            // Decision recommendation
+            interpretation += '<p><strong>Recommendation:</strong> ';
+            if (probCE >= 70 && relativeUncertainty < 1) {
+                interpretation += 'Based on these results, the intervention appears cost-effective with high confidence. Consider proceeding with implementation.';
+            } else if (probCE >= 50) {
+                interpretation += 'Results suggest potential cost-effectiveness, but additional analysis or real-world evidence may strengthen the decision.';
+            } else {
+                interpretation += 'Results suggest limited cost-effectiveness at current WTP threshold. Consider value-based pricing strategies or additional clinical benefits.';
+            }
+            interpretation += '</p>';
+
+            document.getElementById('psaInterpretation').style.display = 'block';
+            document.getElementById('psaInterpretationText').innerHTML = interpretation;
         }
 
         function renderCEACCurve(ceacData) {
@@ -3088,25 +3149,39 @@
             ceacChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ceacData.map(d => '€' + (d.wtp / 1000) + 'k'),
+                    labels: ceacData.map(d => '€' + (d.wtp / 1000).toFixed(0) + 'k'),
                     datasets: [{
                         label: 'Probability Cost-Effective',
-                        data: ceacData.map(d => d.prob * 100),
-                        borderColor: 'rgb(59, 130, 246)',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        data: ceacData.map(d => d.prob_ce * 100),
+                        borderColor: '#6366f1',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
                         fill: true,
                         tension: 0.4,
-                        borderWidth: 3
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        pointHoverRadius: 5
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
                     plugins: {
                         legend: {display: false},
                         tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#e2e8f0',
+                            borderColor: '#6366f1',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: false,
                             callbacks: {
-                                label: (context) => context.parsed.y.toFixed(1) + '%'
+                                title: (context) => 'WTP: ' + context[0].label,
+                                label: (context) => 'Probability CE: ' + context.parsed.y.toFixed(1) + '%'
                             }
                         }
                     },
@@ -3114,10 +3189,39 @@
                         y: {
                             beginAtZero: true,
                             max: 100,
-                            title: {display: true, text: 'Probability Cost-Effective (%)'}
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                callback: (value) => value + '%',
+                                font: {size: 11},
+                                color: '#64748b'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Probability Cost-Effective (%)',
+                                font: {size: 12, weight: '600'},
+                                color: '#0f172a'
+                            }
                         },
                         x: {
-                            title: {display: true, text: 'Willingness-to-Pay Threshold'}
+                            grid: {
+                                display: false,
+                                drawBorder: false
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45,
+                                font: {size: 10},
+                                color: '#64748b'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Willingness-to-Pay Threshold',
+                                font: {size: 12, weight: '600'},
+                                color: '#0f172a'
+                            }
                         }
                     }
                 }
@@ -3142,25 +3246,40 @@
                             x: it.delta_qaly,
                             y: it.delta_cost
                         })),
-                        backgroundColor: 'rgba(59, 130, 246, 0.5)',
-                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(99, 102, 241, 0.4)',
+                        borderColor: 'rgba(99, 102, 241, 0.7)',
                         borderWidth: 1,
-                        pointRadius: 4
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: '#6366f1',
+                        pointHoverBorderColor: '#ffffff',
+                        pointHoverBorderWidth: 2
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
+                    interaction: {
+                        mode: 'point'
+                    },
                     plugins: {
                         legend: {display: false},
                         tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#e2e8f0',
+                            borderColor: '#6366f1',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: false,
                             callbacks: {
+                                title: () => 'PSA Iteration',
                                 label: (context) => {
                                     const icer = context.parsed.y / context.parsed.x;
                                     return [
-                                        `ΔCost: €${context.parsed.y.toFixed(0)}`,
+                                        `ΔCost: €${context.parsed.y.toLocaleString('es-ES', {maximumFractionDigits: 0})}`,
                                         `ΔQALYs: ${context.parsed.x.toFixed(3)}`,
-                                        `ICER: €${icer.toFixed(0)}/QALY`
+                                        `ICER: €${icer.toLocaleString('es-ES', {maximumFractionDigits: 0})}/QALY`
                                     ];
                                 }
                             }
@@ -3168,12 +3287,38 @@
                     },
                     scales: {
                         x: {
-                            title: {display: true, text: 'Incremental QALYs'},
-                            beginAtZero: false
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                font: {size: 11},
+                                color: '#64748b',
+                                callback: (value) => value.toFixed(2)
+                            },
+                            title: {
+                                display: true,
+                                text: 'Incremental QALYs (ΔQALYs)',
+                                font: {size: 12, weight: '600'},
+                                color: '#0f172a'
+                            }
                         },
                         y: {
-                            title: {display: true, text: 'Incremental Costs (€)'},
-                            beginAtZero: false
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                font: {size: 11},
+                                color: '#64748b',
+                                callback: (value) => '€' + (value / 1000).toFixed(0) + 'k'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Incremental Costs (ΔCosts)',
+                                font: {size: 12, weight: '600'},
+                                color: '#0f172a'
+                            }
                         }
                     }
                 }
