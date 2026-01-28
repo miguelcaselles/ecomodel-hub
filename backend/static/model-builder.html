@@ -448,12 +448,49 @@
             font-weight: 600;
             margin-left: 8px;
         }
+
+        /* Professional Icon System */
+        .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        .icon-sm {
+            width: 16px;
+            height: 16px;
+        }
+
+        .icon-lg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .icon-xl {
+            width: 32px;
+            height: 32px;
+        }
     </style>
 </head>
 <body>
     <!-- Header -->
     <div class="header">
-        <div class="logo">🏗️ Model Builder</div>
+        <div class="logo">
+            <svg class="icon" viewBox="0 0 24 24" style="margin-right: 8px; vertical-align: middle;">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+            Model Builder
+        </div>
         <a href="/app" class="back-btn">← Back to Dashboard</a>
     </div>
 
@@ -498,7 +535,13 @@
                     <div class="form-group">
                         <label>
                             Model Type *
-                            <span class="info-icon" title="Need help choosing? Click for guidance" onclick="showModelTypeGuide()">ℹ️</span>
+                            <span class="info-icon" title="Need help choosing? Click for guidance" onclick="showModelTypeGuide()">
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="cursor: pointer; stroke: var(--accent);">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="16" x2="12" y2="12"/>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                </svg>
+                            </span>
                         </label>
                         <select id="modelType" onchange="updateModelTypeDescription()">
                             <option value="">-- Select Model Type --</option>
@@ -518,12 +561,20 @@
 
                 <!-- Model Type Guidance Panel -->
                 <div class="alert alert-info" id="modelTypeGuidance" style="display: none; margin-top: 16px;">
-                    <span>💡</span>
+                    <svg class="icon" viewBox="0 0 24 24" style="flex-shrink: 0; stroke: var(--accent);">
+                        <path d="M9 18h6"/>
+                        <path d="M10 22h4"/>
+                        <path d="M15 2a6 6 0 0 1 2 11.659V16a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-2.341A6 6 0 0 1 9 2z"/>
+                    </svg>
                     <div id="guidanceContent"></div>
                 </div>
 
                 <div class="alert alert-warning">
-                    <span>⚠️</span>
+                    <svg class="icon" viewBox="0 0 24 24" style="flex-shrink: 0; stroke: var(--warning);">
+                        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
                     <div>
                         <strong>Important:</strong> Make sure you have defined all parameters before publishing the model.
                         Unpublished models are only visible to administrators.
@@ -537,7 +588,11 @@
                 <p class="subtitle">Add all the input parameters that users will configure for their scenarios</p>
 
                 <div class="alert alert-info" style="margin-bottom: 20px;">
-                    <span>💡</span>
+                    <svg class="icon" viewBox="0 0 24 24" style="flex-shrink: 0; stroke: var(--accent);">
+                        <path d="M9 18h6"/>
+                        <path d="M10 22h4"/>
+                        <path d="M15 2a6 6 0 0 1 2 11.659V16a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-2.341A6 6 0 0 1 9 2z"/>
+                    </svg>
                     <div>
                         <strong>Parameter Categories:</strong>
                         <ul style="margin: 8px 0 0 20px; font-size: 13px; line-height: 1.6;">
@@ -557,7 +612,11 @@
                 <button class="btn-add" onclick="addParameter()">+ Add New Parameter</button>
 
                 <div class="alert alert-warning" style="margin-top: 20px;">
-                    <span>⚠️</span>
+                    <svg class="icon" viewBox="0 0 24 24" style="flex-shrink: 0; stroke: var(--warning);">
+                        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
                     <div>
                         <strong>Typical Markov Model Parameters:</strong>
                         <ul style="margin: 8px 0 0 20px; font-size: 13px;">
@@ -647,7 +706,7 @@
                     'HIV treatment: Stable → AIDS → Death'
                 ],
                 recommended: true,
-                icon: '🔄'
+                icon: '<svg class="icon" viewBox="0 0 24 24" style="stroke: var(--accent); vertical-align: middle;"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>'
             },
             'DECISION_TREE': {
                 title: 'Decision Tree',
@@ -664,7 +723,7 @@
                     'Vaccination program: Vaccinate → Protected/Not Protected / No Vaccine → Risk'
                 ],
                 recommended: false,
-                icon: '🌳'
+                icon: '<svg class="icon" viewBox="0 0 24 24" style="stroke: var(--accent); vertical-align: middle;"><circle cx="12" cy="5" r="2"/><path d="M12 7v6"/><path d="M8 13l4 4 4-4"/><path d="M8 17h8"/></svg>'
             },
             'PARTITION_SURVIVAL': {
                 title: 'Partitioned Survival Analysis',
@@ -681,7 +740,7 @@
                     'Advanced therapies with published survival data'
                 ],
                 recommended: false,
-                icon: '📊'
+                icon: '<svg class="icon" viewBox="0 0 24 24" style="stroke: var(--accent); vertical-align: middle;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>'
             }
         };
 
@@ -690,7 +749,7 @@
             const guidancePanel = document.getElementById('modelTypeGuidance');
             const guidanceContent = document.getElementById('guidanceContent');
 
-            let html = '<h3 style="margin-top: 0; color: var(--accent);">💡 Choosing the Right Model Type</h3>';
+            let html = '<h3 style="margin-top: 0; color: var(--accent);"><svg class="icon" viewBox="0 0 24 24" style="margin-right: 8px; vertical-align: middle; stroke: var(--accent);"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15 2a6 6 0 0 1 2 11.659V16a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-2.341A6 6 0 0 1 9 2z"/></svg>Choosing the Right Model Type</h3>';
 
             for (const [key, guide] of Object.entries(modelTypeGuidance)) {
                 const recommended = guide.recommended ? '<span class="recommendation-badge">RECOMMENDED</span>' : '';
@@ -715,7 +774,7 @@
 
             html += `
                 <div style="margin-top: 16px; padding: 12px; background: #FEF3C7; border-radius: 6px; font-size: 13px;">
-                    <strong>💡 Not sure which to choose?</strong><br>
+                    <strong><svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke: #F59E0B; vertical-align: middle; margin-right: 4px;"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15 2a6 6 0 0 1 2 11.659V16a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-2.341A6 6 0 0 1 9 2z"/></svg>Not sure which to choose?</strong><br>
                     For most pharmacoeconomic evaluations, <strong>Markov Models</strong> are the most common choice
                     because they can model long-term chronic conditions with recurring costs and health benefits.
                 </div>
@@ -751,19 +810,19 @@
                     <p style="margin: 8px 0;"><strong>${guide.description}</strong></p>
 
                     <div style="margin-top: 16px;">
-                        <p style="font-weight: 600; margin-bottom: 8px;">✅ Best for:</p>
+                        <p style="font-weight: 600; margin-bottom: 8px;"><svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke: var(--success); vertical-align: middle; margin-right: 4px;"><polyline points="20 6 9 17 4 12"/></svg>Best for:</p>
                         <ul style="margin: 4px 0 12px 20px; font-size: 13px; line-height: 1.6;">
                             ${guide.whenToUse.map(item => `<li>${item}</li>`).join('')}
                         </ul>
 
-                        <p style="font-weight: 600; margin-bottom: 8px;">📋 Examples:</p>
+                        <p style="font-weight: 600; margin-bottom: 8px;"><svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke: var(--accent); vertical-align: middle; margin-right: 4px;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>Examples:</p>
                         <ul style="margin: 4px 0; font-size: 13px; line-height: 1.6;">
                             ${guide.examples.map(item => `<li>${item}</li>`).join('')}
                         </ul>
                     </div>
 
                     <div style="margin-top: 12px; font-size: 12px; color: #6B7280;">
-                        <em>Need help choosing? Click the ℹ️ icon above to compare all model types.</em>
+                        <em>Need help choosing? Click the info icon above to compare all model types.</em>
                     </div>
                 `;
 
@@ -779,7 +838,7 @@
                 saveStep1Data();
             } else if (currentStep === 2) {
                 if (modelData.parameters.length === 0) {
-                    alert('⚠️ Please add at least one parameter before continuing');
+                    alert('Please add at least one parameter before continuing');
                     return;
                 }
                 updateSummary();
