@@ -110,8 +110,21 @@ def run_psa(
     wtp_range = np.linspace(0, 100000, 100)  # Willingness-to-pay thresholds
     ceac_data = calculate_ceac(psa_iterations, wtp_range)
 
+    # Calculate probability cost-effective at WTP threshold (e.g., €30,000)
+    wtp_threshold = 30000
+    cost_effective_count = sum(1 for it in psa_iterations
+                               if it.get("icer") is not None and it["icer"] < wtp_threshold)
+    prob_cost_effective = cost_effective_count / len(psa_iterations) if psa_iterations else 0
+
     return {
         "n_iterations": len(psa_iterations),
+        "mean_icer": round(mean_icer, 2) if mean_icer else None,
+        "percentiles": {
+            "p2_5": round(ci_lower, 2) if ci_lower else None,
+            "p50": round(median_icer, 2) if median_icer else None,
+            "p97_5": round(ci_upper, 2) if ci_upper else None
+        },
+        "prob_cost_effective": round(prob_cost_effective, 4),
         "statistics": {
             "mean_icer": round(mean_icer, 2) if mean_icer else None,
             "median_icer": round(median_icer, 2) if median_icer else None,
