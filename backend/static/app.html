@@ -447,6 +447,14 @@
 
         .chart-header {
             margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .chart-header > div {
+            flex: 1;
         }
 
         .chart-header h4 {
@@ -459,6 +467,10 @@
         .chart-header p {
             font-size: 13px;
             color: var(--text-tertiary);
+        }
+
+        .chart-header button {
+            flex-shrink: 0;
         }
 
         .chart-wrapper {
@@ -2008,8 +2020,18 @@
                 <!-- Markov Trace Chart -->
                 <div class="chart-container">
                     <div class="chart-header">
-                        <h4>Markov State Traces - Drug A</h4>
-                        <p>Patient distribution across states over time</p>
+                        <div>
+                            <h4>Markov State Traces - Drug A</h4>
+                            <p>Patient distribution across states over time</p>
+                        </div>
+                        <button class="btn-secondary" onclick="exportChartAsPNG('markovTraceChart', 'markov_trace')" title="Download as PNG">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            PNG
+                        </button>
                     </div>
                     <div class="chart-wrapper">
                         <canvas id="markovTraceChart"></canvas>
@@ -2120,8 +2142,18 @@
                     <!-- CEAC Curve -->
                     <div class="chart-container">
                         <div class="chart-header">
-                            <h4>Cost-Effectiveness Acceptability Curve (CEAC)</h4>
-                            <p>Probability of being cost-effective vs WTP threshold</p>
+                            <div>
+                                <h4>Cost-Effectiveness Acceptability Curve (CEAC)</h4>
+                                <p>Probability of being cost-effective vs WTP threshold</p>
+                            </div>
+                            <button class="btn-secondary" onclick="exportChartAsPNG('ceacChart', 'ceac_curve')" title="Download as PNG">
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                PNG
+                            </button>
                         </div>
                         <div class="chart-wrapper">
                             <canvas id="ceacChart"></canvas>
@@ -3627,6 +3659,78 @@
                 btn.disabled = false;
                 btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="8" y="12" width="8" height="6"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg> Export Excel';
             }
+        }
+
+        // ==================== INDIVIDUAL EXPORT FUNCTIONS ====================
+
+        /**
+         * Export chart as PNG image
+         */
+        function exportChartAsPNG(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) {
+                alert('Chart not available. Please run analysis first.');
+                return;
+            }
+
+            // Create link and trigger download
+            const link = document.createElement('a');
+            link.download = `${filename}_${new Date().toISOString().slice(0,10)}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        /**
+         * Export table as CSV
+         */
+        function exportTableAsCSV(tableId, filename) {
+            const table = document.getElementById(tableId);
+            if (!table) {
+                alert('Table not available.');
+                return;
+            }
+
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+
+            for (let row of rows) {
+                let cols = row.querySelectorAll('td, th');
+                let csvRow = [];
+                for (let col of cols) {
+                    // Clean text and escape quotes
+                    let text = col.innerText.replace(/"/g, '""');
+                    csvRow.push('"' + text + '"');
+                }
+                csv.push(csvRow.join(','));
+            }
+
+            // Create blob and download
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
+            const link = document.createElement('a');
+            link.download = `${filename}_${new Date().toISOString().slice(0,10)}.csv`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+        }
+
+        /**
+         * Export current KPIs as JSON
+         */
+        function exportKPIsAsJSON() {
+            const kpis = {
+                icer: document.getElementById('icerValue').textContent,
+                delta_qalys: document.getElementById('deltaQalyValue').textContent,
+                delta_costs: document.getElementById('deltaCostValue').textContent,
+                conclusion: document.getElementById('conclusionBadge').textContent.trim(),
+                timestamp: new Date().toISOString(),
+                wtp_threshold: document.getElementById('wtpThreshold').value
+            };
+
+            const blob = new Blob([JSON.stringify(kpis, null, 2)], {type: 'application/json'});
+            const link = document.createElement('a');
+            link.download = `kpis_${new Date().toISOString().slice(0,10)}.json`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
         }
 
         // ==================== AI CHAT FUNCTIONS ====================
