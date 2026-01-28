@@ -156,6 +156,14 @@
             color: #64748B;
             margin-bottom: 6px;
             font-family: 'Monaco', 'Courier New', monospace;
+            padding: 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .demo-credentials .credential:hover {
+            background: #E2E8F0;
+            color: #334155;
         }
 
         .demo-credentials .credential strong {
@@ -206,6 +214,20 @@
                 Sign In
             </button>
         </form>
+
+        <!-- Demo Credentials -->
+        <div class="demo-credentials">
+            <h3>Test Accounts</h3>
+            <div class="credential" onclick="fillCredentials('miguel.caselles@ecomodelhub.com', 'EcoModel2026!Secure#')" style="cursor: pointer;">
+                <strong>Admin:</strong> miguel.caselles@ecomodelhub.com
+            </div>
+            <div class="credential" onclick="fillCredentials('user@ecomodelhub.com', 'User2026!Test#')" style="cursor: pointer;">
+                <strong>User:</strong> user@ecomodelhub.com
+            </div>
+            <div class="credential" onclick="fillCredentials('viewer@ecomodelhub.com', 'Viewer2026!Test#')" style="cursor: pointer;">
+                <strong>Viewer:</strong> viewer@ecomodelhub.com
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -232,6 +254,12 @@
 
         function hideAlert() {
             alertDiv.style.display = 'none';
+        }
+
+        function fillCredentials(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            hideAlert();
         }
 
         loginForm.addEventListener('submit', async (e) => {
