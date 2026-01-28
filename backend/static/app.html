@@ -6,17 +6,18 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>EcoModel Hub - Professional HEOR Platform</title>
-    <!-- Version: 2026-01-28-v2 Production -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>HERA Value - Professional HEOR Platform</title>
+    <!-- Version: 2026-01-28-v3 Production -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
         :root {
-            /* Professional color palette - Clean & Corporate */
-            --primary: #0F172A;      /* Dark slate */
+            /* HERA Value Brand Colors */
+            --primary: #0f172a;      /* Slate 900 */
             --primary-light: #1E293B;
-            --accent: #3B82F6;       /* Professional blue */
-            --accent-hover: #2563EB;
+            --accent: #6366f1;       /* Indigo 500 */
+            --accent-hover: #4f46e5; /* Indigo 600 */
+            --accent-light: #818cf8; /* Indigo 400 */
             --success: #059669;
             --warning: #D97706;
             --danger: #DC2626;
@@ -25,12 +26,12 @@
             --bg-primary: #FFFFFF;
             --bg-secondary: #F8FAFC;
             --bg-tertiary: #F1F5F9;
-            --border: #E2E8F0;
+            --border: #e2e8f0;       /* Slate 200 */
             --border-light: #F1F5F9;
 
             /* Text */
-            --text-primary: #0F172A;
-            --text-secondary: #475569;
+            --text-primary: #0f172a; /* Slate 900 */
+            --text-secondary: #64748b; /* Slate 500 */
             --text-tertiary: #94A3B8;
 
             /* Shadows */
@@ -77,33 +78,12 @@
         .logo-area {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 0;
         }
 
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--primary);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .logo-text h1 {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text-primary);
-            letter-spacing: -0.02em;
-        }
-
-        .logo-text p {
-            font-size: 12px;
-            color: var(--text-tertiary);
-            font-weight: 400;
+        .logo-area svg {
+            height: 30px;
+            width: auto;
         }
 
         .header-actions {
@@ -1210,11 +1190,13 @@
     <header class="header">
         <div class="header-content">
             <div class="logo-area">
-                <div class="logo-icon">E</div>
-                <div class="logo-text">
-                    <h1>EcoModel Hub</h1>
-                    <p>Professional HEOR Platform</p>
-                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 80">
+                    <text x="0" y="55" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="50" font-weight="800" letter-spacing="-3">
+                        <tspan fill="#0f172a">H</tspan><tspan fill="#6366f1">E</tspan><tspan fill="#0f172a">RA</tspan>
+                    </text>
+                    <line x1="165" y1="18" x2="165" y2="58" stroke="#e2e8f0" stroke-width="1.5"/>
+                    <text x="180" y="55" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="50" font-weight="300" fill="#64748b" letter-spacing="-3">Value</text>
+                </svg>
             </div>
             <div class="header-actions">
                 <div id="userInfo" style="margin-right: 20px; display: flex; align-items: center; gap: 8px;">
@@ -1841,7 +1823,7 @@
 
     <!-- Footer -->
     <div style="text-align: center; padding: 20px; color: #64748B; font-size: 12px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px;">
-        <p>&copy; 2026 EcoModel Hub®. Created by Miguel Caselles. All rights reserved.</p>
+        <p>&copy; 2026 HERA Value®. Created by Miguel Caselles. All rights reserved.</p>
     </div>
 
     <script>
@@ -1895,7 +1877,7 @@
                 banner.id = 'welcomeBanner';
                 banner.innerHTML = `
                     <div class="welcome-banner-content">
-                        <h3>Welcome to EcoModel Hub!</h3>
+                        <h3>Welcome to HERA Value!</h3>
                         <p>Your complete pharmacoeconomic analysis platform. Need help getting started?</p>
                     </div>
                     <div style="display: flex; align-items: center; gap: 12px;">
@@ -3358,7 +3340,7 @@
         // Load scenarios on page load
         loadScenariosList();
 
-        console.log('EcoModel Hub initialized');
+        console.log('HERA Value initialized');
         console.log('User:', user.email);
         console.log('Role:', user.role);
         console.log('AI Assistant: Available');

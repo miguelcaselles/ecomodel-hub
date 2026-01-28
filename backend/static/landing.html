@@ -3,23 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="EcoModel Hub - Professional pharmacoeconomic analysis platform for HTA submissions, cost-effectiveness studies, and budget impact analyses.">
-    <title>EcoModel Hub - Professional HEOR & Pharmacoeconomic Platform</title>
+    <meta name="description" content="HERA Value - Professional pharmacoeconomic analysis platform for HTA submissions, cost-effectiveness studies, and budget impact analyses.">
+    <title>HERA Value - Professional HEOR & Pharmacoeconomic Platform</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0F172A;
+            --primary: #0f172a;
             --primary-light: #1E293B;
-            --accent: #3B82F6;
-            --accent-light: #60A5FA;
-            --accent-dark: #2563EB;
+            --accent: #6366f1;
+            --accent-light: #818cf8;
+            --accent-dark: #4f46e5;
             --success: #10B981;
             --warning: #F59E0B;
             --purple: #8B5CF6;
             --pink: #EC4899;
             --text: #F8FAFC;
-            --text-muted: #94A3B8;
-            --border: rgba(255,255,255,0.1);
+            --text-muted: #64748b;
+            --text-secondary: #94A3B8;
+            --border: #e2e8f0;
+            --border-alpha: rgba(226, 232, 240, 0.1);
         }
 
         * {
@@ -70,27 +72,14 @@
         .nav-logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 0;
             text-decoration: none;
             color: var(--text);
         }
 
-        .nav-logo-icon {
-            width: 42px;
-            height: 42px;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--purple) 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 20px;
-        }
-
-        .nav-logo-text {
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
+        .nav-logo svg {
+            height: 32px;
+            width: auto;
         }
 
         .nav-links {
@@ -904,8 +893,13 @@
     <nav class="nav" id="nav">
         <div class="nav-container">
             <a href="/" class="nav-logo">
-                <div class="nav-logo-icon">E</div>
-                <span class="nav-logo-text">EcoModel Hub</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 80">
+                    <text x="0" y="55" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="50" font-weight="800" letter-spacing="-3">
+                        <tspan fill="#f8fafc">H</tspan><tspan fill="#6366f1">E</tspan><tspan fill="#f8fafc">RA</tspan>
+                    </text>
+                    <line x1="165" y1="18" x2="165" y2="58" stroke="#e2e8f0" stroke-width="1.5" opacity="0.3"/>
+                    <text x="180" y="55" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="50" font-weight="300" fill="#94a3b8" letter-spacing="-3">Value</text>
+                </svg>
             </a>
             <div class="nav-links">
                 <a href="#features" class="nav-link">Features</a>
@@ -1181,7 +1175,7 @@
             <div class="cta-card">
                 <div class="cta-content">
                     <h2>Ready to streamline your HTA submissions?</h2>
-                    <p>Join leading pharmaceutical companies using EcoModel Hub for faster, more reliable analyses.</p>
+                    <p>Join leading pharmaceutical companies using HERA Value for faster, more reliable analyses.</p>
                     <div class="cta-buttons">
                         <a href="/login" class="btn btn-primary btn-large">Try</a>
                     </div>
@@ -1195,9 +1189,14 @@
         <div class="footer-container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <a href="/" class="nav-logo">
-                        <div class="nav-logo-icon">E</div>
-                        <span class="nav-logo-text">EcoModel Hub</span>
+                    <a href="/" class="nav-logo" style="margin-bottom: 16px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 80">
+                            <text x="0" y="55" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="50" font-weight="800" letter-spacing="-3">
+                                <tspan fill="#f8fafc">H</tspan><tspan fill="#6366f1">E</tspan><tspan fill="#f8fafc">RA</tspan>
+                            </text>
+                            <line x1="165" y1="18" x2="165" y2="58" stroke="#e2e8f0" stroke-width="1.5" opacity="0.3"/>
+                            <text x="180" y="55" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="50" font-weight="300" fill="#94a3b8" letter-spacing="-3">Value</text>
+                        </svg>
                     </a>
                     <p>Professional pharmacoeconomic analysis platform for HTA submissions and health economics research.</p>
                 </div>
@@ -1228,7 +1227,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 EcoModel Hub®. Created by Miguel Caselles. All rights reserved.</p>
+                <p>&copy; 2026 HERA Value®. Created by Miguel Caselles. All rights reserved.</p>
                 <p>Built for the pharmaceutical industry</p>
             </div>
         </div>

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - EcoModel Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Login - HERA Value</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -37,18 +37,10 @@
             margin-bottom: 32px;
         }
 
-        .logo-icon {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 16px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 16px;
+        .logo-area svg {
+            height: 48px;
+            width: auto;
+            margin-bottom: 24px;
         }
 
         h1 {
@@ -87,14 +79,14 @@
 
         input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
         .btn-primary {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #6366f1;
             color: white;
             border: none;
             border-radius: 8px;
@@ -191,8 +183,13 @@
 <body>
     <div class="login-container">
         <div class="logo-area">
-            <div class="logo-icon">E</div>
-            <h1>EcoModel Hub</h1>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 80">
+                <text x="0" y="55" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="50" font-weight="800" letter-spacing="-3">
+                    <tspan fill="#0f172a">H</tspan><tspan fill="#6366f1">E</tspan><tspan fill="#0f172a">RA</tspan>
+                </text>
+                <line x1="165" y1="18" x2="165" y2="58" stroke="#e2e8f0" stroke-width="1.5"/>
+                <text x="180" y="55" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="50" font-weight="300" fill="#64748b" letter-spacing="-3">Value</text>
+            </svg>
             <p class="subtitle">Professional HEOR Platform</p>
         </div>
 
@@ -233,7 +230,7 @@
 
     <!-- Footer -->
     <div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 20px; width: 100%; max-width: 440px;">
-        <p>&copy; 2026 EcoModel Hub®. Created by Miguel Caselles. All rights reserved.</p>
+        <p>&copy; 2026 HERA Value®. Created by Miguel Caselles. All rights reserved.</p>
     </div>
 
     <script>

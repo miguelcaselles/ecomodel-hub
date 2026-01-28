@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 80">
+  <!-- HERA Value - V8 Dark Mode -->
+  <text x="0" y="55" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="50" font-weight="800" letter-spacing="-3">
+    <tspan fill="#ffffff">H</tspan><tspan fill="#818cf8">E</tspan><tspan fill="#ffffff">RA</tspan>
+  </text>
+  <line x1="165" y1="18" x2="165" y2="58" stroke="#334155" stroke-width="1.5"/>
+  <text x="180" y="55" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="50" font-weight="300" fill="#94a3b8" letter-spacing="-3">Value</text>
+</svg>
