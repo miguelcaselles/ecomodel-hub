@@ -68,6 +68,11 @@ echo "👤 Creating admin user..."
 cd /app || { echo "Failed to cd to /app"; exit 1; }
 python create-admin-sql.py || echo "⚠️  Admin user creation skipped (may already exist)"
 
+# Create test users with different roles
+echo ""
+echo "👥 Creating test users..."
+python create-test-users.py || echo "⚠️  Test users creation skipped (may already exist)"
+
 # Start server
 echo ""
 echo "🚀 Starting server..."
