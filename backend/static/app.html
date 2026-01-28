@@ -1218,8 +1218,6 @@
                     <span id="userRole" style="padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase;"></span>
                 </div>
                 <button class="btn-secondary" onclick="logout()">Logout</button>
-                <button class="btn-secondary" onclick="window.location.href='/demo'">Demo</button>
-                <button class="btn-secondary" onclick="window.location.href='/api/v1/docs'">API</button>
                 <button id="modelBuilderBtn" class="btn-secondary" onclick="window.location.href='/model-builder'" style="display: none;">
                     <a href="/model-builder" style="text-decoration: none;">
                         🏗️ Model Builder
@@ -1995,6 +1993,8 @@
         function logout() {
             if (confirm('Are you sure you want to logout?')) {
                 localStorage.clear();
+                // Delete access token cookie
+                document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict';
                 window.location.href = '/login';
             }
         }

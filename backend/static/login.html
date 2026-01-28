@@ -259,9 +259,12 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Store JWT token
+                    // Store JWT token in localStorage
                     localStorage.setItem('access_token', data.access_token);
                     localStorage.setItem('user', JSON.stringify(data.user));
+
+                    // Also store in cookie for backend verification
+                    document.cookie = `access_token=${data.access_token}; path=/; max-age=1800; SameSite=Strict`;
 
                     showAlert('Login successful! Redirecting...', 'success');
 

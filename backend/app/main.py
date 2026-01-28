@@ -1,10 +1,11 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request, Cookie
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import FileResponse, Response, RedirectResponse
 from pydantic import BaseModel
 from datetime import datetime
 import traceback
+from typing import Optional
 
 from app.config import settings
 from app.api.v1.router import api_router
@@ -70,8 +71,30 @@ async def login_page():
     return FileResponse('static/login.html')
 
 @app.get("/app")
-async def app_page():
-    """Serve authenticated app (requires JWT token check in frontend)"""
+async def app_page(request: Request):
+    """Serve authenticated app (requires valid JWT token)"""
+    from app.core.security import decode_token
+
+    # Check for token in Authorization header
+    auth_header = request.headers.get("Authorization")
+    token = None
+
+    if auth_header and auth_header.startswith("Bearer "):
+        token = auth_header.replace("Bearer ", "")
+
+    # If no token in header, check cookies
+    if not token:
+        token = request.cookies.get("access_token")
+
+    # Verify token
+    if not token:
+        return RedirectResponse(url="/login", status_code=302)
+
+    payload = decode_token(token)
+    if not payload or payload.get("type") != "access":
+        return RedirectResponse(url="/login", status_code=302)
+
+    # Token is valid, serve the app
     return FileResponse('static/app.html')
 
 @app.get("/demo")
