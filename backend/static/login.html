@@ -206,13 +206,6 @@
                 Sign In
             </button>
         </form>
-
-        <div class="demo-credentials">
-            <h3>Demo Credentials</h3>
-            <div class="credential"><strong>Admin:</strong> admin@ecomodel.com / admin123</div>
-            <div class="credential"><strong>User:</strong> spain@ecomodel.com / spain123</div>
-            <div class="credential"><strong>Viewer:</strong> viewer@ecomodel.com / viewer123</div>
-        </div>
     </div>
 
     <!-- Footer -->
@@ -288,21 +281,6 @@
                 loginBtn.disabled = false;
                 loginBtn.textContent = 'Sign In';
             }
-        });
-
-        // Quick login for demo credentials
-        document.querySelectorAll('.credential').forEach((el, index) => {
-            el.style.cursor = 'pointer';
-            el.addEventListener('click', () => {
-                const credentials = [
-                    { email: 'admin@ecomodel.com', password: 'admin123' },
-                    { email: 'spain@ecomodel.com', password: 'spain123' },
-                    { email: 'viewer@ecomodel.com', password: 'viewer123' }
-                ];
-
-                document.getElementById('email').value = credentials[index].email;
-                document.getElementById('password').value = credentials[index].password;
-            });
         });
 
         // Check if already logged in
