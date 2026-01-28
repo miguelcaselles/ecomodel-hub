@@ -22,7 +22,7 @@ def main():
         cur = conn.cursor()
 
         # Check if admin user already exists
-        cur.execute("SELECT id, email, role FROM users WHERE email = 'admin@ecomodelhub.com'")
+        cur.execute("SELECT id, email, role FROM users WHERE email = 'miguel.caselles@ecomodelhub.com'")
         existing = cur.fetchone()
 
         if existing:
@@ -38,7 +38,7 @@ def main():
                 UPDATE users
                 SET password_hash = %s,
                     updated_at = NOW()
-                WHERE email = 'admin@ecomodelhub.com'
+                WHERE email = 'miguel.caselles@ecomodelhub.com'
             """, (password_hash,))
             conn.commit()
             print("✅ Password updated")
@@ -61,9 +61,9 @@ def main():
                     updated_at
                 ) VALUES (
                     gen_random_uuid(),
-                    'admin@ecomodelhub.com',
+                    'miguel.caselles@ecomodelhub.com',
                     %s,
-                    'System Administrator',
+                    'Miguel Caselles',
                     'global_admin',
                     true,
                     NULL,
@@ -74,7 +74,7 @@ def main():
             conn.commit()
 
             # Verify creation
-            cur.execute("SELECT id, email, role FROM users WHERE email = 'admin@ecomodelhub.com'")
+            cur.execute("SELECT id, email, role FROM users WHERE email = 'miguel.caselles@ecomodelhub.com'")
             new_user = cur.fetchone()
 
             print(f"✅ Admin user created successfully!")
@@ -83,7 +83,7 @@ def main():
             print(f"   Role: {new_user[2]}")
 
         print(f"\n🔑 Login credentials:")
-        print(f"   Email: admin@ecomodelhub.com")
+        print(f"   Email: miguel.caselles@ecomodelhub.com")
         print(f"   Password: EcoModel2026!Secure#")
 
         cur.close()
