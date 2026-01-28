@@ -71,7 +71,7 @@ python create-admin-sql.py || echo "⚠️  Admin user creation skipped (may alr
 # Create test users with different roles
 echo ""
 echo "👥 Creating test users..."
-python create-test-users.py || echo "⚠️  Test users creation skipped (may already exist)"
+python create-test-users.py 2>&1 || echo "⚠️  Test users creation failed or skipped"
 
 # Start server
 echo ""
