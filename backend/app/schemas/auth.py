@@ -19,7 +19,7 @@ class UserResponse(BaseModel):
     id: UUID
     email: EmailStr
     full_name: str
-    role: UserRole
+    role: str  # Changed from UserRole enum to str to match database
     organization_id: Optional[UUID]
     is_active: bool
 
