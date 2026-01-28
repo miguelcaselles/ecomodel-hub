@@ -73,6 +73,11 @@ echo ""
 echo "👥 Creating test users..."
 python create-test-users.py 2>&1 || echo "⚠️  Test users creation failed or skipped"
 
+# Verify all users can login
+echo ""
+echo "🔍 Verifying user credentials..."
+python verify-users.py || echo "⚠️  User verification skipped"
+
 # Start server
 echo ""
 echo "🚀 Starting server..."
