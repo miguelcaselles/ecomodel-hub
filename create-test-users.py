@@ -30,8 +30,8 @@ def main():
                 'role': 'local_user'
             },
             {
-                'email': 'viewer@ecomodelhub.com',
-                'password': 'Viewer2026!Test#',
+                'email': 'viewer@ecomodel.com',
+                'password': 'viewer123',
                 'full_name': 'Test Viewer',
                 'role': 'viewer'
             }
@@ -100,14 +100,14 @@ def main():
 
         print(f"\n🔑 Login credentials:")
         print(f"\n  Admin:")
-        print(f"   Email: miguel.caselles@ecomodelhub.com")
-        print(f"   Password: EcoModel2026!Secure#")
+        print(f"   Email: spain@ecomodel.com")
+        print(f"   Password: spain123")
         print(f"\n  Local User:")
         print(f"   Email: user@ecomodelhub.com")
         print(f"   Password: User2026!Test#")
         print(f"\n  Viewer:")
-        print(f"   Email: viewer@ecomodelhub.com")
-        print(f"   Password: Viewer2026!Test#")
+        print(f"   Email: viewer@ecomodel.com")
+        print(f"   Password: viewer123")
 
         cur.close()
         conn.close()

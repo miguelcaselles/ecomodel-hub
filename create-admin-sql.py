@@ -22,7 +22,7 @@ def main():
         cur = conn.cursor()
 
         # Check if admin user already exists
-        cur.execute("SELECT id, email, role FROM users WHERE email = 'miguel.caselles@ecomodelhub.com'")
+        cur.execute("SELECT id, email, role FROM users WHERE email = 'spain@ecomodel.com'")
         existing = cur.fetchone()
 
         if existing:
@@ -33,19 +33,19 @@ def main():
 
             # Update password with correct hash
             print("🔄 Updating password with correct hash...")
-            password_hash = get_password_hash("EcoModel2026!Secure#")
+            password_hash = get_password_hash("spain123")
             cur.execute("""
                 UPDATE users
                 SET password_hash = %s,
                     updated_at = NOW()
-                WHERE email = 'miguel.caselles@ecomodelhub.com'
+                WHERE email = 'spain@ecomodel.com'
             """, (password_hash,))
             conn.commit()
             print("✅ Password updated")
         else:
             print("👤 Creating admin user...")
             # Generate password hash using backend security module
-            password_hash = get_password_hash("EcoModel2026!Secure#")
+            password_hash = get_password_hash("spain123")
 
             # Insert admin user
             cur.execute("""
@@ -61,9 +61,9 @@ def main():
                     updated_at
                 ) VALUES (
                     gen_random_uuid(),
-                    'miguel.caselles@ecomodelhub.com',
+                    'spain@ecomodel.com',
                     %s,
-                    'Miguel Caselles',
+                    'Spain Admin',
                     'global_admin',
                     true,
                     NULL,
@@ -74,7 +74,7 @@ def main():
             conn.commit()
 
             # Verify creation
-            cur.execute("SELECT id, email, role FROM users WHERE email = 'miguel.caselles@ecomodelhub.com'")
+            cur.execute("SELECT id, email, role FROM users WHERE email = 'spain@ecomodel.com'")
             new_user = cur.fetchone()
 
             print(f"✅ Admin user created successfully!")
@@ -83,8 +83,8 @@ def main():
             print(f"   Role: {new_user[2]}")
 
         print(f"\n🔑 Login credentials:")
-        print(f"   Email: miguel.caselles@ecomodelhub.com")
-        print(f"   Password: EcoModel2026!Secure#")
+        print(f"   Email: spain@ecomodel.com")
+        print(f"   Password: spain123")
 
         cur.close()
         conn.close()
