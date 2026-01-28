@@ -312,8 +312,17 @@
             }
         });
 
-        // Check if already logged in
-        if (localStorage.getItem('access_token')) {
+        // Clear any old tokens when arriving at login page
+        // This prevents redirect loops with invalid tokens
+        if (document.referrer.includes('/app')) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            document.cookie = 'access_token=; path=/; max-age=0';
+        }
+
+        // Check if already logged in with valid token
+        // Only auto-redirect if we didn't just come from /app (which would mean token is invalid)
+        if (localStorage.getItem('access_token') && !document.referrer.includes('/app')) {
             window.location.href = '/app';
         }
     </script>
