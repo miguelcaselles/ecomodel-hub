@@ -677,6 +677,14 @@
                             <h4>Annual Budget Impact</h4>
                             <p>Incremental cost vs current scenario</p>
                         </div>
+                        <button onclick="exportChartAsPNG('budgetChart', 'budget_impact_chart')" class="export-btn">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            PNG
+                        </button>
                     </div>
                     <div class="chart-wrapper">
                         <canvas id="budgetChart"></canvas>
@@ -687,6 +695,14 @@
                 <div class="card">
                     <div class="card-header">
                         <h3>Detailed Budget Breakdown</h3>
+                        <button onclick="exportTableAsCSV('budgetTable', 'budget_breakdown')" class="export-btn">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            CSV
+                        </button>
                     </div>
                     <div class="card-body" style="padding: 0;">
                         <table class="budget-table" id="budgetTable">
@@ -719,6 +735,14 @@
                             <h4>Market Share & Patient Distribution</h4>
                             <p>Projected uptake of new treatment over time</p>
                         </div>
+                        <button onclick="exportChartAsPNG('marketShareChart', 'market_share_chart')" class="export-btn">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            PNG
+                        </button>
                     </div>
                     <div class="chart-wrapper">
                         <canvas id="marketShareChart"></canvas>
@@ -734,6 +758,38 @@
         let marketShareChart = null;
         let currentScenario = 'base';
         let lastResults = null;
+
+        // Export Functions
+        function exportChartAsPNG(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const link = document.createElement('a');
+            link.download = `${filename}_${new Date().toISOString().slice(0,10)}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function exportTableAsCSV(tableId, filename) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+            for (let row of rows) {
+                let cols = row.querySelectorAll('td, th');
+                let csvRow = [];
+                for (let col of cols) {
+                    let text = col.innerText.replace(/"/g, '""');
+                    csvRow.push('"' + text + '"');
+                }
+                csv.push(csvRow.join(','));
+            }
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
+            const link = document.createElement('a');
+            link.download = `${filename}_${new Date().toISOString().slice(0,10)}.csv`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+        }
 
         // Scenario presets
         const scenarios = {

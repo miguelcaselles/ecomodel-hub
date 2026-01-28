@@ -659,7 +659,25 @@
                         <h3>EVPPI by Parameter</h3>
                         <p>Expected value of partial perfect information</p>
                     </div>
-                    <button class="btn btn-secondary" onclick="exportPDF()"><svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg> Export PDF</button>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-secondary" onclick="exportPDF()"><svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg> Export PDF</button>
+                        <button onclick="exportChartAsPNG('evppiChart', 'evppi_chart')" class="export-btn">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            PNG
+                        </button>
+                        <button onclick="exportTableAsCSV('evppiTable', 'evppi_table')" class="export-btn">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            CSV
+                        </button>
+                    </div>
                 </div>
                 <div class="chart-wrapper">
                     <canvas id="evppiChart"></canvas>
@@ -698,6 +716,14 @@
                         <h3>Cost-Effectiveness Acceptability Curve</h3>
                         <p>Probability of being cost-effective across WTP thresholds</p>
                     </div>
+                    <button onclick="exportChartAsPNG('ceacChart', 'ceac_chart')" class="export-btn">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        PNG
+                    </button>
                 </div>
                 <div class="chart-wrapper">
                     <canvas id="ceacChart"></canvas>
@@ -711,6 +737,14 @@
                         <h3>EVPI Across WTP Thresholds</h3>
                         <p>How the value of information changes with willingness-to-pay</p>
                     </div>
+                    <button onclick="exportChartAsPNG('evpiWtpChart', 'evpi_wtp_chart')" class="export-btn">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        PNG
+                    </button>
                 </div>
                 <div class="chart-wrapper">
                     <canvas id="evpiWtpChart"></canvas>
@@ -726,6 +760,38 @@
         let parameters = [];
         let paramIdCounter = 0;
         let lastResults = null;
+
+        // Export Functions
+        function exportChartAsPNG(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const link = document.createElement('a');
+            link.download = `${filename}_${new Date().toISOString().slice(0,10)}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function exportTableAsCSV(tableId, filename) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+            for (let row of rows) {
+                let cols = row.querySelectorAll('td, th');
+                let csvRow = [];
+                for (let col of cols) {
+                    let text = col.innerText.replace(/"/g, '""');
+                    csvRow.push('"' + text + '"');
+                }
+                csv.push(csvRow.join(','));
+            }
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
+            const link = document.createElement('a');
+            link.download = `${filename}_${new Date().toISOString().slice(0,10)}.csv`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+        }
 
         // Presets
         const presets = {

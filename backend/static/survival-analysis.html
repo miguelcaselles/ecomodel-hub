@@ -701,6 +701,14 @@
                         <h3>Model Fit Statistics</h3>
                         <p>Compare parametric distributions by goodness of fit</p>
                     </div>
+                    <button onclick="exportTableAsCSV('modelTable', 'model_fit_statistics')" class="export-btn">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        CSV
+                    </button>
                 </div>
 
                 <table class="model-table" id="modelTable">
@@ -736,6 +744,14 @@
                         <h3>Hazard Functions</h3>
                         <p>Instantaneous risk over time by distribution</p>
                     </div>
+                    <button onclick="exportChartAsPNG('hazardChart', 'hazard_functions')" class="export-btn">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        PNG
+                    </button>
                 </div>
                 <div class="chart-wrapper">
                     <canvas id="hazardChart"></canvas>
@@ -748,6 +764,38 @@
         let survivalChart = null;
         let hazardChart = null;
         let currentResults = null;
+
+        // Export Functions
+        function exportChartAsPNG(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const link = document.createElement('a');
+            link.download = `${filename}_${new Date().toISOString().slice(0,10)}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function exportTableAsCSV(tableId, filename) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+            for (let row of rows) {
+                let cols = row.querySelectorAll('td, th');
+                let csvRow = [];
+                for (let col of cols) {
+                    let text = col.innerText.replace(/"/g, '""');
+                    csvRow.push('"' + text + '"');
+                }
+                csv.push(csvRow.join(','));
+            }
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
+            const link = document.createElement('a');
+            link.download = `${filename}_${new Date().toISOString().slice(0,10)}.csv`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+        }
 
         // Templates data
         const templates = {

@@ -2102,6 +2102,22 @@
                     <div class="chart-header">
                         <h4>Cost Breakdown by Category</h4>
                         <p>Distribution of costs for Drug A vs Drug B</p>
+                        <button onclick="exportChartAsPNG('costBreakdownA', 'cost_breakdown_drug_a')" class="export-btn">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Drug A PNG
+                        </button>
+                        <button onclick="exportChartAsPNG('costBreakdownB', 'cost_breakdown_drug_b')" class="export-btn" style="margin-left: 8px;">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Drug B PNG
+                        </button>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                         <div>
@@ -2165,6 +2181,14 @@
                         <div class="chart-header">
                             <h4>PSA Scatter Plot</h4>
                             <p>Monte Carlo simulation results (1000 iterations)</p>
+                            <button onclick="exportChartAsPNG('psaScatterChart', 'psa_scatter_plot')" class="export-btn">
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                PNG
+                            </button>
                         </div>
                         <div class="chart-wrapper">
                             <canvas id="psaScatterChart"></canvas>
@@ -2175,8 +2199,16 @@
                     <div class="table-container">
                         <div class="table-header">
                             <h4>PSA Summary Statistics</h4>
+                            <button onclick="exportTableAsCSV('psaStatsTable', 'psa_summary_statistics')" class="export-btn">
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                CSV
+                            </button>
                         </div>
-                        <table>
+                        <table id="psaStatsTable">
                             <thead>
                                 <tr>
                                     <th>Metric</th>
@@ -2226,6 +2258,14 @@
                         <div class="chart-header">
                             <h4>Tornado Diagram - One-Way Sensitivity Analysis</h4>
                             <p>Parameters ranked by impact on ICER</p>
+                            <button onclick="exportChartAsPNG('tornadoChart', 'tornado_diagram')" class="export-btn">
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                PNG
+                            </button>
                         </div>
                         <div class="chart-wrapper">
                             <canvas id="tornadoChart"></canvas>
