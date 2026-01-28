@@ -21,6 +21,12 @@ def main():
         conn = psycopg2.connect(database_url)
         cur = conn.cursor()
 
+        # Delete old viewer if exists
+        cur.execute("DELETE FROM users WHERE email = 'viewer@ecomodelhub.com'")
+        if cur.rowcount > 0:
+            print(f"🗑️  Deleted old viewer: viewer@ecomodelhub.com")
+        conn.commit()
+
         # Test users to create
         test_users = [
             {

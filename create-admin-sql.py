@@ -21,6 +21,14 @@ def main():
         conn = psycopg2.connect(database_url)
         cur = conn.cursor()
 
+        # Delete old admin users if they exist
+        old_emails = ['miguel.caselles@ecomodelhub.com', 'admin@ecomodel.com', 'admin@ecomodelhub.com']
+        for old_email in old_emails:
+            cur.execute("DELETE FROM users WHERE email = %s", (old_email,))
+            if cur.rowcount > 0:
+                print(f"🗑️  Deleted old user: {old_email}")
+        conn.commit()
+
         # Check if admin user already exists
         cur.execute("SELECT id, email, role FROM users WHERE email = 'spain@ecomodel.com'")
         existing = cur.fetchone()
