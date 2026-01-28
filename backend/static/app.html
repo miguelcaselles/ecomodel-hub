@@ -743,6 +743,62 @@
             color: var(--warning);
         }
 
+        /* Professional SVG Icons */
+        .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        .icon-sm {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2.5;
+        }
+
+        .icon-lg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 1.5;
+        }
+
+        .icon-xl {
+            width: 32px;
+            height: 32px;
+            stroke-width: 1.5;
+        }
+
+        .module-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(99, 102, 241, 0.08);
+            border-radius: 12px;
+            color: var(--accent);
+        }
+
+        .module-icon .icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Button icons */
+        .btn-primary .icon,
+        .btn-secondary .icon {
+            width: 18px;
+            height: 18px;
+            margin-right: 6px;
+        }
+
         /* Responsive */
         @media (max-width: 1200px) {
             .main-grid {
@@ -1444,8 +1500,14 @@
                 </div>
                 <button class="btn-secondary" onclick="logout()">Logout</button>
                 <button id="modelBuilderBtn" class="btn-secondary" onclick="window.location.href='/model-builder'" style="display: none;">
-                    <a href="/model-builder" style="text-decoration: none;">
-                        🏗️ Model Builder
+                    <a href="/model-builder" style="text-decoration: none; display: flex; align-items: center;">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;">
+                            <rect x="3" y="3" width="7" height="7"/>
+                            <rect x="14" y="3" width="7" height="7"/>
+                            <rect x="14" y="14" width="7" height="7"/>
+                            <rect x="3" y="14" width="7" height="7"/>
+                        </svg>
+                        Model Builder
                     </a>
                 </button>
             </div>
@@ -1468,27 +1530,37 @@
             <div class="card-body">
                 <div class="modules-grid">
                     <div class="module-card active" onclick="selectModule('markov')" id="module-markov">
-                        <div class="module-icon">📊</div>
+                        <div class="module-icon">
+                            <svg class="icon icon-xl" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                        </div>
                         <div class="module-name">Markov Model</div>
                         <div class="module-desc">CEA Analysis</div>
                     </div>
                     <div class="module-card" onclick="selectModule('bia')" id="module-bia">
-                        <div class="module-icon">💰</div>
+                        <div class="module-icon">
+                            <svg class="icon icon-xl" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg>
+                        </div>
                         <div class="module-name">Budget Impact</div>
                         <div class="module-desc">BIA Analysis</div>
                     </div>
                     <div class="module-card" onclick="selectModule('decision-tree')" id="module-decision-tree">
-                        <div class="module-icon">🌳</div>
+                        <div class="module-icon">
+                            <svg class="icon icon-xl" viewBox="0 0 24 24"><path d="M12 2v6"/><path d="m12 8-4 4v4m4-8 4 4v4"/><path d="M4 16h4M16 16h4"/><path d="M6 20v2m12-2v2"/></svg>
+                        </div>
                         <div class="module-name">Decision Tree</div>
                         <div class="module-desc">Short-term CEA</div>
                     </div>
                     <div class="module-card" onclick="selectModule('survival')" id="module-survival">
-                        <div class="module-icon">📈</div>
+                        <div class="module-icon">
+                            <svg class="icon icon-xl" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                        </div>
                         <div class="module-name">Survival</div>
                         <div class="module-desc">Parametric models</div>
                     </div>
                     <div class="module-card" onclick="selectModule('voi')" id="module-voi">
-                        <div class="module-icon">🎯</div>
+                        <div class="module-icon">
+                            <svg class="icon icon-xl" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                        </div>
                         <div class="module-name">EVPI/EVPPI</div>
                         <div class="module-desc">Value of Info</div>
                     </div>
@@ -1779,7 +1851,12 @@
                         </label>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
                             <button class="btn-secondary" onclick="saveScenario()" title="Save current parameters">
-                                💾 Save
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;">
+                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                    <polyline points="17 21 17 13 7 13 7 21"/>
+                                    <polyline points="7 3 7 8 15 8"/>
+                                </svg>
+                                Save
                             </button>
                         </div>
                         <select id="scenarioSelect" class="form-control" onchange="loadScenario()" style="margin-bottom: 8px;">
@@ -1787,17 +1864,36 @@
                         </select>
                         <a href="/model-builder" style="text-decoration: none;">
                             <button class="btn-secondary" style="width: 100%; margin-top: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
-                                🏗️ Model Builder
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;">
+                                    <rect x="3" y="3" width="7" height="7"/>
+                                    <rect x="14" y="3" width="7" height="7"/>
+                                    <rect x="14" y="14" width="7" height="7"/>
+                                    <rect x="3" y="14" width="7" height="7"/>
+                                </svg>
+                                Model Builder
                             </button>
                         </a>
                     </div>
 
                     <button class="btn-primary" onclick="runAnalysis()">Run Analysis</button>
                     <button class="btn-primary" onclick="runPSA()" style="background: var(--success); margin-top: 8px;">
-                        🎲 Run PSA (1000)
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <circle cx="15.5" cy="8.5" r="1.5"/>
+                            <circle cx="15.5" cy="15.5" r="1.5"/>
+                            <circle cx="8.5" cy="15.5" r="1.5"/>
+                            <circle cx="12" cy="12" r="1.5"/>
+                        </svg>
+                        Run PSA (1000)
                     </button>
                     <button class="btn-primary" onclick="runTornado()" style="background: var(--warning); margin-top: 8px;">
-                        🌪️ Run Tornado
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                            <line x1="12" y1="22.08" x2="12" y2="12"/>
+                        </svg>
+                        Run Tornado
                     </button>
 
                     <div class="divider"></div>
@@ -1809,10 +1905,23 @@
                         </label>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                             <button class="btn-secondary" onclick="exportPDF()" title="Download PDF report" id="btnExportPDF">
-                                📑 Export PDF
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="12" y1="18" x2="12" y2="12"/>
+                                    <line x1="9" y1="15" x2="15" y2="15"/>
+                                </svg>
+                                Export PDF
                             </button>
                             <button class="btn-secondary" onclick="exportExcel()" title="Download Excel report" id="btnExportExcel">
-                                📊 Export Excel
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <rect x="8" y="12" width="8" height="6"/>
+                                    <line x1="8" y1="15" x2="16" y2="15"/>
+                                    <line x1="12" y1="12" x2="12" y2="18"/>
+                                </svg>
+                                Export Excel
                             </button>
                         </div>
                         <p style="font-size: 10px; color: var(--text-tertiary); margin-top: 8px; text-align: center;">
@@ -1826,7 +1935,15 @@
             <div class="results-section">
                 <!-- Executive Summary (shown after analysis) -->
                 <div id="executiveSummary" class="executive-summary" style="display: none;">
-                    <h3>📊 Executive Summary</h3>
+                    <h3>
+                        <svg class="icon" viewBox="0 0 24 24" style="margin-right: 8px; vertical-align: middle;">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                            <line x1="8" y1="16" x2="16" y2="16"/>
+                            <line x1="8" y1="8" x2="16" y2="8"/>
+                        </svg>
+                        Executive Summary
+                    </h3>
                     <div class="summary-grid">
                         <div class="summary-stat">
                             <div class="summary-stat-label">Net Monetary Benefit</div>
@@ -1842,7 +1959,14 @@
                         </div>
                     </div>
                     <div id="recommendationBox" class="recommendation-box recommendation-positive">
-                        <h4>💡 Recommendation</h4>
+                        <h4>
+                            <svg class="icon" viewBox="0 0 24 24" style="margin-right: 6px; vertical-align: middle;">
+                                <path d="M9 18h6"/>
+                                <path d="M10 22h4"/>
+                                <path d="M15 2a6 6 0 0 1 2 11.659V16a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-2.341A6 6 0 0 1 9 2z"/>
+                            </svg>
+                            Recommendation
+                        </h4>
                         <p id="recommendationText">Analysis not yet performed. Configure parameters and run the model.</p>
                     </div>
                     <div class="hta-compliance">
@@ -2086,9 +2210,9 @@
         };
 
         const roleLabels = {
-            'global_admin': '👑 ADMIN',
-            'local_user': '💼 USER',
-            'viewer': '👁️ VIEWER'
+            'global_admin': 'ADMIN',
+            'local_user': 'USER',
+            'viewer': 'VIEWER'
         };
 
         const roleColor = roleColors[user.role] || roleColors.viewer;
@@ -2155,7 +2279,7 @@
                 const container = document.querySelector('.container');
                 const warning = document.createElement('div');
                 warning.style.cssText = 'background: #FEF3C7; border: 2px solid #F59E0B; padding: 16px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;';
-                warning.innerHTML = '<span style="font-size: 24px;">👁️</span><div><strong>Viewer Mode</strong><br><span style="font-size: 13px; color: #92400E;">You can view results and download reports, but cannot create or modify scenarios.</span></div>';
+                warning.innerHTML = '<svg class="icon icon-lg" viewBox="0 0 24 24" style="stroke: #F59E0B; flex-shrink: 0;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><div><strong>Viewer Mode</strong><br><span style="font-size: 13px; color: #92400E;">You can view results and download reports, but cannot create or modify scenarios.</span></div>';
                 container.insertBefore(warning, container.firstChild);
             }
 
@@ -2164,7 +2288,7 @@
                 const container = document.querySelector('.container');
                 const info = document.createElement('div');
                 info.style.cssText = 'background: #DBEAFE; border: 2px solid #3B82F6; padding: 16px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;';
-                info.innerHTML = '<span style="font-size: 24px;">💼</span><div><strong>Local User Mode</strong><br><span style="font-size: 13px; color: #1E40AF;">You can create scenarios, run simulations, and generate reports for your organization.</span></div>';
+                info.innerHTML = '<svg class="icon icon-lg" viewBox="0 0 24 24" style="stroke: #3B82F6; flex-shrink: 0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div><strong>Local User Mode</strong><br><span style="font-size: 13px; color: #1E40AF;">You can create scenarios, run simulations, and generate reports for your organization.</span></div>';
                 container.insertBefore(info, container.firstChild);
             }
 
@@ -2173,7 +2297,7 @@
                 const container = document.querySelector('.container');
                 const admin = document.createElement('div');
                 admin.style.cssText = 'background: #FEE2E2; border: 2px solid #DC2626; padding: 16px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;';
-                admin.innerHTML = '<span style="font-size: 24px;">👑</span><div><strong>Administrator Mode</strong><br><span style="font-size: 13px; color: #991B1B;">Full access: You can create models, manage organizations, and perform all actions. Use the Model Builder to create new economic models.</span></div>';
+                admin.innerHTML = '<svg class="icon icon-lg" viewBox="0 0 24 24" style="stroke: #DC2626; flex-shrink: 0;"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg><div><strong>Administrator Mode</strong><br><span style="font-size: 13px; color: #991B1B;">Full access: You can create models, manage organizations, and perform all actions. Use the Model Builder to create new economic models.</span></div>';
                 container.insertBefore(admin, container.firstChild);
             }
         }
@@ -2293,7 +2417,7 @@
                 updateResults(data);
 
                 // Show success feedback
-                btn.innerHTML = '✓ Analysis Complete';
+                btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Analysis Complete';
                 setTimeout(() => {
                     btn.innerHTML = originalText;
                     btn.disabled = false;
@@ -2301,7 +2425,7 @@
 
             } catch (error) {
                 console.error('Error:', error);
-                btn.innerHTML = '✗ Error';
+                btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Error';
                 btn.style.background = 'var(--danger)';
 
                 // Show error message with better UX - Heuristic 9: Help users recognize, diagnose, and recover from errors
@@ -2334,8 +2458,8 @@
             const conclusionBadge = document.getElementById('conclusionBadge');
 
             conclusionBadge.innerHTML = isCostEffective
-                ? '<span class="conclusion success">✓ Cost-Effective</span>'
-                : '<span class="conclusion danger">✗ Not Cost-Effective</span>';
+                ? '<span class="conclusion success"><svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px; vertical-align: middle;"><polyline points="20 6 9 17 4 12"/></svg>Cost-Effective</span>'
+                : '<span class="conclusion danger"><svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px; vertical-align: middle;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Not Cost-Effective</span>';
 
             // Update table
             document.getElementById('costA').textContent =
@@ -2746,15 +2870,15 @@
                 if (response.ok) {
                     const scenario = await response.json();
                     currentScenarioId = scenario.id;
-                    alert('✅ Scenario saved successfully!');
+                    alert('Scenario saved successfully!');
                     await loadScenariosList();
                 } else {
                     const error = await response.json();
-                    alert('❌ Error saving scenario: ' + (error.detail || 'Unknown error'));
+                    alert('Error saving scenario: ' + (error.detail || 'Unknown error'));
                 }
             } catch (error) {
                 console.error('Error saving scenario:', error);
-                alert('❌ Error saving scenario: ' + error.message);
+                alert('Error saving scenario: ' + error.message);
             }
         }
 
@@ -2820,10 +2944,10 @@
                 }
 
                 currentScenarioId = scenarioId;
-                alert(`✅ Loaded scenario: ${scenario.name}`);
+                alert(`Loaded scenario: ${scenario.name}`);
             } catch (error) {
                 console.error('Error loading scenario:', error);
-                alert('❌ Error loading scenario');
+                alert('Error loading scenario');
             }
         }
 
@@ -2889,7 +3013,7 @@
                 renderPSAScatter(psaResults.scatter_data || generateScatterData(psaResults));
 
                 // Show success with better UX
-                btn.innerHTML = '✓ PSA Complete!';
+                btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> PSA Complete!';
                 setTimeout(() => {
                     btn.disabled = false;
                     btn.innerHTML = originalText;
@@ -2906,7 +3030,7 @@
                 console.error('PSA error:', error);
 
                 // Better error handling - Heuristic 9
-                btn.innerHTML = '✗ PSA Failed';
+                btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> PSA Failed';
                 btn.style.background = 'var(--danger)';
 
                 const errorMsg = document.createElement('div');
@@ -3068,7 +3192,7 @@
             if (!btn) return;
 
             btn.disabled = true;
-            btn.textContent = '⏳ Running Tornado...';
+            btn.innerHTML = '<svg class="icon icon-sm spinner" viewBox="0 0 24 24" style="margin-right: 6px;"><circle cx="12" cy="12" r="10"/></svg> Running Tornado...';
 
             try {
                 const requestData = {
@@ -3107,14 +3231,14 @@
                 // Render Tornado chart - use tornado_data array
                 renderTornadoChart(tornadoResults.tornado_data);
 
-                alert('✅ Tornado analysis completed! Scroll down to see sensitivity results.');
+                alert('Tornado analysis completed! Scroll down to see sensitivity results.');
 
             } catch (error) {
                 console.error('Tornado error:', error);
-                alert('❌ Tornado analysis failed: ' + error.message);
+                alert('Tornado analysis failed: ' + error.message);
             } finally {
                 btn.disabled = false;
-                btn.textContent = '🌪️ Run Tornado';
+                btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Run Tornado';
             }
         }
 
@@ -3224,7 +3348,7 @@
         async function exportPDF() {
             const btn = document.getElementById('btnExportPDF');
             btn.disabled = true;
-            btn.textContent = '⏳ Generating PDF...';
+            btn.innerHTML = '<svg class="icon icon-sm spinner" viewBox="0 0 24 24" style="margin-right: 6px;"><circle cx="12" cy="12" r="10"/></svg> Generating PDF...';
 
             try {
                 // Collect current parameters
@@ -3278,21 +3402,21 @@
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url);
 
-                alert('✅ PDF report downloaded successfully!\n\nCheck your Downloads folder.');
+                alert('PDF report downloaded successfully!\n\nCheck your Downloads folder.');
 
             } catch (error) {
                 console.error('PDF export error:', error);
-                alert('❌ Failed to generate PDF report: ' + error.message);
+                alert('Failed to generate PDF report: ' + error.message);
             } finally {
                 btn.disabled = false;
-                btn.textContent = '📑 Export PDF';
+                btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg> Export PDF';
             }
         }
 
         async function exportExcel() {
             const btn = document.getElementById('btnExportExcel');
             btn.disabled = true;
-            btn.textContent = '⏳ Generating Excel...';
+            btn.innerHTML = '<svg class="icon icon-sm spinner" viewBox="0 0 24 24" style="margin-right: 6px;"><circle cx="12" cy="12" r="10"/></svg> Generating Excel...';
 
             try {
                 // Collect current parameters
@@ -3346,14 +3470,14 @@
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url_obj);
 
-                alert('✅ Excel report downloaded successfully!\n\nCheck your Downloads folder.');
+                alert('Excel report downloaded successfully!\n\nCheck your Downloads folder.');
 
             } catch (error) {
                 console.error('Excel export error:', error);
-                alert('❌ Failed to generate Excel report: ' + error.message);
+                alert('Failed to generate Excel report: ' + error.message);
             } finally {
                 btn.disabled = false;
-                btn.textContent = '📊 Export Excel';
+                btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="8" y="12" width="8" height="6"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg> Export Excel';
             }
         }
 
@@ -3556,11 +3680,11 @@
                     addChatMessage(`Template loaded: ${templateName}\n\n${templateNotes}`, 'assistant');
                 }
 
-                alert(`✅ Template "${templateName}" loaded!\n\n${templateNotes}\n\nClick "Run Analysis" to see results.`);
+                alert(`Template "${templateName}" loaded!\n\n${templateNotes}\n\nClick "Run Analysis" to see results.`);
 
             } catch (error) {
                 console.error('Error loading template:', error);
-                alert('❌ Error loading template: ' + error.message);
+                alert('Error loading template: ' + error.message);
             }
         }
 
