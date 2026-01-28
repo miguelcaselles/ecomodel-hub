@@ -1,0 +1,40 @@
+#!/usr/bin/expect -f
+
+set timeout 300
+
+cd "/Users/miguelcaselles/Desktop/PROYECTOS PROGRAMACIÓN /Innovación HSCS/Farmacoeconomia"
+
+spawn railway login --browserless
+
+expect {
+    "Pairing Code:" {
+        puts "\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        puts "CÓDIGO DE EMPAREJAMIENTO RECIBIDO"
+        puts "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+        puts "Por favor ve a: https://railway.app/verify"
+        puts "E introduce el código que aparece arriba\n"
+
+        expect {
+            "Logged in as" {
+                puts "\n✅ Login exitoso!\n"
+                exit 0
+            }
+            timeout {
+                puts "\n⏱️ Tiempo de espera agotado\n"
+                exit 1
+            }
+        }
+    }
+    "Logged in as" {
+        puts "\n✅ Ya está logueado!\n"
+        exit 0
+    }
+    "Cannot login in non-interactive mode" {
+        puts "\n❌ No se puede hacer login en modo no-interactivo\n"
+        exit 1
+    }
+    timeout {
+        puts "\n⏱️ Timeout\n"
+        exit 1
+    }
+}

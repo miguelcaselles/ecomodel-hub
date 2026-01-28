@@ -473,6 +473,30 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* Professional Icon System */
+        .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        .icon-sm {
+            width: 16px;
+            height: 16px;
+        }
+
+        .icon-lg {
+            width: 24px;
+            height: 24px;
+        }
     </style>
 </head>
 <body>
@@ -488,7 +512,7 @@
             <span class="page-title">/ Survival Analysis</span>
         </div>
         <div>
-            <button class="btn btn-secondary" onclick="exportPDF()" style="padding: 8px 16px; font-size: 14px;">📄 Export PDF</button>
+            <button class="btn btn-secondary" onclick="exportPDF()" style="padding: 8px 16px; font-size: 14px;"><svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg> Export PDF</button>
         </div>
     </header>
 

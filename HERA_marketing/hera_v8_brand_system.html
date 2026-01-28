@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HERA Value — Brand System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #fafafa;
+            color: #0f172a;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            background: #ffffff;
+        }
+
+        .logo-main {
+            margin-bottom: 3rem;
+        }
+
+        .logo-main svg {
+            height: 80px;
+            width: auto;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #64748b;
+            letter-spacing: 0.5px;
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 3rem;
+        }
+
+        /* Logo Variants */
+        .variants-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .variant-card {
+            border-radius: 16px;
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+        }
+
+        .variant-card.light {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+        }
+
+        .variant-card.dark {
+            background: #0f172a;
+        }
+
+        .variant-card svg {
+            max-width: 100%;
+            height: 60px;
+        }
+
+        .variant-label {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        /* Colors */
+        .colors-grid {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .color-card {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .color-swatch {
+            height: 100px;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .color-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .color-hex {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-family: 'SF Mono', monospace;
+        }
+
+        /* Icons */
+        .icons-grid {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .icon-item {
+            text-align: center;
+        }
+
+        .icon-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 28px;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .icon-size {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        /* Typography */
+        .type-specimen {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 3rem;
+            border: 1px solid #f1f5f9;
+        }
+
+        .type-sample {
+            margin-bottom: 2rem;
+        }
+
+        .type-sample:last-child {
+            margin-bottom: 0;
+        }
+
+        .type-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+        }
+
+        .type-display {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            color: #0f172a;
+        }
+
+        .type-display .accent {
+            color: #6366f1;
+        }
+
+        .type-body {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .type-light {
+            font-size: 2rem;
+            font-weight: 300;
+            color: #64748b;
+            letter-spacing: -1px;
+        }
+
+        /* Spacing */
+        .spacing-demo {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 4rem;
+            border: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .spacing-box {
+            border: 2px dashed #e2e8f0;
+            padding: 2rem;
+            display: inline-block;
+        }
+
+        .spacing-label {
+            position: absolute;
+            font-size: 0.7rem;
+            color: #6366f1;
+            font-weight: 500;
+        }
+
+        /* Don'ts */
+        .donts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .dont-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid #f1f5f9;
+            text-align: center;
+        }
+
+        .dont-card svg {
+            height: 40px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .dont-label {
+            font-size: 0.8rem;
+            color: #ef4444;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .variants-grid {
+                grid-template-columns: 1fr;
+            }
+            .donts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="logo-main">
+            <svg viewBox="0 0 340 80">
+                <text x="0" y="55" font-family="'Inter', sans-serif" font-size="50" font-weight="800" letter-spacing="-3">
+                    <tspan fill="#0f172a">H</tspan><tspan fill="#6366f1">E</tspan><tspan fill="#0f172a">RA</tspan>
+                </text>
+                <line x1="165" y1="18" x2="165" y2="58" stroke="#e2e8f0" stroke-width="1.5"/>
+                <text x="180" y="55" font-family="'Inter', sans-serif" font-size="50" font-weight="300" fill="#64748b" letter-spacing="-3">Value</text>
+            </svg>
+        </div>
+        <p class="tagline">Intelligent Pharmacoeconomic Assessment</p>
+    </section>
+
+    <!-- Logo Variants -->
+    <section>
+        <h2 class="section-title">Logo Variants</h2>
+        <div class="variants-grid">
+            <div>
+                <div class="variant-card light">
+                    <svg viewBox="0 0 340 80">
+                        <text x="0" y="55" font-family="'Inter', sans-serif" font-size="50" font-weight="800" letter-spacing="-3">
+                            <tspan fill="#0f172a">H</tspan><tspan fill="#6366f1">E</tspan><tspan fill="#0f172a">RA</tspan>
+                        </text>
+                        <line x1="165" y1="18" x2="165" y2="58" stroke="#e2e8f0" stroke-width="1.5"/>
+                        <text x="180" y="55" font-family="'Inter', sans-serif" font-size="50" font-weight="300" fill="#64748b" letter-spacing="-3">Value</text>
+                    </svg>
+                </div>
+                <p class="variant-label">Primary — Light Background</p>
+            </div>
+            <div>
+                <div class="variant-card dark">
+                    <svg viewBox="0 0 340 80">
+                        <text x="0" y="55" font-family="'Inter', sans-serif" font-size="50" font-weight="800" letter-spacing="-3">
+                            <tspan fill="#ffffff">H</tspan><tspan fill="#818cf8">E</tspan><tspan fill="#ffffff">RA</tspan>
+                        </text>
+                        <line x1="165" y1="18" x2="165" y2="58" stroke="#334155" stroke-width="1.5"/>
+                        <text x="180" y="55" font-family="'Inter', sans-serif" font-size="50" font-weight="300" fill="#94a3b8" letter-spacing="-3">Value</text>
+                    </svg>
+                </div>
+                <p class="variant-label">Primary — Dark Background</p>
+            </div>
+            <div>
+                <div class="variant-card light">
+                    <svg viewBox="0 0 160 80">
+                        <text x="0" y="55" font-family="'Inter', sans-serif" font-size="50" font-weight="800" letter-spacing="-3">
+                            <tspan fill="#0f172a">H</tspan><tspan fill="#6366f1">E</tspan><tspan fill="#0f172a">RA</tspan>
+                        </text>
+                    </svg>
+                </div>
+                <p class="variant-label">Short — Without Descriptor</p>
+            </div>
+            <div>
+                <div class="variant-card light">
+                    <svg viewBox="0 0 340 80">
+                        <text x="0" y="55" font-family="'Inter', sans-serif" font-size="50" font-weight="800" fill="#0f172a" letter-spacing="-3">HERA</text>
+                        <line x1="165" y1="18" x2="165" y2="58" stroke="#cbd5e1" stroke-width="1.5"/>
+                        <text x="180" y="55" font-family="'Inter', sans-serif" font-size="50" font-weight="300" fill="#64748b" letter-spacing="-3">Value</text>
+                    </svg>
+                </div>
+                <p class="variant-label">Monochrome</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Colors -->
+    <section>
+        <h2 class="section-title">Color Palette</h2>
+        <div class="colors-grid">
+            <div class="color-card">
+                <div class="color-swatch" style="background: #0f172a;"></div>
+                <div class="color-name">Slate 900</div>
+                <div class="color-hex">#0f172a</div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: #6366f1;"></div>
+                <div class="color-name">Indigo 500</div>
+                <div class="color-hex">#6366f1</div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: #818cf8;"></div>
+                <div class="color-name">Indigo 400</div>
+                <div class="color-hex">#818cf8</div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: #64748b;"></div>
+                <div class="color-name">Slate 500</div>
+                <div class="color-hex">#64748b</div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: #e2e8f0; border: 1px solid #cbd5e1;"></div>
+                <div class="color-name">Slate 200</div>
+                <div class="color-hex">#e2e8f0</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Icons -->
+    <section>
+        <h2 class="section-title">App Icons</h2>
+        <div class="icons-grid">
+            <div class="icon-item">
+                <svg class="icon-preview" viewBox="0 0 512 512">
+                    <rect width="512" height="512" rx="115" fill="#0f172a"/>
+                    <text x="256" y="310" font-family="'Inter', sans-serif" font-size="200" font-weight="800" text-anchor="middle" letter-spacing="-12">
+                        <tspan fill="#ffffff">H</tspan><tspan fill="#818cf8">E</tspan>
+                    </text>
+                </svg>
+                <div class="icon-size">Dark</div>
+            </div>
+            <div class="icon-item">
+                <svg class="icon-preview" viewBox="0 0 512 512" style="border: 1px solid #e2e8f0;">
+                    <rect width="512" height="512" rx="115" fill="#ffffff"/>
+                    <text x="256" y="310" font-family="'Inter', sans-serif" font-size="200" font-weight="800" text-anchor="middle" letter-spacing="-12">
+                        <tspan fill="#0f172a">H</tspan><tspan fill="#6366f1">E</tspan>
+                    </text>
+                </svg>
+                <div class="icon-size">Light</div>
+            </div>
+            <div class="icon-item">
+                <svg class="icon-preview" viewBox="0 0 512 512">
+                    <defs>
+                        <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#4f46e5"/>
+                            <stop offset="100%" style="stop-color:#6366f1"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="512" height="512" rx="115" fill="url(#iconGrad)"/>
+                    <text x="256" y="310" font-family="'Inter', sans-serif" font-size="200" font-weight="800" text-anchor="middle" letter-spacing="-12" fill="#ffffff">HE</text>
+                </svg>
+                <div class="icon-size">Gradient</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Typography -->
+    <section>
+        <h2 class="section-title">Typography</h2>
+        <div class="type-specimen">
+            <div class="type-sample">
+                <div class="type-label">Display — Inter 800</div>
+                <div class="type-display">H<span class="accent">E</span>RA Value</div>
+            </div>
+            <div class="type-sample">
+                <div class="type-label">Light — Inter 300</div>
+                <div class="type-light">Intelligent Assessment</div>
+            </div>
+            <div class="type-sample">
+                <div class="type-label">Body — Inter 400</div>
+                <div class="type-body">HERA Value automatiza el análisis de coste-efectividad, modelos de impacto presupuestario y generación de informes HTA con inteligencia artificial.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Don'ts -->
+    <section>
+        <h2 class="section-title">Incorrect Usage</h2>
+        <div class="donts-grid">
+            <div class="dont-card">
+                <svg viewBox="0 0 160 80" style="transform: scaleX(1.5);">
+                    <text x="0" y="55" font-family="'Inter', sans-serif" font-size="50" font-weight="800" letter-spacing="-3">
+                        <tspan fill="#0f172a">H</tspan><tspan fill="#6366f1">E</tspan><tspan fill="#0f172a">RA</tspan>
+                    </text>
+                </svg>
+                <div class="dont-label">Don't stretch</div>
+            </div>
+            <div class="dont-card">
+                <svg viewBox="0 0 160 80">
+                    <text x="0" y="55" font-family="'Inter', sans-serif" font-size="50" font-weight="800" letter-spacing="-3">
+                        <tspan fill="#ef4444">H</tspan><tspan fill="#22c55e">E</tspan><tspan fill="#3b82f6">RA</tspan>
+                    </text>
+                </svg>
+                <div class="dont-label">Don't change colors</div>
+            </div>
+            <div class="dont-card">
+                <svg viewBox="0 0 160 80" style="filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.3));">
+                    <text x="0" y="55" font-family="'Inter', sans-serif" font-size="50" font-weight="800" letter-spacing="-3">
+                        <tspan fill="#0f172a">H</tspan><tspan fill="#6366f1">E</tspan><tspan fill="#0f172a">RA</tspan>
+                    </text>
+                </svg>
+                <div class="dont-label">Don't add effects</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        HERA Value — Brand Guidelines v1.0
+    </footer>
+</body>
+</html>

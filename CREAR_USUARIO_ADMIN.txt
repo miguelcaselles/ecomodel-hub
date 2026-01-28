@@ -1,0 +1,59 @@
+═════════════════════════════════════════════════════════════
+CÓMO CREAR EL USUARIO ADMIN PARA HACER LOGIN
+═══════════════════════════════════════════════════════════
+
+Tu aplicación está funcionando perfectamente en:
+https://web-production-f4a6.up.railway.app
+
+✅ Base de datos configurada
+✅ Migraciones ejecutadas
+✅ Servidor corriendo
+
+Solo necesitas crear el primer usuario. Hay 2 opciones:
+
+─────────────────────────────────────────────────────────────
+OPCIÓN 1: Desde la API Docs (MÁS FÁCIL)
+─────────────────────────────────────────────────────────────
+
+1. Abre: https://web-production-f4a6.up.railway.app/api/v1/docs
+
+2. Busca el endpoint: POST /api/v1/organizations/{organization_id}/users
+
+3. Primero necesitas crear una organización:
+   - Busca: POST /api/v1/organizations/
+   - Click "Try it out"
+   - Usa este JSON:
+     {
+       "name": "Mi Organización",
+       "country": "ES"
+     }
+   - Copia el "id" que te devuelve
+
+4. Ahora crea tu usuario:
+   - Ve a: POST /api/v1/organizations/{organization_id}/users
+   - Click "Try it out"
+   - Pega el organization_id que copiaste
+   - Usa este JSON:
+     {
+       "email": "admin@ecomodel.com",
+       "password": "admin123",
+       "full_name": "Administrator",
+       "role": "admin"
+     }
+
+¡Listo! Ya puedes hacer login con admin@ecomodel.com / admin123
+
+─────────────────────────────────────────────────────────────
+OPCIÓN 2: Ejecutar script automático
+─────────────────────────────────────────────────────────────
+
+En tu terminal, ejecuta:
+
+cd "/Users/miguelcaselles/Desktop/PROYECTOS PROGRAMACIÓN /Innovación HSCS/Farmacoeconomia"
+./create-admin.py
+
+(Necesitarás tener las librerías instaladas localmente)
+
+═════════════════════════════════════════════════════════════
+
+¿Prefieres que te ayude con alguna de estas opciones?

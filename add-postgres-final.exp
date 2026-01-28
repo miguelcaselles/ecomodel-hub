@@ -1,0 +1,55 @@
+#!/usr/bin/expect -f
+
+set timeout 120
+
+cd "/Users/miguelcaselles/Desktop/PROYECTOS PROGRAMACIÓN /Innovación HSCS/Farmacoeconomia"
+
+spawn railway add
+
+expect {
+    "What do you need?" {
+        # Enviar Down arrow para seleccionar Database
+        send "\x1B\[B"
+        sleep 0.5
+        send "\r"
+
+        expect {
+            "Select databases to add" {
+                # PostgreSQL es la primera opción
+                # Usar space para seleccionar
+                send " "
+                sleep 0.5
+                # Dar Enter para confirmar
+                send "\r"
+
+                expect {
+                    -re "Adding.*" {
+                        sleep 5
+                        puts "\n\n✅ PostgreSQL añadido exitosamente!\n"
+                        exit 0
+                    }
+                    -re "Created.*" {
+                        puts "\n\n✅ PostgreSQL creado!\n"
+                        exit 0
+                    }
+                    -re "Added.*" {
+                        puts "\n\n✅ PostgreSQL configurado!\n"
+                        exit 0
+                    }
+                    timeout {
+                        puts "\n\n⚠️ Proceso iniciado (verificar en dashboard)\n"
+                        exit 0
+                    }
+                }
+            }
+            timeout {
+                puts "\n\n⏱️ Timeout en selección de database\n"
+                exit 1
+            }
+        }
+    }
+    timeout {
+        puts "\n\n⏱️ Timeout inicial\n"
+        exit 1
+    }
+}

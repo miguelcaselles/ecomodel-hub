@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 80">
+  <!-- HERA Value - V8 Mono Black -->
+  <text x="0" y="55" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="50" font-weight="800" fill="#0f172a" letter-spacing="-3">HERA</text>
+  <line x1="165" y1="18" x2="165" y2="58" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="180" y="55" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="50" font-weight="300" fill="#64748b" letter-spacing="-3">Value</text>
+</svg>

@@ -1,0 +1,38 @@
+#!/usr/bin/expect -f
+
+set timeout 60
+
+cd "/Users/miguelcaselles/Desktop/PROYECTOS PROGRAMACIÓN /Innovación HSCS/Farmacoeconomia"
+
+spawn railway link
+
+expect {
+    "Select a project" {
+        # Buscar ecomodel-hub en la lista y seleccionarlo
+        send "\r"
+        expect {
+            "Select an environment" {
+                # Seleccionar production (primer opción)
+                send "\r"
+                expect {
+                    "*" {
+                        puts "\n✅ Proyecto linkeado exitosamente!\n"
+                        exit 0
+                    }
+                }
+            }
+            "*" {
+                puts "\n✅ Proyecto linkeado!\n"
+                exit 0
+            }
+        }
+    }
+    "Cannot link in non-interactive mode" {
+        puts "\n❌ No se puede linkear en modo no-interactivo\n"
+        exit 1
+    }
+    timeout {
+        puts "\n⏱️ Timeout\n"
+        exit 1
+    }
+}

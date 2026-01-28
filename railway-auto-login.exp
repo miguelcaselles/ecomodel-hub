@@ -1,0 +1,31 @@
+#!/usr/bin/expect -f
+
+set timeout 120
+
+cd "/Users/miguelcaselles/Desktop/PROYECTOS PROGRAMACIÓN /Innovación HSCS/Farmacoeconomia"
+
+spawn railway login
+
+expect {
+    "Open the browser?" {
+        send "Y\r"
+        expect {
+            "Logged in as" {
+                puts "\n\n✅ Login successful!\n"
+                exit 0
+            }
+            timeout {
+                puts "\n\n⏱️  Waiting for browser authentication...\n"
+                exp_continue
+            }
+        }
+    }
+    "Logged in as" {
+        puts "\n\n✅ Already logged in!\n"
+        exit 0
+    }
+    timeout {
+        puts "\n\n❌ Login timeout\n"
+        exit 1
+    }
+}

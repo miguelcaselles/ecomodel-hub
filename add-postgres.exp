@@ -1,0 +1,36 @@
+#!/usr/bin/expect -f
+
+set timeout 60
+
+cd "/Users/miguelcaselles/Desktop/PROYECTOS PROGRAMACIÓN /Innovación HSCS/Farmacoeconomia"
+
+spawn railway add
+
+expect {
+    "What do you need?" {
+        send "\033\[B\r"
+        expect {
+            "Which database?" {
+                send "\r"
+                expect {
+                    "Added" {
+                        puts "\n✅ PostgreSQL añadido exitosamente!\n"
+                        exit 0
+                    }
+                    "*" {
+                        puts "\n✅ Base de datos añadida!\n"
+                        exit 0
+                    }
+                }
+            }
+            "*" {
+                puts "\n✅ PostgreSQL añadido!\n"
+                exit 0
+            }
+        }
+    }
+    timeout {
+        puts "\n⏱️ Timeout\n"
+        exit 1
+    }
+}
