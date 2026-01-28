@@ -1,10 +1,12 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
 from datetime import datetime
 from uuid import UUID
 
 
 class ScenarioBase(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     name: str = Field(..., min_length=1, max_length=200)
     description: Optional[str] = None
     country_code: str = Field(..., min_length=2, max_length=2, description="ISO 3166-1 alpha-2")
