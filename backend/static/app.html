@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>EcoModel Hub - Professional HEOR Platform</title>
-    <!-- Version: 2026-01-28 Production -->
+    <!-- Version: 2026-01-28-v2 Production -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
@@ -1231,44 +1231,6 @@
         </div>
     </header>
 
-    <!-- AI Chat Widget -->
-    <div class="ai-chat-widget">
-        <div class="ai-chat-panel" id="aiChatPanel">
-            <div class="ai-chat-header">
-                <div class="ai-chat-header-icon">🤖</div>
-                <div class="ai-chat-header-info">
-                    <h4>PharmEcon AI Assistant</h4>
-                    <p>Expert guidance for HTA &amp; HEOR</p>
-                </div>
-            </div>
-            <div class="ai-chat-messages" id="aiChatMessages">
-                <div class="ai-message assistant">
-                    Hello! I'm your pharmacoeconomics expert. I can help you with:
-                    <br><br>
-                    • Explaining concepts (ICER, QALY, PSA...)
-                    <br>• Configuring your models
-                    <br>• Interpreting results
-                    <br>• HTA submission requirements
-                    <br><br>
-                    How can I help you today?
-                </div>
-            </div>
-            <div class="ai-quick-actions">
-                <button class="ai-quick-btn" onclick="askAI('What is an ICER?')">What is ICER?</button>
-                <button class="ai-quick-btn" onclick="askAI('How do I interpret my PSA results?')">PSA help</button>
-                <button class="ai-quick-btn" onclick="askAI('What parameters should I use for oncology?')">Oncology tips</button>
-                <button class="ai-quick-btn" onclick="interpretCurrentResults()">Interpret results</button>
-            </div>
-            <div class="ai-chat-input-area">
-                <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask me anything..."
-                       onkeypress="if(event.key==='Enter') sendAIMessage()">
-                <button class="ai-chat-send" onclick="sendAIMessage()" id="aiSendBtn">➤</button>
-            </div>
-        </div>
-        <button class="ai-chat-toggle" onclick="toggleAIChat()" title="AI Assistant">
-            🤖
-        </button>
-    </div>
 
     <!-- Main Container -->
     <div class="container">
