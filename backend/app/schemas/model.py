@@ -9,10 +9,10 @@ class ModelBase(BaseModel):
 
     name: str = Field(..., min_length=1, max_length=200)
     description: Optional[str] = None
-    model_type: str = Field(..., pattern="^(MARKOV|DECISION_TREE|PARTITION_SURVIVAL)$")
+    model_type: str = Field(..., pattern="^(MARKOV|DECISION_TREE|PARTITION_SURVIVAL|markov|decision_tree|partition_survival)$")
     script_content: Optional[str] = None
     config: Optional[dict] = Field(default_factory=dict)
-    version: str = Field(default="1.0.0")
+    version: str = Field(default="1.0")
 
 
 class ModelCreate(ModelBase):
@@ -22,7 +22,7 @@ class ModelCreate(ModelBase):
 class ModelUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=1, max_length=200)
     description: Optional[str] = None
-    model_type: Optional[str] = Field(None, pattern="^(MARKOV|DECISION_TREE|PARTITION_SURVIVAL)$")
+    model_type: Optional[str] = Field(None, pattern="^(MARKOV|DECISION_TREE|PARTITION_SURVIVAL|markov|decision_tree|partition_survival)$")
     script_content: Optional[str] = None
     config: Optional[dict] = None
     version: Optional[str] = None
