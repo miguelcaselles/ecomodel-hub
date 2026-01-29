@@ -1,6 +1,7 @@
-from sqlalchemy import Column, String, Text, Integer, Boolean, ForeignKey, Enum as SQLEnum
+from sqlalchemy import Column, String, Text, Integer, Boolean, DateTime, ForeignKey, Enum as SQLEnum
 
 from sqlalchemy.orm import relationship
+from datetime import datetime
 import uuid
 import enum
 from app.db.base import Base
@@ -43,6 +44,8 @@ class Parameter(Base):
     is_editable_by_local = Column(Boolean, default=True)
     display_order = Column(Integer, default=0)
     unit = Column(String)  # "EUR", "%", "days"
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
     model = relationship("EconomicModel", back_populates="parameters")
