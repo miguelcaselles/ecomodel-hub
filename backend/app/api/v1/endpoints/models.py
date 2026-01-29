@@ -74,18 +74,13 @@ def create_model(
     if model_data.script_content:
         script_hash = hashlib.sha256(model_data.script_content.encode()).hexdigest()
 
-    # Convert model_type string to ModelType enum
-    model_type_map = {
-        "MARKOV": ModelType.MARKOV,
-        "DECISION_TREE": ModelType.DECISION_TREE,
-        "PARTITION_SURVIVAL": ModelType.PARTITION_SURVIVAL,
-    }
-    model_type_enum = model_type_map.get(model_data.model_type.upper(), ModelType.MARKOV)
+    # Convert model_type to lowercase DB enum value
+    model_type_value = model_data.model_type.lower()
 
     model = EconomicModel(
         name=model_data.name,
         description=model_data.description,
-        model_type=model_type_enum,
+        model_type=model_type_value,
         script_content=model_data.script_content,
         script_hash=script_hash,
         config=model_data.config or {},
