@@ -30,3 +30,4 @@ class User(Base):
     organization = relationship("Organization", back_populates="users")
     scenarios = relationship("Scenario", back_populates="created_by_user")
     simulations = relationship("Simulation", back_populates="created_by_user")
+    created_models = relationship("EconomicModel", back_populates="created_by")

@@ -34,3 +34,4 @@ class EconomicModel(Base):
     # Relationships
     parameters = relationship("Parameter", back_populates="model", cascade="all, delete-orphan")
     scenarios = relationship("Scenario", back_populates="model")
+    created_by = relationship("User", back_populates="created_models", foreign_keys=[created_by_id])
