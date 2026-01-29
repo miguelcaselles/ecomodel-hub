@@ -407,6 +407,28 @@
             color: #1E40AF;
         }
 
+        .btn-demo {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--accent), #6366F1);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-demo:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-demo:active {
+            transform: translateY(0);
+        }
+
         .info-icon {
             cursor: pointer;
             margin-left: 8px;
@@ -491,7 +513,17 @@
             </svg>
             Model Builder
         </div>
-        <a href="/app" class="back-btn">← Back to Dashboard</a>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button class="btn-demo" onclick="loadDemoExample()" title="Load a pre-configured oncology Markov model example">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 6px; stroke: white;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Load Demo Example
+            </button>
+            <a href="/app" class="back-btn">&larr; Back to Dashboard</a>
+        </div>
     </div>
 
     <!-- Container -->
@@ -837,10 +869,21 @@
                 if (!validateStep1()) return;
                 saveStep1Data();
             } else if (currentStep === 2) {
-                if (modelData.parameters.length === 0) {
-                    alert('Please add at least one parameter before continuing');
+                // Collect all parameters from DOM
+                const paramCount = collectParameters();
+
+                if (paramCount === 0) {
+                    showAlert('Please add at least one parameter before continuing', 'warning');
                     return;
                 }
+
+                // Validate that all parameters have both fields filled
+                const invalidParams = modelData.parameters.filter(p => !p.name || !p.display_name);
+                if (invalidParams.length > 0) {
+                    showAlert('Please complete all parameter fields (name and display name)', 'warning');
+                    return;
+                }
+
                 updateSummary();
             } else if (currentStep === 3) {
                 createModel();
@@ -857,6 +900,10 @@
             if (currentStep > 1) {
                 currentStep--;
                 updateStepUI();
+
+                // Clear any alerts when going back
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => alert.remove());
             }
         }
 
@@ -882,16 +929,26 @@
 
             // Update buttons
             document.getElementById('btnPrev').disabled = currentStep === 1;
-            document.getElementById('btnNext').textContent = currentStep === 3 ? 'Create Model' : 'Next';
+            const btnNext = document.getElementById('btnNext');
+            btnNext.textContent = currentStep === 3 ? 'Create Model' : 'Next';
+            btnNext.disabled = false;  // Re-enable when changing steps
         }
 
         // Step 1 validation
         function validateStep1() {
             const name = document.getElementById('modelName').value.trim();
+            const modelType = document.getElementById('modelType').value;
+
             if (!name) {
-                alert('⚠️ Please enter a model name');
+                showAlert('⚠️ Please enter a model name', 'warning');
                 return false;
             }
+
+            if (!modelType) {
+                showAlert('⚠️ Please select a model type', 'warning');
+                return false;
+            }
+
             return true;
         }
 
@@ -900,6 +957,26 @@
             modelData.description = document.getElementById('modelDescription').value.trim();
             modelData.model_type = document.getElementById('modelType').value;
             modelData.version = document.getElementById('modelVersion').value.trim();
+        }
+
+        // Show in-page alerts instead of native popups
+        function showAlert(message, type = 'info') {
+            const alertHTML = `
+                <div class="alert alert-${type}" style="margin-bottom: 16px; padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px; background: ${type === 'warning' ? '#FEF3C7' : type === 'error' ? '#FEE2E2' : '#DBEAFE'}; border-left: 4px solid ${type === 'warning' ? '#F59E0B' : type === 'error' ? '#EF4444' : '#3B82F6'};">
+                    <span style="flex: 1; color: var(--text-primary); font-size: 14px;">${message}</span>
+                    <button onclick="this.parentElement.remove()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-secondary);">&times;</button>
+                </div>
+            `;
+            const container = document.querySelector('.step-content.active');
+            const existing = container.querySelector('.alert');
+            if (existing) existing.remove();
+            container.insertAdjacentHTML('afterbegin', alertHTML);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                const alert = container.querySelector('.alert');
+                if (alert) alert.remove();
+            }, 5000);
         }
 
         // Parameter management
@@ -911,36 +988,124 @@
                 <div class="parameter-item" id="${paramId}">
                     <div class="parameter-info">
                         <div class="parameter-name">
-                            <input type="text" placeholder="Parameter name (e.g., cost_drug_a)"
+                            <input type="text"
+                                   id="${paramId}-name"
+                                   placeholder="Parameter name (e.g., cost_drug_a)"
                                    style="border: none; background: transparent; width: 100%; font-weight: 600;"
-                                   onchange="updateParameter('${paramId}')">
+                                   onchange="updateParameter('${paramId}')"
+                                   autocomplete="off">
                         </div>
                         <div class="parameter-details">
-                            <input type="text" placeholder="Display name (e.g., Drug A Cost)"
+                            <input type="text"
+                                   id="${paramId}-display"
+                                   placeholder="Display name (e.g., Drug A Cost)"
                                    style="border: none; background: transparent; width: 100%; font-size: 12px; color: var(--text-secondary);"
-                                   onchange="updateParameter('${paramId}')">
+                                   oninput="autoGenerateParamName('${paramId}')"
+                                   onchange="updateParameter('${paramId}')"
+                                   autocomplete="off">
                         </div>
                     </div>
                     <div class="parameter-actions">
-                        <button class="btn-icon danger" onclick="removeParameter('${paramId}')" title="Delete">×</button>
+                        <button class="btn-icon danger" onclick="removeParameter('${paramId}')" title="Delete parameter">×</button>
                     </div>
                 </div>
             `;
 
             document.getElementById('parametersList').insertAdjacentHTML('beforeend', paramHTML);
             parameterCount++;
+
+            // Focus on the display name input (more user-friendly to start here)
+            setTimeout(() => {
+                document.getElementById(`${paramId}-display`).focus();
+            }, 100);
+        }
+
+        // Auto-generate parameter name from display name (convenience feature)
+        function autoGenerateParamName(paramId) {
+            const displayInput = document.getElementById(`${paramId}-display`);
+            const nameInput = document.getElementById(`${paramId}-name`);
+
+            // Only auto-generate if name field is empty
+            if (!nameInput.value.trim() && displayInput.value.trim()) {
+                // Convert "Drug A Cost" → "cost_drug_a"
+                const autoName = displayInput.value
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\s]/g, '')  // Remove special chars
+                    .trim()
+                    .replace(/\s+/g, '_');  // Replace spaces with underscore
+
+                nameInput.value = autoName;
+                updateParameter(paramId);
+            }
         }
 
         function updateParameter(paramId) {
-            // This would update the parameter in modelData.parameters
-            console.log('Update parameter:', paramId);
+            // Save parameter data to modelData.parameters
+            const paramElem = document.getElementById(paramId);
+            if (!paramElem) return;
+
+            const inputs = paramElem.querySelectorAll('input');
+            const paramName = inputs[0]?.value.trim() || '';
+            const displayName = inputs[1]?.value.trim() || '';
+
+            if (!paramName || !displayName) {
+                return; // Don't save incomplete parameters
+            }
+
+            // Find existing parameter or add new one
+            const existingIndex = modelData.parameters.findIndex(p => p.paramId === paramId);
+            const paramData = {
+                paramId: paramId,
+                name: paramName,
+                display_name: displayName,
+                data_type: 'float',  // Default type
+                category: 'general',
+                is_required: true
+            };
+
+            if (existingIndex >= 0) {
+                modelData.parameters[existingIndex] = paramData;
+            } else {
+                modelData.parameters.push(paramData);
+            }
         }
 
         function removeParameter(paramId) {
-            if (confirm('Are you sure you want to remove this parameter?')) {
+            const paramElem = document.getElementById(paramId);
+            const inputs = paramElem?.querySelectorAll('input');
+            const paramName = inputs[0]?.value?.trim() || 'this parameter';
+
+            if (confirm(`Are you sure you want to remove "${paramName}"?`)) {
                 document.getElementById(paramId).remove();
+                // Also remove from modelData.parameters
+                modelData.parameters = modelData.parameters.filter(p => p.paramId !== paramId);
                 parameterCount--;
             }
+        }
+
+        // Collect all parameters before moving to step 3
+        function collectParameters() {
+            modelData.parameters = [];
+            const paramItems = document.querySelectorAll('.parameter-item');
+
+            paramItems.forEach(paramElem => {
+                const inputs = paramElem.querySelectorAll('input');
+                const paramName = inputs[0]?.value.trim();
+                const displayName = inputs[1]?.value.trim();
+
+                if (paramName && displayName) {
+                    modelData.parameters.push({
+                        paramId: paramElem.id,
+                        name: paramName,
+                        display_name: displayName,
+                        data_type: 'float',
+                        category: 'general',
+                        is_required: true
+                    });
+                }
+            });
+
+            return modelData.parameters.length;
         }
 
         // Summary update
@@ -950,50 +1115,255 @@
             document.getElementById('summaryVersion').textContent = modelData.version;
             document.getElementById('summaryParamCount').textContent = modelData.parameters.length;
 
-            // Show parameters
-            const paramsHTML = modelData.parameters.map(p => `
-                <div class="summary-item">
-                    <span class="summary-label">${p.display_name}</span>
-                    <span class="summary-value">${p.data_type}</span>
+            // Show parameters with better formatting
+            const paramsHTML = modelData.parameters.map((p, index) => `
+                <div class="summary-item" style="padding: 8px; background: var(--bg-secondary); border-radius: 6px; margin-bottom: 6px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span class="summary-label" style="display: block; font-weight: 600; color: var(--text-primary);">${p.display_name}</span>
+                            <span class="summary-value" style="display: block; font-size: 11px; color: var(--text-secondary); font-family: monospace;">
+                                ${p.name}
+                            </span>
+                        </div>
+                        <span style="font-size: 11px; color: var(--text-tertiary); text-transform: uppercase;">
+                            ${p.data_type}
+                        </span>
+                    </div>
                 </div>
             `).join('');
-            document.getElementById('summaryParams').innerHTML = paramsHTML || '<p style="color: var(--text-secondary);">No parameters defined</p>';
+
+            const summaryParamsDiv = document.getElementById('summaryParams');
+            if (modelData.parameters.length > 0) {
+                summaryParamsDiv.innerHTML = paramsHTML;
+            } else {
+                summaryParamsDiv.innerHTML = '<p style="color: var(--text-secondary); font-style: italic; text-align: center; padding: 20px;">No parameters defined</p>';
+            }
         }
 
         // Create model API call
         async function createModel() {
             const token = localStorage.getItem('access_token');
             if (!token) {
-                alert('⚠️ You must be logged in as admin to create models');
-                window.location.href = '/login';
+                showAlert('⚠️ You must be logged in as admin to create models', 'error');
+                setTimeout(() => window.location.href = '/login', 2000);
                 return;
             }
 
+            const btnNext = document.getElementById('btnNext');
+            const originalText = btnNext.textContent;
+
+            // Show loading state
+            btnNext.disabled = true;
+            btnNext.innerHTML = '<svg class="icon icon-sm spinner" viewBox="0 0 24 24" style="margin-right: 6px; animation: spin 1s linear infinite;"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/></svg> Creating Model...';
+
             try {
-                const response = await fetch('/api/v1/models', {
+                // Step 1: Create the model (without parameters)
+                const modelPayload = {
+                    name: modelData.name,
+                    description: modelData.description || '',
+                    model_type: modelData.model_type,
+                    version: modelData.version,
+                    script_content: '',  // Empty for now
+                    config: {}
+                };
+
+                const modelResponse = await fetch('/api/v1/models', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify(modelData)
+                    body: JSON.stringify(modelPayload)
                 });
 
-                if (!response.ok) {
-                    throw new Error('Failed to create model');
+                if (!modelResponse.ok) {
+                    const errorData = await modelResponse.json().catch(() => ({}));
+                    throw new Error(errorData.detail || 'Failed to create model');
                 }
 
-                const result = await response.json();
+                const createdModel = await modelResponse.json();
+
+                // Step 2: Create parameters if any exist
+                if (modelData.parameters.length > 0) {
+                    const parametersPayload = modelData.parameters.map(p => ({
+                        model_id: createdModel.id,
+                        name: p.name,
+                        display_name: p.display_name,
+                        data_type: p.data_type,
+                        category: p.category,
+                        is_required: p.is_required
+                    }));
+
+                    const paramsResponse = await fetch('/api/v1/parameters/bulk', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(parametersPayload)
+                    });
+
+                    if (!paramsResponse.ok) {
+                        const errorData = await paramsResponse.json().catch(() => ({}));
+                        console.error('Failed to create parameters:', errorData);
+                        // Model was created but parameters failed - show partial success
+                        showAlert(`Model "${modelData.name}" created but some parameters failed. You can add them later.`, 'warning');
+                    }
+                }
+
+                // Success!
                 document.getElementById('successAlert').style.display = 'flex';
-                document.getElementById('btnNext').disabled = true;
+                btnNext.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Model Created!';
 
                 setTimeout(() => {
                     window.location.href = '/app';
-                }, 2000);
+                }, 2500);
+
             } catch (error) {
-                alert('❌ Error creating model: ' + error.message);
+                console.error('Model creation error:', error);
+                showAlert(`❌ Error creating model: ${error.message}`, 'error');
+                btnNext.disabled = false;
+                btnNext.textContent = originalText;
             }
         }
+
+        // Add spinner animation to style
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Keyboard shortcuts for better UX
+        document.addEventListener('keydown', function(e) {
+            // Don't intercept if user is typing in an input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                // Allow Enter in the display name field to add parameter
+                if (e.key === 'Enter' && e.target.id.includes('-display')) {
+                    e.preventDefault();
+                    addParameter();
+                }
+                return;
+            }
+
+            // Enter = Next Step (or Create Model on final step)
+            if (e.key === 'Enter' && !document.getElementById('btnNext').disabled) {
+                e.preventDefault();
+                nextStep();
+            }
+
+            // Escape = Previous Step
+            if (e.key === 'Escape' && currentStep > 1) {
+                e.preventDefault();
+                previousStep();
+            }
+        });
+
+        // Load pre-configured demo example for quick demonstrations
+        function loadDemoExample() {
+            // Reset to Step 1
+            currentStep = 1;
+            updateStepUI();
+
+            // Define a realistic oncology Markov model
+            const demoModel = {
+                name: 'NSCLC Immunotherapy Cost-Effectiveness Model',
+                description: 'Markov cost-effectiveness model comparing immunotherapy (Drug A) versus standard chemotherapy (Drug B) for advanced non-small cell lung cancer (NSCLC). Three health states: Stable Disease, Progression, and Death. Cycle length: 1 year. Perspective: National Health System.',
+                model_type: 'MARKOV',
+                version: '1.0'
+            };
+
+            const demoParameters = [
+                { name: 'time_horizon', display_name: 'Time Horizon (years)' },
+                { name: 'discount_rate', display_name: 'Discount Rate' },
+                { name: 'cohort_size', display_name: 'Cohort Size' },
+                { name: 'cost_drug_a', display_name: 'Cost Drug A (Immunotherapy)' },
+                { name: 'cost_drug_b', display_name: 'Cost Drug B (Chemotherapy)' },
+                { name: 'cost_state_s', display_name: 'Cost Stable State' },
+                { name: 'cost_state_p', display_name: 'Cost Progression State' },
+                { name: 'prob_s_to_p_a', display_name: 'Prob. Stable to Progression (Drug A)' },
+                { name: 'prob_s_to_p_b', display_name: 'Prob. Stable to Progression (Drug B)' },
+                { name: 'prob_s_to_d', display_name: 'Prob. Stable to Death' },
+                { name: 'prob_p_to_d', display_name: 'Prob. Progression to Death' },
+                { name: 'utility_stable', display_name: 'Utility Stable State' },
+                { name: 'utility_progression', display_name: 'Utility Progression State' }
+            ];
+
+            // Fill Step 1 fields
+            document.getElementById('modelName').value = demoModel.name;
+            document.getElementById('modelDescription').value = demoModel.description;
+            document.getElementById('modelType').value = demoModel.model_type;
+            document.getElementById('modelVersion').value = demoModel.version;
+            updateModelTypeDescription();
+
+            // Save Step 1 data
+            modelData.name = demoModel.name;
+            modelData.description = demoModel.description;
+            modelData.model_type = demoModel.model_type;
+            modelData.version = demoModel.version;
+
+            // Clear existing parameters
+            document.getElementById('parametersList').innerHTML = '';
+            modelData.parameters = [];
+            parameterCount = 0;
+
+            // Create parameter items in the DOM
+            demoParameters.forEach(param => {
+                const paramId = `param-${Date.now()}-${parameterCount}`;
+                const paramHTML = `
+                    <div class="parameter-item" id="${paramId}">
+                        <div class="parameter-info">
+                            <div class="parameter-name">
+                                <input type="text"
+                                       id="${paramId}-name"
+                                       placeholder="Parameter name (e.g., cost_drug_a)"
+                                       style="border: none; background: transparent; width: 100%; font-weight: 600;"
+                                       onchange="updateParameter('${paramId}')"
+                                       autocomplete="off"
+                                       value="${param.name}">
+                            </div>
+                            <div class="parameter-details">
+                                <input type="text"
+                                       id="${paramId}-display"
+                                       placeholder="Display name (e.g., Drug A Cost)"
+                                       style="border: none; background: transparent; width: 100%; font-size: 12px; color: var(--text-secondary);"
+                                       oninput="autoGenerateParamName('${paramId}')"
+                                       onchange="updateParameter('${paramId}')"
+                                       autocomplete="off"
+                                       value="${param.display_name}">
+                            </div>
+                        </div>
+                        <div class="parameter-actions">
+                            <button class="btn-icon danger" onclick="removeParameter('${paramId}')" title="Delete parameter">&times;</button>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('parametersList').insertAdjacentHTML('beforeend', paramHTML);
+
+                modelData.parameters.push({
+                    paramId: paramId,
+                    name: param.name,
+                    display_name: param.display_name,
+                    data_type: 'float',
+                    category: 'general',
+                    is_required: true
+                });
+
+                parameterCount++;
+            });
+
+            // Visual confirmation
+            showAlert('Demo example loaded: NSCLC Immunotherapy Markov Model with ' + demoParameters.length + ' parameters. Click "Next" to proceed through the wizard.', 'info');
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            updateStepUI();
+            console.log('Model Builder initialized successfully');
+        });
     </script>
 
     <!-- Footer -->
