@@ -10,9 +10,9 @@ class ParameterBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=100, description="Code name for parameter")
     display_name: str = Field(..., min_length=1, max_length=200, description="Human-readable name")
     description: Optional[str] = None
-    category: str = Field(..., max_length=100, description="e.g., 'costs', 'probabilities', 'utilities'")
-    data_type: str = Field(..., pattern="^(FLOAT|INT|PERCENTAGE|CURRENCY|BOOLEAN)$")
-    input_type: str = Field(..., pattern="^(SLIDER|NUMBER|SELECT|CHECKBOX)$")
+    category: str = Field(default="general", max_length=100, description="e.g., 'costs', 'probabilities', 'utilities'")
+    data_type: str = Field(default="FLOAT", pattern="^(FLOAT|INT|PERCENTAGE|CURRENCY|BOOLEAN|float|int|percentage|currency|boolean)$")
+    input_type: str = Field(default="NUMBER", pattern="^(SLIDER|NUMBER|SELECT|CHECKBOX|slider|number|select|checkbox)$")
     constraints: Optional[dict] = Field(default_factory=dict, description="min, max, step, options")
     default_value: Optional[float] = None
     distribution: Optional[dict] = Field(default_factory=dict, description="type, params for PSA")

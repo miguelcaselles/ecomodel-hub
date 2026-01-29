@@ -30,7 +30,7 @@ class Parameter(Base):
     category = Column(String)  # For accordion grouping: "Costes", "Utilidades", etc.
     data_type = Column(SQLEnum(DataType), nullable=False, default=DataType.FLOAT)
     input_type = Column(SQLEnum(InputType), nullable=False, default=InputType.NUMBER)
-    default_value = Column(JSONType, nullable=False)
+    default_value = Column(JSONType, nullable=True)
     constraints = Column(JSONType, default={})  # {min, max, step, options}
     distribution = Column(JSONType)  # For PSA: {type: "beta", alpha: 10, beta: 90}
     is_country_specific = Column(Boolean, default=False)

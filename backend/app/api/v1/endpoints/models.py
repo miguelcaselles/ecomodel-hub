@@ -82,12 +82,6 @@ def create_model(
     }
     model_type_enum = model_type_map.get(model_data.model_type.upper(), ModelType.MARKOV)
 
-    # Convert version string to integer
-    try:
-        version_int = int(float(model_data.version))
-    except (ValueError, TypeError):
-        version_int = 1
-
     model = EconomicModel(
         name=model_data.name,
         description=model_data.description,
@@ -95,7 +89,7 @@ def create_model(
         script_content=model_data.script_content,
         script_hash=script_hash,
         config=model_data.config or {},
-        version=version_int,
+        version=model_data.version or "1.0",
         created_by_id=current_user.id,
         is_published=False,  # New models start unpublished
     )

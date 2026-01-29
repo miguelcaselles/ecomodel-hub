@@ -22,7 +22,7 @@ class EconomicModel(Base):
     script_content = Column(Text)  # Python script uploaded by Global Admin
     script_hash = Column(String)  # SHA256 for versioning
     config = Column(JSONType, default={})  # Model configuration
-    version = Column(Integer, default=1)
+    version = Column(String, default="1.0")
     is_published = Column(Boolean, default=False)
     created_by_id = Column(GUID, ForeignKey("users.id"))
     created_at = Column(DateTime, default=datetime.utcnow)

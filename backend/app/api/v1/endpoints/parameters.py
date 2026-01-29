@@ -139,8 +139,14 @@ def create_parameters_bulk(
     # Create all parameters
     created_params = []
     for param_data in bulk_data.parameters:
+        param_dict = param_data.model_dump()
+        # Normalize enum values to lowercase for DB compatibility
+        if 'data_type' in param_dict and param_dict['data_type']:
+            param_dict['data_type'] = param_dict['data_type'].lower()
+        if 'input_type' in param_dict and param_dict['input_type']:
+            param_dict['input_type'] = param_dict['input_type'].lower()
         parameter = Parameter(
-            **param_data.model_dump(),
+            **param_dict,
             model_id=bulk_data.model_id
         )
         db.add(parameter)
