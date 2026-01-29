@@ -968,7 +968,7 @@
                 </div>
             `;
             const container = document.querySelector('.step-content.active');
-            const existing = container.querySelector('.alert');
+            const existing = container.querySelector('.alert:not(#successAlert)');
             if (existing) existing.remove();
             container.insertAdjacentHTML('afterbegin', alertHTML);
 
@@ -1185,14 +1185,15 @@
 
                 // Step 2: Create parameters if any exist
                 if (modelData.parameters.length > 0) {
-                    const parametersPayload = modelData.parameters.map(p => ({
+                    const parametersPayload = {
                         model_id: createdModel.id,
-                        name: p.name,
-                        display_name: p.display_name,
-                        data_type: p.data_type,
-                        category: p.category,
-                        is_required: p.is_required
-                    }));
+                        parameters: modelData.parameters.map(p => ({
+                            name: p.name,
+                            display_name: p.display_name,
+                            data_type: p.data_type,
+                            category: p.category
+                        }))
+                    };
 
                     const paramsResponse = await fetch('/api/v1/parameters/bulk', {
                         method: 'POST',
@@ -1212,7 +1213,8 @@
                 }
 
                 // Success!
-                document.getElementById('successAlert').style.display = 'flex';
+                const successEl = document.getElementById('successAlert');
+                if (successEl) successEl.style.display = 'flex';
                 btnNext.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Model Created!';
 
                 setTimeout(() => {
