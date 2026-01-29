@@ -28,8 +28,14 @@ class Parameter(Base):
     display_name = Column(String, nullable=False)  # UI label
     description = Column(Text)
     category = Column(String)  # For accordion grouping: "Costes", "Utilidades", etc.
-    data_type = Column(SQLEnum(DataType), nullable=False, default=DataType.FLOAT)
-    input_type = Column(SQLEnum(InputType), nullable=False, default=InputType.NUMBER)
+    data_type = Column(
+        SQLEnum(DataType, values_callable=lambda obj: [e.value for e in obj]),
+        nullable=False, default=DataType.FLOAT
+    )
+    input_type = Column(
+        SQLEnum(InputType, values_callable=lambda obj: [e.value for e in obj]),
+        nullable=False, default=InputType.NUMBER
+    )
     default_value = Column(JSONType, nullable=True)
     constraints = Column(JSONType, default={})  # {min, max, step, options}
     distribution = Column(JSONType)  # For PSA: {type: "beta", alpha: 10, beta: 90}
