@@ -105,7 +105,7 @@ async def demo():
 @app.get("/model-builder")
 async def model_builder():
     """Serve the Model Builder wizard (admin only)"""
-    return FileResponse('static/model-builder.html')
+    return FileResponse('static/model-builder.html', headers={"Cache-Control": "no-store"})
 
 
 @app.get("/demo-guidance")
@@ -278,6 +278,36 @@ async def export_excel_quick(request: CalculationRequest):
         )
     except Exception as e:
         return {"error": str(e)}
+
+
+@app.post("/api/export/word")
+async def export_word_quick(request: CalculationRequest):
+    """Export Word document from quick analysis results (no authentication required)"""
+    try:
+        params = request.model_dump()
+        results = run_markov_analysis(params)
+
+        word_bytes = report_service.generate_word_report(
+            scenario_name="Quick Analysis",
+            user_email="anonymous@heravalue.com",
+            organization="Demo",
+            parameters=params,
+            results_drug_a=results["drug_a_results"],
+            results_drug_b=results["drug_b_results"]
+        )
+
+        # Return Word document
+        return Response(
+            content=word_bytes,
+            media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            headers={
+                "Content-Disposition": f"attachment; filename=HERA_Value_Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.docx"
+            }
+        )
+    except Exception as e:
+        print(f"Word Generation Error: {str(e)}")
+        print(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"Word generation failed: {str(e)}")
 
 
 @app.get("/health")
