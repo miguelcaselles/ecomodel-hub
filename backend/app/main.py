@@ -95,7 +95,7 @@ async def app_page(request: Request):
         return RedirectResponse(url="/login", status_code=302)
 
     # Token is valid, serve the app
-    return FileResponse('static/app.html')
+    return FileResponse('static/app.html', headers={"Cache-Control": "no-store"})
 
 @app.get("/demo")
 async def demo():
