@@ -5,7 +5,7 @@ from uuid import UUID
 
 from app.db.session import get_db
 from app.models.user import User
-from app.models.economic_model import EconomicModel
+from app.models.economic_model import EconomicModel, ModelType
 from app.models.parameter import Parameter
 from app.core.permissions import (
     get_current_user,
@@ -74,10 +74,28 @@ def create_model(
     if model_data.script_content:
         script_hash = hashlib.sha256(model_data.script_content.encode()).hexdigest()
 
+    # Convert model_type string to ModelType enum
+    model_type_map = {
+        "MARKOV": ModelType.MARKOV,
+        "DECISION_TREE": ModelType.DECISION_TREE,
+        "PARTITION_SURVIVAL": ModelType.PARTITION_SURVIVAL,
+    }
+    model_type_enum = model_type_map.get(model_data.model_type.upper(), ModelType.MARKOV)
+
+    # Convert version string to integer
+    try:
+        version_int = int(float(model_data.version))
+    except (ValueError, TypeError):
+        version_int = 1
+
     model = EconomicModel(
-        **model_data.dict(exclude={"script_content"}),
+        name=model_data.name,
+        description=model_data.description,
+        model_type=model_type_enum,
         script_content=model_data.script_content,
         script_hash=script_hash,
+        config=model_data.config or {},
+        version=version_int,
         created_by_id=current_user.id,
         is_published=False,  # New models start unpublished
     )

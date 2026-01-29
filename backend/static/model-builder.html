@@ -1167,7 +1167,7 @@
                     config: {}
                 };
 
-                const modelResponse = await fetch('/api/v1/models', {
+                const modelResponse = await fetch('/api/v1/models/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1194,7 +1194,7 @@
                         is_required: p.is_required
                     }));
 
-                    const paramsResponse = await fetch('/api/v1/parameters/bulk', {
+                    const paramsResponse = await fetch('/api/v1/parameters/bulk/', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
