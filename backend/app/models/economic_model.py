@@ -18,7 +18,10 @@ class EconomicModel(Base):
     id = Column(GUID, primary_key=True, default=uuid.uuid4)
     name = Column(String, nullable=False)
     description = Column(Text)
-    model_type = Column(SQLEnum(ModelType), nullable=False, default=ModelType.MARKOV)
+    model_type = Column(
+        SQLEnum(ModelType, values_callable=lambda obj: [e.value for e in obj]),
+        nullable=False, default=ModelType.MARKOV
+    )
     script_content = Column(Text)  # Python script uploaded by Global Admin
     script_hash = Column(String)  # SHA256 for versioning
     config = Column(JSONType, default={})  # Model configuration

@@ -5,7 +5,7 @@ from uuid import UUID
 
 from app.db.session import get_db
 from app.models.user import User
-from app.models.economic_model import EconomicModel, ModelType
+from app.models.economic_model import EconomicModel
 from app.models.parameter import Parameter
 from app.core.permissions import (
     get_current_user,
