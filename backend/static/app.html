@@ -82,7 +82,7 @@
         }
 
         .logo-area svg {
-            height: 30px;
+            height: 40px;
             width: auto;
         }
 
@@ -1493,6 +1493,477 @@
             background: #4F46E5;
             color: white;
         }
+
+        /* ========================================
+           MOBILE RESPONSIVE STYLES
+           ======================================== */
+
+        /* Small laptops and below */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                padding: 16px 24px;
+            }
+
+            .container {
+                padding: 24px 16px;
+            }
+        }
+
+        /* Tablets and below */
+        @media (max-width: 768px) {
+            /* Header adjustments */
+            .header-content {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .logo-area svg {
+                height: 32px;
+            }
+
+            .header-actions {
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+
+            .btn-secondary {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+
+            /* Container */
+            .container {
+                padding: 16px 12px;
+            }
+
+            /* Page header */
+            .page-header h2 {
+                font-size: 20px;
+            }
+
+            .page-header p {
+                font-size: 13px;
+            }
+
+            /* Cards */
+            .card {
+                border-radius: 8px;
+                padding: 16px;
+            }
+
+            .card-header h3 {
+                font-size: 16px;
+            }
+
+            /* KPI Grid */
+            .kpi-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .kpi-card {
+                padding: 16px;
+            }
+
+            /* Tables - make scrollable */
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table-container table {
+                min-width: 600px;
+                font-size: 13px;
+            }
+
+            .table-container th,
+            .table-container td {
+                padding: 10px 12px;
+            }
+
+            /* Form inputs */
+            .form-group {
+                margin-bottom: 16px;
+            }
+
+            .form-group label {
+                font-size: 13px;
+                margin-bottom: 6px;
+            }
+
+            input[type="text"],
+            input[type="number"],
+            input[type="email"],
+            input[type="password"],
+            select,
+            textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 10px 12px;
+                min-height: 44px; /* Touch-friendly */
+            }
+
+            /* Buttons */
+            .btn-primary,
+            .btn-secondary {
+                min-height: 44px; /* Touch-friendly */
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .export-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+
+            /* Charts - ensure they're responsive */
+            .chart-container {
+                position: relative;
+                width: 100%;
+                max-height: 300px;
+            }
+
+            /* Module grid */
+            .module-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* AI Chat Widget */
+            .ai-chat-widget {
+                bottom: 16px;
+                right: 16px;
+            }
+
+            .ai-chat-toggle {
+                width: 56px;
+                height: 56px;
+                font-size: 24px;
+            }
+
+            .ai-chat-container {
+                width: calc(100vw - 32px);
+                height: calc(100vh - 120px);
+                max-height: 600px;
+                bottom: 80px;
+                right: 16px;
+            }
+        }
+
+        /* Small tablets and large phones */
+        @media (max-width: 640px) {
+            /* Header */
+            .header-content {
+                padding: 10px 12px;
+            }
+
+            .logo-area svg {
+                height: 28px;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            /* Typography */
+            .page-header h2 {
+                font-size: 18px;
+            }
+
+            /* Cards */
+            .card {
+                padding: 12px;
+            }
+
+            .card-header {
+                padding: 12px;
+                margin: -12px -12px 12px -12px;
+            }
+
+            .card-header h3 {
+                font-size: 15px;
+            }
+
+            /* KPI Cards */
+            .kpi-card {
+                padding: 12px;
+            }
+
+            .kpi-label {
+                font-size: 12px;
+            }
+
+            .kpi-value {
+                font-size: 24px;
+            }
+
+            /* Tables */
+            .table-container table {
+                font-size: 12px;
+            }
+
+            .table-container th,
+            .table-container td {
+                padding: 8px 10px;
+            }
+
+            .table-header {
+                flex-direction: column;
+                gap: 8px;
+                align-items: stretch;
+            }
+
+            .table-header h4 {
+                font-size: 14px;
+            }
+
+            .export-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* Tabs */
+            .nav-tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                flex-wrap: nowrap;
+            }
+
+            .nav-tabs button {
+                white-space: nowrap;
+                font-size: 13px;
+                padding: 10px 16px;
+            }
+
+            /* Grids */
+            .grid-2cols {
+                grid-template-columns: 1fr;
+            }
+
+            /* Charts */
+            .chart-container {
+                max-height: 250px;
+            }
+        }
+
+        /* Mobile phones */
+        @media (max-width: 480px) {
+            /* Header - ultra compact */
+            .header-content {
+                padding: 8px 12px;
+            }
+
+            .logo-area svg {
+                height: 24px;
+            }
+
+            .btn-secondary {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            /* Container */
+            .container {
+                padding: 12px 8px;
+            }
+
+            /* Page header */
+            .page-header {
+                margin-bottom: 16px;
+            }
+
+            .page-header h2 {
+                font-size: 16px;
+            }
+
+            .page-header p {
+                font-size: 12px;
+            }
+
+            /* Cards */
+            .card {
+                padding: 10px;
+                border-radius: 6px;
+            }
+
+            .card-header {
+                padding: 10px;
+                margin: -10px -10px 10px -10px;
+            }
+
+            .card-header h3 {
+                font-size: 14px;
+            }
+
+            /* KPI Cards */
+            .kpi-card {
+                padding: 10px;
+            }
+
+            .kpi-label {
+                font-size: 11px;
+            }
+
+            .kpi-value {
+                font-size: 20px;
+            }
+
+            .kpi-change {
+                font-size: 11px;
+            }
+
+            /* Tables */
+            .table-container {
+                margin: 0 -10px;
+            }
+
+            .table-container table {
+                font-size: 11px;
+            }
+
+            .table-container th,
+            .table-container td {
+                padding: 6px 8px;
+            }
+
+            .table-header h4 {
+                font-size: 13px;
+            }
+
+            /* Buttons */
+            .btn-primary,
+            .btn-secondary {
+                font-size: 13px;
+                padding: 8px 14px;
+            }
+
+            .export-btn {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+
+            /* Forms */
+            .form-group label {
+                font-size: 12px;
+            }
+
+            input[type="text"],
+            input[type="number"],
+            input[type="email"],
+            input[type="password"],
+            select,
+            textarea {
+                font-size: 16px;
+                padding: 8px 10px;
+            }
+
+            /* Tabs */
+            .nav-tabs button {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+
+            /* Charts - smaller on phones */
+            .chart-container {
+                max-height: 200px;
+            }
+
+            /* Module grid */
+            .module-card {
+                padding: 12px;
+            }
+
+            .module-title {
+                font-size: 14px;
+            }
+
+            .module-desc {
+                font-size: 12px;
+            }
+
+            /* AI Chat */
+            .ai-chat-toggle {
+                width: 50px;
+                height: 50px;
+                font-size: 22px;
+            }
+
+            .ai-chat-container {
+                width: calc(100vw - 24px);
+                height: calc(100vh - 100px);
+                bottom: 70px;
+                right: 12px;
+            }
+
+            .ai-chat-header {
+                padding: 12px;
+            }
+
+            .ai-chat-messages {
+                padding: 12px;
+            }
+
+            .ai-chat-input-container {
+                padding: 12px;
+            }
+
+            /* Spacing utilities */
+            .gap-4 {
+                gap: 8px;
+            }
+
+            .gap-6 {
+                gap: 12px;
+            }
+
+            /* Hide non-essential elements on mobile */
+            .hide-mobile {
+                display: none !important;
+            }
+        }
+
+        /* Landscape orientation on small devices */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .header-content {
+                padding: 8px 16px;
+            }
+
+            .container {
+                padding: 12px 16px;
+            }
+
+            .ai-chat-container {
+                height: calc(100vh - 80px);
+            }
+
+            .chart-container {
+                max-height: 180px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .header-actions,
+            .ai-chat-widget,
+            .export-btn,
+            .btn-primary,
+            .btn-secondary {
+                display: none !important;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .card {
+                page-break-inside: avoid;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1535,6 +2006,28 @@
         <div class="page-header">
             <h2>Pharmacoeconomic Analysis Suite</h2>
             <p>Complete HEOR toolkit for cost-effectiveness, budget impact, and decision analysis</p>
+        </div>
+
+        <!-- Models Management (Admin only) -->
+        <div id="modelsPanel" class="card" style="margin-bottom: 24px; display: none;">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <h3>Economic Models</h3>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-secondary" onclick="loadModels()" style="padding: 6px 12px; font-size: 12px;">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+                        Refresh
+                    </button>
+                    <a href="/model-builder" class="btn-secondary" style="padding: 6px 12px; font-size: 12px; text-decoration: none; display: flex; align-items: center;">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;"><path d="M12 5v14M5 12h14"/></svg>
+                        New Model
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="modelsList" style="display: grid; gap: 12px;">
+                    <p style="color: var(--text-secondary); font-size: 13px;">Loading models...</p>
+                </div>
+            </div>
         </div>
 
         <!-- Analysis Modules Selection -->
@@ -1918,7 +2411,7 @@
                         <label style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 12px; display: block;">
                             Export Reports
                         </label>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
                             <button class="btn-secondary" onclick="exportPDF()" title="Download PDF report" id="btnExportPDF">
                                 <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -1926,7 +2419,16 @@
                                     <line x1="12" y1="18" x2="12" y2="12"/>
                                     <line x1="9" y1="15" x2="15" y2="15"/>
                                 </svg>
-                                Export PDF
+                                PDF
+                            </button>
+                            <button class="btn-secondary" onclick="exportWord()" title="Download Word document" id="btnExportWord">
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <path d="M9 17l2-6 2 6"/>
+                                    <path d="M10 14h2"/>
+                                </svg>
+                                Word
                             </button>
                             <button class="btn-secondary" onclick="exportExcel()" title="Download Excel report" id="btnExportExcel">
                                 <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;">
@@ -1936,11 +2438,11 @@
                                     <line x1="8" y1="15" x2="16" y2="15"/>
                                     <line x1="12" y1="12" x2="12" y2="18"/>
                                 </svg>
-                                Export Excel
+                                Excel
                             </button>
                         </div>
                         <p style="font-size: 10px; color: var(--text-tertiary); margin-top: 8px; text-align: center;">
-                            Generate professional reports from analysis results
+                            Generate professional reports with charts and tables
                         </p>
                     </div>
                 </div>
@@ -2058,14 +2560,37 @@
                         <div class="ce-label x-label">Δ QALYs →</div>
                         <div class="ce-label y-label">Δ Costs ↑</div>
                     </div>
+                    <div style="margin-top: 16px; padding: 12px; background: #FEF2F2; border-left: 4px solid #EF4444; border-radius: 6px;">
+                        <div style="display: flex; align-items: start; gap: 8px;">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke: #EF4444; flex-shrink: 0; margin-top: 2px;">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            <div style="font-size: 13px; color: #7F1D1D;">
+                                <strong style="color: #991B1B;">Línea Roja (WTP Threshold):</strong>
+                                La línea diagonal roja representa el umbral de disposición a pagar (WTP).
+                                Puntos <strong>debajo</strong> de esta línea son coste-efectivos (el ICER es menor que el umbral WTP).
+                                Puntos <strong>encima</strong> de esta línea NO son coste-efectivos (el ICER supera el umbral WTP).
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Comparison Table -->
                 <div class="table-container">
                     <div class="table-header">
                         <h4>Detailed Comparison</h4>
+                        <button onclick="exportTableAsCSV('comparisonTable', 'detailed_comparison')" class="export-btn">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 4px;">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Export CSV
+                        </button>
                     </div>
-                    <table>
+                    <table id="comparisonTable">
                         <thead>
                             <tr>
                                 <th>Metric</th>
@@ -2312,9 +2837,11 @@
         userRoleEl.style.background = roleColor.bg;
         userRoleEl.style.color = roleColor.text;
 
-        // Show/hide Model Builder button based on role
+        // Show/hide Model Builder button and Models panel based on role
         if (user.role === 'global_admin') {
             document.getElementById('modelBuilderBtn').style.display = 'block';
+            document.getElementById('modelsPanel').style.display = 'block';
+            loadModels();
         }
 
         // Apply role-based permissions
@@ -2912,6 +3439,105 @@
                 discount_rate: parseFloat(document.getElementById('discountRate').value) / 100,
                 wtp_threshold: parseFloat(document.getElementById('wtpThreshold').value)
             };
+        }
+
+        // Load and display economic models (admin only)
+        async function loadModels() {
+            const container = document.getElementById('modelsList');
+            if (!container) return;
+
+            try {
+                const response = await apiCall('/api/v1/models/?show_unpublished=true');
+                if (!response.ok) {
+                    container.innerHTML = '<p style="color: var(--text-secondary); font-size: 13px;">Failed to load models.</p>';
+                    return;
+                }
+
+                const models = await response.json();
+
+                if (models.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 24px; color: var(--text-secondary);">
+                            <svg class="icon" viewBox="0 0 24 24" style="width: 40px; height: 40px; margin-bottom: 8px; opacity: 0.5;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                            <p style="font-size: 13px;">No models yet. Create your first model with the Model Builder.</p>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = models.map(m => `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border);">
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <strong style="font-size: 14px;">${m.name}</strong>
+                                <span style="padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; ${m.is_published ? 'background: #D1FAE5; color: #065F46;' : 'background: #FEF3C7; color: #92400E;'}">
+                                    ${m.is_published ? 'Published' : 'Draft'}
+                                </span>
+                                <span style="padding: 2px 8px; border-radius: 10px; font-size: 10px; background: var(--bg-tertiary, #E5E7EB); color: var(--text-secondary);">
+                                    ${m.model_type}
+                                </span>
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">
+                                ${m.parameter_count} parameters &middot; v${m.version || '1.0'} &middot; ${new Date(m.created_at).toLocaleDateString()}
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button onclick="toggleModelPublish('${m.id}', ${!m.is_published})"
+                                    class="btn-secondary"
+                                    style="padding: 4px 12px; font-size: 11px;">
+                                ${m.is_published ? 'Unpublish' : 'Publish'}
+                            </button>
+                            <button onclick="deleteModel('${m.id}')"
+                                    class="btn-secondary"
+                                    style="padding: 4px 12px; font-size: 11px; color: #DC2626;">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Error loading models:', err);
+                container.innerHTML = '<p style="color: var(--text-secondary); font-size: 13px;">Error loading models.</p>';
+            }
+        }
+
+        async function toggleModelPublish(modelId, publish) {
+            try {
+                const response = await apiCall(`/api/v1/models/${modelId}/publish`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ is_published: publish })
+                });
+
+                if (!response.ok) {
+                    const err = await response.json().catch(() => ({}));
+                    alert(err.detail || 'Failed to update model');
+                    return;
+                }
+
+                loadModels();
+            } catch (err) {
+                console.error('Error toggling publish:', err);
+            }
+        }
+
+        async function deleteModel(modelId) {
+            if (!confirm('This will unpublish the model. Continue?')) return;
+
+            try {
+                const response = await apiCall(`/api/v1/models/${modelId}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    const err = await response.json().catch(() => ({}));
+                    alert(err.detail || 'Failed to delete model');
+                    return;
+                }
+
+                loadModels();
+            } catch (err) {
+                console.error('Error deleting model:', err);
+            }
         }
 
         // Load scenarios list
@@ -3629,7 +4255,75 @@
                 alert('Failed to generate PDF report: ' + error.message);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg> Export PDF';
+                btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg> PDF';
+            }
+        }
+
+        async function exportWord() {
+            const btn = document.getElementById('btnExportWord');
+            btn.disabled = true;
+            btn.innerHTML = '<svg class="icon icon-sm spinner" viewBox="0 0 24 24" style="margin-right: 6px;"><circle cx="12" cy="12" r="10"/></svg> Generating...';
+
+            try {
+                // Collect current parameters
+                const requestData = {
+                    time_horizon: parseInt(document.getElementById('timeHorizon').value),
+                    discount_rate: parseFloat(document.getElementById('discountRate').value) / 100,
+                    cohort_size: 1000,
+                    cost_drug_a: parseFloat(document.getElementById('costDrugA').value),
+                    cost_drug_b: parseFloat(document.getElementById('costDrugB').value),
+                    cost_state_s: parseFloat(document.getElementById('costStable').value),
+                    cost_state_p: parseFloat(document.getElementById('costProgression').value),
+                    prob_s_to_p_a: parseFloat(document.getElementById('probProgressionA').value) / 100,
+                    prob_s_to_p_b: parseFloat(document.getElementById('probProgressionB').value) / 100,
+                    prob_s_to_d: 0.02,
+                    prob_p_to_d: 0.17,
+                    utility_stable: parseFloat(document.getElementById('utilityStable').value),
+                    utility_progression: parseFloat(document.getElementById('utilityProgression').value)
+                };
+
+                // Call new Word export endpoint
+                const response = await fetch('/api/export/word', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Word generation failed');
+                }
+
+                // Get the Word document blob
+                const blob = await response.blob();
+
+                // Extract filename from Content-Disposition header
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = 'hera_value_report.docx';
+                if (contentDisposition) {
+                    const filenameMatch = contentDisposition.match(/filename="?(.+)"?/);
+                    if (filenameMatch) {
+                        filename = filenameMatch[1];
+                    }
+                }
+
+                // Create download link
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+
+                alert('Word document downloaded successfully!\n\nCheck your Downloads folder.');
+
+            } catch (error) {
+                console.error('Word export error:', error);
+                alert('Failed to generate Word document: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 17l2-6 2 6"/><path d="M10 14h2"/></svg> Word';
             }
         }
 
@@ -3697,7 +4391,7 @@
                 alert('Failed to generate Excel report: ' + error.message);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="8" y="12" width="8" height="6"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg> Export Excel';
+                btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24" style="margin-right: 6px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="8" y="12" width="8" height="6"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="12" y1="12" x2="12" y2="18"/></svg> Excel';
             }
         }
 
